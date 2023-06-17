@@ -1,3 +1,6 @@
+![image](https://github.com/ChoiKang-TEAM/Meal-Guard/assets/89833446/5dcb54fd-5cd9-4184-b7e4-21489d48a181)
+
+
 # Meal-Guard
 메뉴 추천 웹사이트
 
