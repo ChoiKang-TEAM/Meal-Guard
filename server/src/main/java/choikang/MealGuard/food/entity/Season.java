@@ -5,26 +5,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
-public class Food {
+public class Season {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "FOOD_ID")
+    @Column(name = "SEASON_ID")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "food",cascade = CascadeType.ALL)
-    private List<Time> times = new ArrayList<>();
-
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
-    private List<Season> seasons = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "FOOD_ID")
+    private Food food;
 }
