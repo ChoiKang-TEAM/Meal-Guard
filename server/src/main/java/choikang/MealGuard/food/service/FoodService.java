@@ -17,7 +17,7 @@ public class FoodService {
 
     private final FoodRepository foodRepository;
 
-    public Food findFood(){
+    public Food findFoodBuTime(){
         LocalTime currentTime =  LocalTime.now();
 
         String timezone = "";
