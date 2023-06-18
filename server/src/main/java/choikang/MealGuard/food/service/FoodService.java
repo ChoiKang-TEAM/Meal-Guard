@@ -37,4 +37,24 @@ public class FoodService {
 
         return null;
     }
+
+    public Food findFoodByTemp(Double temp) {
+        String season = "";
+
+        if(temp >= 25.0) season="여름";
+        else if(temp >= 20.0) season="봄";
+        else if(temp >= 10.0) season="가을";
+        else season="겨울";
+
+        List<Food> foods = foodRepository.findAllByName(season);
+
+        if(!foods.isEmpty()){
+            Random rand = new Random();
+            Food randomFood = foods.get(rand.nextInt(foods.size()));
+            return randomFood;
+        }
+
+        return null;
+
+    }
 }

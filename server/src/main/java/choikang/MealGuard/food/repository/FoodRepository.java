@@ -11,4 +11,7 @@ public interface FoodRepository extends JpaRepository<Food,Long> {
 
     @Query("select f from Food f join f.times t where t.hours = :hours")
     List<Food> findAllByHours(@Param("hours") String hours);
+
+    @Query("select f from Food f join f.seasons s where s.name = :name")
+    List<Food> findAllByName(@Param("name") String name);
 }

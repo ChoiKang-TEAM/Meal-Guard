@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -21,11 +22,19 @@ public class FoodController {
     private final FoodMapper foodMapper;
 
     @GetMapping("/time")
-    public ResponseEntity getFood(){
+    public ResponseEntity getFoodByTime(){
 
         Food food = foodService.findFoodBuTime();
 
         return new ResponseEntity<>(foodMapper.foodToFoodResponseDto(food), HttpStatus.OK);
     }
+
+    @GetMapping("/temp")
+    public ResponseEntity getFoodByTemp(@RequestParam Double temp){
+        Food food = foodService.findFoodByTemp(temp);
+
+        return new ResponseEntity<>(foodMapper.foodToFoodResponseDto(food), HttpStatus.OK);
+    }
+
 
 }
