@@ -135,11 +135,13 @@ public class WeatherApiService {
             Weather weather = new Weather(temp, rainAmount, humid, currentChangeTime);
             region.updateRegionWeather(weather); // DB 업데이트
             return WeatherDto.Response.builder()
+                    .region(region.getParentRegion() +" "+ region.getChildRegion())
                     .weather(weather)
                     .message("날씨를 불러 왔습니다.").build();
 
         } catch (IOException e) {
             return WeatherDto.Response.builder()
+                    .region(null)
                     .weather(null)
                     .message("날씨 정보를 불러오는 중 오류가 발생했습니다").build();
         }
