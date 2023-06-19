@@ -69,9 +69,9 @@ module.exports = {
 
   // add your custom rules here
   rules: {
-    
     'prefer-promise-reject-errors': 'off',
-
+    
+    '@typescript-eslint/no-explicit-any': 'off',
     quotes: ['warn', 'single', { avoidEscape: true }],
 
     // this rule, if on, would require explicit return type on the `render` function
@@ -85,6 +85,13 @@ module.exports = {
     'no-unused-vars': 'off',
 
     // allow debugger during development only
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+
+    'vue/multi-word-component-names': [
+      'error',
+      {
+        ignores: ['Home'],
+      },
+    ],
   }
 }
