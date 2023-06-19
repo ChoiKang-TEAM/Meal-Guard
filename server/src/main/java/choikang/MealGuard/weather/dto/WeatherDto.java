@@ -12,6 +12,7 @@ public class WeatherDto {
     @Builder
     public static class Response{
 
+        private String region;
         private Weather weather;
 
         private String message;
