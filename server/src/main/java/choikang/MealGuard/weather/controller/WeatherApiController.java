@@ -1,6 +1,7 @@
 package choikang.MealGuard.weather.controller;
 
 import choikang.MealGuard.weather.dto.WeatherDto;
+import choikang.MealGuard.weather.service.RegionService;
 import choikang.MealGuard.weather.service.WeatherApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,13 @@ public class WeatherApiController {
 
     private final WeatherApiService weatherApiService;
 
+    private final RegionService regionService;
+
     @GetMapping
     @Transactional
-    public ResponseEntity getRegionWeather(@RequestParam(defaultValue = "1") Long regionId) {
+    public ResponseEntity getRegionWeather(@RequestParam(defaultValue = "60") int currentLatitude,
+                                           @RequestParam(defaultValue = "127") int currentLongitude) {
+        Long regionId = regionService.getRegionId(currentLatitude, currentLongitude);
 
         WeatherDto.Response regionWeather = weatherApiService.getRegionWeather(regionId);
 
