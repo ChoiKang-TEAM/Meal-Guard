@@ -1,4 +1,4 @@
-package choikang.MealGuard.food.config;
+package choikang.MealGuard.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
