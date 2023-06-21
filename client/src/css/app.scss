@@ -1,1 +1,19 @@
 // app global css in SCSS form
+@charset "utf-8";
+/***********************************************************
+	01- Common Class : 레이아웃
+***********************************************************/
+
+html {
+  font-size: 20px;
+}
+body {
+  font-family: 'NeoDunggeunmoPro-Regular';
+}
+
+@font-face {
+  font-family: 'NeoDunggeunmoPro-Regular';
+  font-style: normal;
+  font-weight: 300;
+  src: url('src/assets/fonts/NeoDunggeunmoPro-Regular.woff') format('woff');
+}
