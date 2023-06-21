@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header elevated class="bg-red">
       <q-toolbar>
         <q-btn
           flat
@@ -11,9 +11,13 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title> 식사 냠냠이 </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-tabs v-model="tab">
+          <q-tab alert="white" name="meal" icon="restaurant" />
+          <q-tab alert="purple" name="dessert" icon="icecream" />
+          <q-tab alert="orange" name="custom" icon="settings_suggest" />
+        </q-tabs>
       </q-toolbar>
     </q-header>
 
@@ -36,53 +40,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import EssentialLink from 'components/EssentialLink.vue';
+import { defineComponent, ref } from 'vue'
+import EssentialLink from 'components/EssentialLink.vue'
 
 const linksList = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
     title: 'Github',
-    caption: 'github.com/quasarframework',
+    caption: 'github.com/ChoiKang-TEAM/Meal-Guard',
     icon: 'code',
-    link: 'https://github.com/quasarframework',
+    link: 'https://github.com/ChoiKang-TEAM/Meal-Guard',
   },
   {
     title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
+    caption: 'chat.discord.ahn-kang-choi',
+    icon: 'discord',
+    link: 'https://discord.com/channels/956122442068279317/956122442655469572',
   },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-];
+]
 
 export default defineComponent({
   name: 'MainLayout',
@@ -92,15 +66,16 @@ export default defineComponent({
   },
 
   setup() {
-    const leftDrawerOpen = ref(false);
+    const leftDrawerOpen = ref(false)
 
     return {
       essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
+        leftDrawerOpen.value = !leftDrawerOpen.value
       },
-    };
+      tab: ref(''),
+    }
   },
-});
+})
 </script>
