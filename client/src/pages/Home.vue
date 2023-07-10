@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useGoogleImgSotre } from 'src/stores/google-img-store'
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { IMAGE_GROUP } from 'src/common/images'
 
 export default defineComponent({
@@ -9,15 +9,13 @@ export default defineComponent({
     const store = useGoogleImgSotre()
     const keyword = ref<string>('')
     const { searchUrl } = store
-    const randomImgUrl = ref<string>(IMAGE_GROUP[0])
-    const imgStyle = ref<{ opacity: number }>({ opacity: 0 })
+    const imageData = ref({
+      randomImgUrl: '',
+      imgStyle: { opacity: 0 },
+    })
     onMounted(async () => {
-      setInterval(() => {
-        const randomValue: number = Math.floor(
-          Math.random() * IMAGE_GROUP.length
-        )
-        randomImgUrl.value = IMAGE_GROUP[randomValue]
-      }, 3000)
+      const randomValue: number = Math.floor(Math.random() * IMAGE_GROUP.length)
+      imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
     })
 
     const change = async () => {
@@ -28,13 +26,24 @@ export default defineComponent({
 
       setTimeout(() => {
         imgStyle.value.opacity = 1
-
+        const randomValue: number = Math.floor(
+          Math.random() * IMAGE_GROUP.length
+        )
+        imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
         setTimeout(() => {
+          console.log(2)
           imgStyle.value.opacity = 0
-        }, 1000) // 이미지가 나타난 후 1초 후에 사라지도록 설정
-      }, 500) // 이미지 변경 후 0.5초 후에 나타나도록 설정
+          fadeImage()
+        }, 2000)
+      }, 1000)
     }
-    watch(randomImgUrl, fadeImage)
+    const randomImgUrl = computed(() => {
+      console.log(1)
+      return imageData.value.randomImgUrl
+    })
+    const imgStyle = computed(() => imageData.value.imgStyle)
+
+    fadeImage() // 초기 이미지 애니메이션 적용
     return { url, keyword, randomImgUrl, imgStyle, change }
   },
 })
@@ -43,10 +52,10 @@ export default defineComponent({
 <template>
   <q-page>
     <q-card>
-      <q-card-section class="bg-yellow-5">
+      <q-card-section class="bg-yellow-3">
         <div class="lb-wrap">
           <div class="lb-text">
-            <h2>식사 지킴이</h2>
+            <h2 class="title-text">식사 지킴이</h2>
           </div>
           <div class="lb-image">
             <img class="meal-image" :src="randomImgUrl" :style="imgStyle" />
@@ -74,5 +83,9 @@ export default defineComponent({
 .lb-text {
   padding: 10px 20px;
   text-align: center;
+}
+.title-text {
+  color: white; /* 텍스트 색상 */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
 }
 </style>
