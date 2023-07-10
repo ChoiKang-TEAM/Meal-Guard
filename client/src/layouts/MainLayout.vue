@@ -2,13 +2,10 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated class="bg-black">
       <q-toolbar>
-        <q-toolbar-title align="center"> Meal Guard </q-toolbar-title>
+        <q-toolbar-title class="toolbar-title">
+          <div class="text-center">Meal Guard</div>
+        </q-toolbar-title>
       </q-toolbar>
-      <q-tabs v-model="tab">
-        <q-tab alert="white" name="meal" icon="restaurant" />
-        <q-tab alert="purple" name="dessert" icon="icecream" />
-        <q-tab alert="orange" name="custom" icon="settings_suggest" />
-      </q-tabs>
     </q-header>
 
     <q-page-container>
@@ -18,15 +15,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { useFoodStore } from 'src/stores/food-store'
+import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup() {
+    const store = useFoodStore()
+    const { getCurrentWeather } = store
+    const rotateData = ref()
+    onMounted(async () => {
+      rotateData.value = await getCurrentWeather()
+    })
     return {
-      tab: ref(''),
+      tab: ref<number>(0),
+      rotateData,
     }
   },
 })
 </script>
+
+<style>
+/* .toolbar-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+.float-right {
+  margin-left: auto;
+}
+.float-left {
+  margin-right: auto;
+}
+</style>
