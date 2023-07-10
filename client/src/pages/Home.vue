@@ -1,8 +1,6 @@
 <script lang="ts">
-import { useGoogleImgSotre } from 'src/stores/google-img-store'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { IMAGE_GROUP } from 'src/common/images'
-import { api } from 'src/boot/axios'
 import { useFoodStore } from 'src/stores/food-store'
 import { storeToRefs } from 'pinia'
 
@@ -82,6 +80,7 @@ export default defineComponent({
       sections,
       activeTabIndex,
       rotateData,
+      randomFoodData,
     }
     const action = {
       scrollToSection,
@@ -111,6 +110,7 @@ export default defineComponent({
   <q-card class="bg-yellow-3">
     <q-card-section>
       <div class="weather-widget">
+        {{ randomFoodData?.data }}
         <div class="location">{{ rotateData?.region }}</div>
         <div class="temperature">{{ rotateData?.weather?.temp }}°C</div>
         <div class="description">
