@@ -3,12 +3,11 @@
 /***********************************************************
 	01- Common Class : 레이아웃
 ***********************************************************/
-
-html {
-  font-size: 20px;
-}
-body {
-  font-family: 'NeoDunggeunmoPro-Regular';
+@font-face {
+  font-family: 'GmarketSansTTFBold';
+  font-style: normal;
+  font-weight: 300;
+  src: url('src/assets/fonts/GmarketSansTTFBold.ttf') format('truetype');
 }
 
 @font-face {
@@ -16,4 +15,12 @@ body {
   font-style: normal;
   font-weight: 300;
   src: url('src/assets/fonts/NeoDunggeunmoPro-Regular.woff') format('woff');
+}
+html {
+  font-size: 20px;
+}
+body {
+  font-family: 'GmarketSansTTFBold';
+  color: white;
+  font-weight: bolder;
 }
