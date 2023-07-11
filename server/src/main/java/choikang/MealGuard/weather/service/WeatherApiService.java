@@ -72,6 +72,7 @@ public class WeatherApiService {
             }
         }
 
+
         log.info("API 요청 발송 >>> 지역: {}, 연월일: {}, 시각: {}", region, yyyyMMdd, hourStr);
 
         try {
@@ -110,10 +111,21 @@ public class WeatherApiService {
             //// 응답 수신 완료 ////
             //// 응답 결과를 JSON 파싱 ////
 
+            // "no data"가 반환되는 경우 DB에서 이전의 날씨 정보를 조회
+            if (data.equals("no data")) {
+                if (prevWeather != null) {
+                    log.info("이전 날씨 정보를 사용합니다");
+                    return WeatherDto.Response.builder()
+                            .region(region.getParentRegion() + " " + region.getChildRegion())
+                            .weather(prevWeather)
+                            .message("날씨를 불러왔습니다.").build();
+                }
+            }
+
             Double temp = null;
             Double humid = null;
             String sky = "";
-            String rainAmount = "";
+            String pty = "";
 
             JSONObject jObject = new JSONObject(data);
             JSONObject response = jObject.getJSONObject("response");
@@ -130,8 +142,12 @@ public class WeatherApiService {
                     case "T1H":
                         temp = Double.parseDouble((String) fcstValue);
                         break;
-                    case "RN1":
-                        rainAmount = (String)fcstValue;
+                    case "PTY":
+                        pty = (String)fcstValue;
+                        if(pty.equals("1")) pty="비";
+                        else if(pty.equals("2")) pty="비/눈";
+                        else if(pty.equals("3")) pty="눈";
+                        else pty ="소나기";
                         break;
                     case "SKY":
                         sky = (String) fcstValue;
@@ -146,8 +162,13 @@ public class WeatherApiService {
                         break;
                 }
             }
+            if(pty.equals("0")){
+                if(sky.equals("맑음")) pty = "맑음";
+                else if(sky.equals("구름 많음")) pty = "구름많음";
+                else pty = "흐림";
+            }
 
-            Weather weather = new Weather(temp, rainAmount, humid, currentChangeTime,sky);
+            Weather weather = new Weather(temp, humid, currentChangeTime,pty);
             region.updateRegionWeather(weather); // DB 업데이트
             return WeatherDto.Response.builder()
                     .region(region.getParentRegion() +" "+ region.getChildRegion())
