@@ -13,6 +13,7 @@ export default defineComponent({
     const { rotateData, randomFoodData } = storeToRefs(store)
     const { getCurrentWeather } = store
     const parallax = ref<HTMLElement | null>(null)
+    const parallax2 = ref<HTMLElement | null>(null)
     const section = ref<HTMLElement | null>(null)
     const isVisible = ref(false)
 
@@ -40,10 +41,12 @@ export default defineComponent({
 
     onMounted(async () => {
       observe()
-      await getCurrentWeather()
+
       const randomValue: number = Math.floor(Math.random() * IMAGE_GROUP.length)
       imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
       window.addEventListener('scroll', parallaxScroll)
+
+      await getCurrentWeather()
     })
 
     const parallaxScroll = () => {
@@ -52,6 +55,15 @@ export default defineComponent({
           window.pageYOffset || document.documentElement.scrollTop
         const parallaxOffset = scrollTop * 0.5
         parallax.value.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`
+      }
+    }
+
+    const parallaxBodyScroll = () => {
+      if (parallax2.value) {
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop
+        const parallaxOffset = scrollTop * 0.5
+        parallax2.value.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`
       }
     }
 
@@ -106,6 +118,7 @@ export default defineComponent({
     }
     onBeforeUnmount(() => {
       window.removeEventListener('scroll', parallaxScroll)
+      window.removeEventListener('scroll', parallaxBodyScroll)
     })
     const state = {
       url,
@@ -118,6 +131,7 @@ export default defineComponent({
       rotateData,
       randomFoodData,
       parallax,
+      parallax2,
       section,
       isVisible,
     }
@@ -148,30 +162,64 @@ export default defineComponent({
     </q-header>
 
     <q-card class="bg-yellow-3">
-      <div class="q-card-section">
-        <div class="weather-widget">
-          {{ randomFoodData?.data }}
-          <div class="location">{{ rotateData?.region }}</div>
-          <div class="temperature">{{ rotateData?.weather?.temp }}°C</div>
-          <div class="description">
-            <q-icon name="cloud" />{{ rotateData?.weather?.sky }}
-          </div>
-        </div>
-        <div class="parallax" ref="parallax">
-          <div class="lb-wrap">
-            <div class="lb-text">
-              <h2 class="title-text">식사 지킴이</h2>
-            </div>
-            <div class="lb-image">
-              <img class="meal-image" :src="randomImgUrl" :style="imgStyle" />
+      <q-card-section>
+        <div class="q-card-section">
+          <div class="weather-widget">
+            {{ randomFoodData?.data }}
+            <div class="location">{{ rotateData?.region }}</div>
+            <div class="temperature">{{ rotateData?.weather?.temp }}°C</div>
+            <div class="description">
+              <q-icon name="cloud" />{{ rotateData?.weather?.sky }}
             </div>
           </div>
+          <div class="parallax" ref="parallax">
+            <div class="lb-wrap">
+              <div class="lb-text">
+                <h2 class="title-text">식사 지킴이</h2>
+              </div>
+              <q-parallax class="meal-image" :src="randomImgUrl" />
+            </div>
+          </div>
         </div>
-      </div>
+      </q-card-section>
+    </q-card>
+    <q-card class="my-card">
+      <q-card-section horizontal>
+        <q-img
+          class="col-5"
+          src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
+          style="height: 500px"
+        />
 
-      <div class="section" ref="section">
-        ㅇㅇ
-        <!-- <div class="content-container">
+        <q-card-section> dd </q-card-section>
+      </q-card-section>
+
+      <q-separator />
+    </q-card>
+
+    <q-card class="bg-pink-2">
+      <q-card-section>
+        <q-parallax
+          class="img-50"
+          src="src/assets/images/cake2.png"
+          :height="100"
+          style="width: 500px"
+        />
+      </q-card-section>
+    </q-card>
+    <q-card class="my-card">
+      <q-card-section horizontal>
+        <q-img
+          class="col-5"
+          src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
+        />
+
+        <q-card-section> dd </q-card-section>
+      </q-card-section>
+
+      <q-separator />
+    </q-card>
+    <!-- <div class="content-container">
           <div
             v-for="(section, index) in sections"
             :key="index"
@@ -180,25 +228,16 @@ export default defineComponent({
             {{ section }}
           </div>
         </div> -->
-      </div>
-    </q-card>
   </q-page-container>
 </template>
 
 <style scoped>
-.lb-wrap {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  height: 100vh;
-}
 .meal-image {
-  width: 100%;
-  height: auto;
+  min-width: 500px;
+  max-width: 500px;
   transition: opacity 1s ease-in-out;
 }
+
 .lb-text {
   padding: 10px 20px;
   text-align: center;
@@ -210,12 +249,6 @@ export default defineComponent({
 .content-container {
   height: 400px;
   overflow-y: scroll;
-}
-
-.section {
-  height: 500px;
-  margin-bottom: 20px;
-  background-color: #f2f2f2;
 }
 
 .tab-sticky {
@@ -235,6 +268,7 @@ export default defineComponent({
   background: linear-gradient(45deg, rgb(240, 240, 116), pink);
   border-radius: 20px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
+  z-index: 1000;
 }
 
 .location {
@@ -290,8 +324,7 @@ export default defineComponent({
 }
 
 .section {
-  height: 100vh;
-  background-color: #e9e9e9;
+  background-color: rgb(181, 232, 213);
   display: flex;
   flex-direction: column;
   justify-content: center;
