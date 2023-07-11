@@ -1,5 +1,6 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useIntersectionObserver } from 'src/composables/useIntersectionObserver'
 import { IMAGE_GROUP } from 'src/common/images'
 import { useFoodStore } from 'src/stores/food-store'
 import { storeToRefs } from 'pinia'
@@ -11,16 +12,48 @@ export default defineComponent({
     const keyword = ref<string>('')
     const { rotateData, randomFoodData } = storeToRefs(store)
     const { getCurrentWeather } = store
+    const parallax = ref<HTMLElement | null>(null)
+    const section = ref<HTMLElement | null>(null)
+    const isVisible = ref(false)
+
+    const { observe, stopObserving } = useIntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            isVisible.value = true
+          } else {
+            isVisible.value = false
+          }
+        })
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      }
+    )
+
     const imageData = ref({
       randomImgUrl: '',
       imgStyle: { opacity: 0 },
     })
 
     onMounted(async () => {
+      observe()
       await getCurrentWeather()
       const randomValue: number = Math.floor(Math.random() * IMAGE_GROUP.length)
       imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
+      window.addEventListener('scroll', parallaxScroll)
     })
+
+    const parallaxScroll = () => {
+      if (parallax.value) {
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop
+        const parallaxOffset = scrollTop * 0.5
+        parallax.value.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`
+      }
+    }
 
     const fadeImage = () => {
       imgStyle.value.opacity = 0
@@ -71,6 +104,9 @@ export default defineComponent({
       ] as HTMLElement
       sectionElement.scrollIntoView({ behavior: 'smooth' })
     }
+    onBeforeUnmount(() => {
+      window.removeEventListener('scroll', parallaxScroll)
+    })
     const state = {
       url,
       keyword,
@@ -81,6 +117,9 @@ export default defineComponent({
       activeTabIndex,
       rotateData,
       randomFoodData,
+      parallax,
+      section,
+      isVisible,
     }
     const action = {
       scrollToSection,
@@ -94,40 +133,45 @@ export default defineComponent({
 </script>
 
 <template>
-  <q-header style="margin-top: 50px">
-    <q-tabs class="bg-black" v-model="activeTabIndex">
-      <q-tab
-        v-for="(tab, index) in tabs"
-        :key="index"
-        @click="scrollToSection(index)"
-        :alert="tab.alert"
-        :icon="tab.icon"
-        :name="tab.name"
-      />
-    </q-tabs>
-  </q-header>
+  <q-page-container>
+    <q-header style="margin-top: 50px">
+      <q-tabs class="bg-black" v-model="activeTabIndex">
+        <q-tab
+          v-for="(tab, index) in tabs"
+          :key="index"
+          @click="scrollToSection(index)"
+          :alert="tab.alert"
+          :icon="tab.icon"
+          :name="tab.name"
+        />
+      </q-tabs>
+    </q-header>
 
-  <q-card class="bg-yellow-3">
-    <q-card-section>
-      <div class="weather-widget">
-        {{ randomFoodData?.data }}
-        <div class="location">{{ rotateData?.region }}</div>
-        <div class="temperature">{{ rotateData?.weather?.temp }}°C</div>
-        <div class="description">
-          <q-icon name="cloud" />{{ rotateData?.weather?.sky }}
+    <q-card class="bg-yellow-3">
+      <div class="q-card-section">
+        <div class="weather-widget">
+          {{ randomFoodData?.data }}
+          <div class="location">{{ rotateData?.region }}</div>
+          <div class="temperature">{{ rotateData?.weather?.temp }}°C</div>
+          <div class="description">
+            <q-icon name="cloud" />{{ rotateData?.weather?.sky }}
+          </div>
+        </div>
+        <div class="parallax" ref="parallax">
+          <div class="lb-wrap">
+            <div class="lb-text">
+              <h2 class="title-text">식사 지킴이</h2>
+            </div>
+            <div class="lb-image">
+              <img class="meal-image" :src="randomImgUrl" :style="imgStyle" />
+            </div>
+          </div>
         </div>
       </div>
-      <div class="lb-wrap">
-        <div class="lb-text">
-          <h2 class="title-text">식사 지킴이</h2>
-        </div>
-        <div class="lb-image">
-          <img class="meal-image" :src="randomImgUrl" :style="imgStyle" />
-        </div>
-      </div>
 
-      <!-- <div>
-        <div class="content-container">
+      <div class="section" ref="section">
+        ㅇㅇ
+        <!-- <div class="content-container">
           <div
             v-for="(section, index) in sections"
             :key="index"
@@ -135,11 +179,10 @@ export default defineComponent({
           >
             {{ section }}
           </div>
-        </div>
-      </div> -->
-    </q-card-section>
-    <q-card-section>dasdasdasd</q-card-section>
-  </q-card>
+        </div> -->
+      </div>
+    </q-card>
+  </q-page-container>
 </template>
 
 <style scoped>
@@ -148,10 +191,10 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100%;
+
+  height: 100vh;
 }
-.lb-wrap .meal-image {
+.meal-image {
   width: 100%;
   height: auto;
   transition: opacity 1s ease-in-out;
@@ -209,5 +252,102 @@ export default defineComponent({
   font-size: 22px;
   color: rgb(228, 222, 222);
   margin-bottom: 15px;
+}
+
+.parallax {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.parallax-content {
+  transform-style: preserve-3d;
+  animation: float 6s infinite;
+}
+
+.parallax-title {
+  font-size: 60px;
+  font-weight: bold;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+  opacity: 0;
+  transform: translate3d(0, 100px, -100px);
+  animation: fadeUp 2s forwards;
+}
+
+.parallax-subtitle {
+  font-size: 24px;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+  opacity: 0;
+  transform: translate3d(0, 50px, -100px);
+  animation: fadeUp 2s forwards;
+}
+
+.section {
+  height: 100vh;
+  background-color: #e9e9e9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  font-size: 24px;
+}
+
+.section-title {
+  font-size: 36px;
+  color: #333;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(100px);
+  animation: fadeUp 1s forwards;
+}
+
+.section-content {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeUp 1s forwards;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes float {
+  0% {
+    transform: translate3d(0, 0, -100px);
+  }
+  50% {
+    transform: translate3d(0, 50px, -100px);
+  }
+  100% {
+    transform: translate3d(0, 0, -100px);
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
