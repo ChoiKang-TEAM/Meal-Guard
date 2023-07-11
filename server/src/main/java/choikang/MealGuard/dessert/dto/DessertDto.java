@@ -12,6 +12,6 @@ public class DessertDto {
 
         private String name;
 
-        private String kcal;
+        private int kcal;
     }
 }

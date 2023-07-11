@@ -20,6 +20,6 @@ public class Dessert {
 
     private String name;
 
-    private String kcal;
+    private int kcal;
 
 }
