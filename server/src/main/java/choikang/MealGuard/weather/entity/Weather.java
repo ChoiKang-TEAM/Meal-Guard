@@ -19,4 +19,6 @@ public class Weather {
     private Double humid;
 
     private String lastUpdateTime;
+
+    private String sky;
 }

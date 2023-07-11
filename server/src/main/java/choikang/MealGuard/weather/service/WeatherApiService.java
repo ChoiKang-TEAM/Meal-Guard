@@ -5,6 +5,8 @@ import choikang.MealGuard.global.exception.ExceptionCode;
 import choikang.MealGuard.weather.dto.WeatherDto;
 import choikang.MealGuard.weather.entity.Region;
 import choikang.MealGuard.weather.entity.Weather;
+import choikang.MealGuard.weather.helper.ConvertGPS;
+import choikang.MealGuard.weather.helper.LatXLngY;
 import choikang.MealGuard.weather.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +36,12 @@ public class WeatherApiService {
     @Value("${weatherApi.serviceKey}")
     private String serviceKey;
     private final RegionRepository regionRepository;
+    private final ConvertGPS convertGPS;
 
     public WeatherDto.Response getRegionWeather(Long regionId){
         // 1. 날씨 정보를 요청한 지역 조회
         Optional<Region> optionalRegion = regionRepository.findById(regionId);
-        Region region = optionalRegion.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REGION_NOT_FOUND));
+        Region region = optionalRegion.orElseThrow();  // 예외 처리 로직 추가 해야함
 
         StringBuilder urlBuilder =  new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst");
 
@@ -50,9 +53,11 @@ public class WeatherApiService {
         if(min <= 30) { // 해당 시각 발표 전에는 자료가 없음 - 이전시각을 기준으로 해야함
             hour -= 1;
         }
+        LatXLngY tmp = convertGPS.convertGRID_GPS(0, region.getNy(), region.getNx());
+
         String hourStr = hour + "00"; // 정시 기준
-        String nx = Integer.toString(region.getNx());
-        String ny = Integer.toString(region.getNy());
+        String nx = String.valueOf((int)tmp.x);
+        String ny = String.valueOf((int)tmp.y);
         String currentChangeTime = now.format(DateTimeFormatter.ofPattern("yy.MM.dd ")) + hour;
 
         // 기준 시각 조회 자료가 이미 존재하고 있다면 API 요청 없이 기존 자료 그대로 넘김
@@ -61,6 +66,7 @@ public class WeatherApiService {
             if(prevWeather.getLastUpdateTime().equals(currentChangeTime)) {
                 log.info("기존 자료를 재사용합니다");
                 return WeatherDto.Response.builder()
+                        .region(region.getParentRegion() +" "+ region.getChildRegion())
                         .weather(prevWeather)
                         .message("날씨를 불러 왔습니다.").build();
             }
@@ -106,6 +112,7 @@ public class WeatherApiService {
 
             Double temp = null;
             Double humid = null;
+            String sky = "";
             String rainAmount = "";
 
             JSONObject jObject = new JSONObject(data);
@@ -126,13 +133,21 @@ public class WeatherApiService {
                     case "RN1":
                         rainAmount = (String)fcstValue;
                         break;
+                    case "SKY":
+                        sky = (String) fcstValue;
+
+                        if(sky.equals("1")) sky = "맑음";
+                        else if(sky.equals("3")) sky = "구름많음";
+                        else sky = "흐림";
+
+                        break;
                     case "REH":
                         humid = Double.parseDouble((String) fcstValue);
                         break;
                 }
             }
 
-            Weather weather = new Weather(temp, rainAmount, humid, currentChangeTime);
+            Weather weather = new Weather(temp, rainAmount, humid, currentChangeTime,sky);
             region.updateRegionWeather(weather); // DB 업데이트
             return WeatherDto.Response.builder()
                     .region(region.getParentRegion() +" "+ region.getChildRegion())

@@ -23,14 +23,14 @@ public class Region {
     @Column(name = "region_child")
     private String childRegion;
 
-    private int nx;
+    private double nx;
 
-    private int ny;
+    private double ny;
 
     @Embedded
     private Weather weather;
 
-    public Region(Long id, String parentRegion, String childRegion, int nx, int ny) {
+    public Region(Long id, String parentRegion, String childRegion, double nx, double ny) {
         this.id = id;
         this.parentRegion = parentRegion;
         this.childRegion = childRegion;
@@ -40,10 +40,5 @@ public class Region {
 
     public void updateRegionWeather(Weather weather){
         this.weather = weather;
-    }
-
-    @Override
-    public String toString() {
-        return parentRegion + " " + childRegion;
     }
 }
