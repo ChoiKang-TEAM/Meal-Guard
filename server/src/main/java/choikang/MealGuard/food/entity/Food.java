@@ -22,7 +22,7 @@ public class Food {
     @Column(nullable = false)
     private String name;
 
-    private String kcal;
+    private int kcal;
 
     @OneToMany(mappedBy = "food",cascade = CascadeType.ALL)
     private List<Time> times = new ArrayList<>();

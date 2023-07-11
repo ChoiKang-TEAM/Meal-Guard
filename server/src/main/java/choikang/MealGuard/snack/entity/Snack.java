@@ -1,4 +1,4 @@
-package choikang.MealGuard.dessert.entity;
+package choikang.MealGuard.snack.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,13 +13,13 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Dessert {
+public class Snack {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long dessertId;
+    private Long snackId;
 
     private String name;
 
     private int kcal;
-
 }

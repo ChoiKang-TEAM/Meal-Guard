@@ -1,18 +1,15 @@
-package choikang.MealGuard.food.dto;
+package choikang.MealGuard.snack.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class FoodDto {
+public class SnackDto {
 
     @Getter
     @Setter
     public static class Response{
-
-        private long id;
+        private Long snackId;
         private String name;
-
         private int kcal;
     }
-
 }
