@@ -9,10 +9,12 @@ public class FoodDto {
     @Setter
     public static class Response{
 
-        private long id;
+        private long foodId;
         private String name;
 
         private int kcal;
+
+        private String taste;
     }
 
 }

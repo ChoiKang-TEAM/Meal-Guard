@@ -9,9 +9,12 @@ import java.util.List;
 
 public interface FoodRepository extends JpaRepository<Food,Long> {
 
-    @Query("select f from Food f join f.times t where t.hours = :hours")
-    List<Food> findAllByHours(@Param("hours") String hours);
 
-    @Query("select f from Food f join f.seasons s where s.name = :name")
-    List<Food> findAllByName(@Param("name") String name);
+    List<Food> findAllByTimesHours(String hours);
+
+    List<Food> findAllByTasteAndTimesHours(String taste,String hours);
+
+    List<Food> findAllBySeasonsName(String name);
+
+    List<Food> findAllByTasteAndSeasonsName(String taste, String name);
 }

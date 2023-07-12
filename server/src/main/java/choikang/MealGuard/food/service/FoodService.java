@@ -17,7 +17,7 @@ public class FoodService {
 
     private final FoodRepository foodRepository;
 
-    public Food findFoodBuTime(){
+    public Food findFoodByTime(String taste){
         LocalTime currentTime =  LocalTime.now();
 
         String timezone = "";
@@ -27,7 +27,10 @@ public class FoodService {
         else if(currentTime.isAfter(LocalTime.of(17,0)) && currentTime.isBefore(LocalTime.of(22,0))) timezone = "저녁";
         else  timezone = "야식";
 
-        List<Food> foods = foodRepository.findAllByHours(timezone);
+        List<Food> foods;
+        if(taste == null) foods = foodRepository.findAllByTimesHours(timezone);
+        else foods = foodRepository.findAllByTasteAndTimesHours(taste,timezone);
+
 
         if(!foods.isEmpty()){
             Random rand = new Random();
@@ -38,7 +41,7 @@ public class FoodService {
         return null;
     }
 
-    public Food findFoodByTemp(Double temp) {
+    public Food findFoodByTemp(String taste,Double temp) {
         String season = "";
 
         if(temp >= 25.0) season="여름";
@@ -46,7 +49,9 @@ public class FoodService {
         else if(temp >= 10.0) season="가을";
         else season="겨울";
 
-        List<Food> foods = foodRepository.findAllByName(season);
+        List<Food> foods;
+        if(taste == null) foods = foodRepository.findAllBySeasonsName(season);
+        else foods = foodRepository.findAllByTasteAndSeasonsName(taste,season);
 
         if(!foods.isEmpty()){
             Random rand = new Random();

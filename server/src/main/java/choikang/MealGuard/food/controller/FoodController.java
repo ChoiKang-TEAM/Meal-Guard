@@ -22,16 +22,17 @@ public class FoodController {
     private final FoodMapper foodMapper;
 
     @GetMapping("/time")
-    public ResponseEntity getFoodByTime(){
+    public ResponseEntity getFoodByTime(@RequestParam(required = false) String taste){
 
-        Food food = foodService.findFoodBuTime();
+        Food food = foodService.findFoodByTime(taste);
 
         return new ResponseEntity<>(foodMapper.foodToFoodResponseDto(food), HttpStatus.OK);
     }
 
     @GetMapping("/temp")
-    public ResponseEntity getFoodByTemp(@RequestParam Double temp){
-        Food food = foodService.findFoodByTemp(temp);
+    public ResponseEntity getFoodByTemp(@RequestParam(required = false) String taste,
+                                        @RequestParam Double temp){
+        Food food = foodService.findFoodByTemp(taste,temp);
 
         return new ResponseEntity<>(foodMapper.foodToFoodResponseDto(food), HttpStatus.OK);
     }
