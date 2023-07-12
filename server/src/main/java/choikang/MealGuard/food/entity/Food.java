@@ -16,13 +16,14 @@ public class Food {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "FOOD_ID")
-    private Long id;
+    private Long foodId;
 
     @Column(nullable = false)
     private String name;
 
     private int kcal;
+
+    private String taste;
 
     @OneToMany(mappedBy = "food",cascade = CascadeType.ALL)
     private List<Time> times = new ArrayList<>();
