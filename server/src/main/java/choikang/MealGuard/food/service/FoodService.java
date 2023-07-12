@@ -41,7 +41,7 @@ public class FoodService {
         return null;
     }
 
-    public Food findFoodByTemp(Double temp) {
+    public Food findFoodByTemp(String taste,Double temp) {
         String season = "";
 
         if(temp >= 25.0) season="여름";
@@ -49,7 +49,9 @@ public class FoodService {
         else if(temp >= 10.0) season="가을";
         else season="겨울";
 
-        List<Food> foods = foodRepository.findAllByName(season);
+        List<Food> foods;
+        if(taste == null) foods = foodRepository.findAllBySeasonsName(season);
+        else foods = foodRepository.findAllByTasteAndSeasonsName(taste,season);
 
         if(!foods.isEmpty()){
             Random rand = new Random();
