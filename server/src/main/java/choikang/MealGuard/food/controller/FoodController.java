@@ -22,9 +22,9 @@ public class FoodController {
     private final FoodMapper foodMapper;
 
     @GetMapping("/time")
-    public ResponseEntity getFoodByTime(){
+    public ResponseEntity getFoodByTime(@RequestParam(required = false) String taste){
 
-        Food food = foodService.findFoodBuTime();
+        Food food = foodService.findFoodByTime(taste);
 
         return new ResponseEntity<>(foodMapper.foodToFoodResponseDto(food), HttpStatus.OK);
     }
