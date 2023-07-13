@@ -1,26 +1,70 @@
 <script lang="ts">
-import { useGoogleImgSotre } from 'src/stores/google-img-store'
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+} from 'vue'
+import { useIntersectionObserver } from 'src/composables/useIntersectionObserver'
 import { IMAGE_GROUP } from 'src/common/images'
+import { useFoodStore } from 'src/stores/food-store'
+import { storeToRefs } from 'pinia'
+import { HOME_TABS, WHEATER_ICONS } from 'src/common/constants'
 
 export default defineComponent({
   setup() {
     const url = ref()
-    const store = useGoogleImgSotre()
+    const store = useFoodStore()
     const keyword = ref<string>('')
-    const { searchUrl } = store
+    const { rotateData, randomFoodData } = storeToRefs(store)
+    const { getCurrentWeather } = store
+    const parallax = ref<HTMLElement | null>(null)
+
+    const isVisible = ref(false)
+
+    const { observe } = useIntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            isVisible.value = true
+          } else {
+            isVisible.value = false
+          }
+        })
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      }
+    )
+
     const imageData = ref({
       randomImgUrl: '',
       imgStyle: { opacity: 0 },
     })
+
     onMounted(async () => {
+      observe()
+
       const randomValue: number = Math.floor(Math.random() * IMAGE_GROUP.length)
       imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
+      window.addEventListener('scroll', parallaxScroll)
+
+      await getCurrentWeather()
     })
 
-    const change = async () => {
-      url.value = await searchUrl(keyword.value)
+    const parallaxScroll = () => {
+      if (parallax.value) {
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop
+        const parallaxOffset = scrollTop * 0.5
+        parallax.value.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`
+      }
     }
+
     const fadeImage = () => {
       imgStyle.value.opacity = 0
 
@@ -31,61 +75,174 @@ export default defineComponent({
         )
         imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
         setTimeout(() => {
-          console.log(2)
           imgStyle.value.opacity = 0
           fadeImage()
         }, 2000)
       }, 1000)
     }
     const randomImgUrl = computed(() => {
-      console.log(1)
       return imageData.value.randomImgUrl
     })
     const imgStyle = computed(() => imageData.value.imgStyle)
 
     fadeImage() // 초기 이미지 애니메이션 적용
-    return { url, keyword, randomImgUrl, imgStyle, change }
+
+    const sections = ref<string[]>(['Section 1', 'Section 2', 'Section 3'])
+    const activeTabIndex = ref(0)
+    const scrollToSection = (index: number) => {
+      const sectionElement = document.querySelectorAll('.section')[
+        index
+      ] as HTMLElement
+      sectionElement.scrollIntoView({ behavior: 'smooth' })
+    }
+
+    const viewModalState = reactive<{ name: string; state: boolean }[]>([
+      {
+        name: 'food',
+        state: false,
+      },
+      {
+        name: 'dessert',
+        state: false,
+      },
+      {
+        name: 'recipe',
+        state: false,
+      },
+    ])
+    const openViewModal = (viewStateIndex: number): void => {
+      viewModalState[viewStateIndex].state = true
+    }
+    onBeforeUnmount(() => {
+      window.removeEventListener('scroll', parallaxScroll)
+    })
+
+    const state = {
+      url,
+      keyword,
+      randomImgUrl,
+      imgStyle,
+      HOME_TABS,
+      sections,
+      activeTabIndex,
+      rotateData,
+      randomFoodData,
+      parallax,
+      isVisible,
+      WHEATER_ICONS,
+      viewModalState,
+    }
+    const action = {
+      scrollToSection,
+      openViewModal,
+    }
+    return {
+      ...state,
+      ...action,
+    }
   },
 })
 </script>
 
 <template>
-  <q-page>
-    <q-card>
-      <q-card-section class="bg-yellow-3">
-        <div class="lb-wrap">
-          <div class="lb-text">
-            <h2 class="title-text">식사 지킴이</h2>
+  <q-page-container>
+    <q-header style="margin-top: 50px">
+      <q-tabs class="bg-black" v-model="activeTabIndex">
+        <q-tab
+          v-for="(tab, index) in HOME_TABS"
+          :key="index"
+          @click="scrollToSection(index)"
+          :alert="tab.alert"
+          :icon="tab.icon"
+          :name="tab.name"
+        />
+      </q-tabs>
+    </q-header>
+
+    <q-card class="bg-yellow-3 section">
+      <q-card-section>
+        <div class="weather-widget">
+          <div class="location">{{ rotateData?.region }}</div>
+          <div class="temperature">{{ rotateData?.weather?.temp }}°C</div>
+          <div class="description">
+            <ion-icon v-if="rotateData?.weather?.sky" name="snow" />
+            {{ rotateData?.weather?.sky }}
           </div>
-          <div class="lb-image">
-            <img class="meal-image" :src="randomImgUrl" :style="imgStyle" />
+        </div>
+        <div class="parallax" ref="parallax">
+          <div>
+            <div class="lb-text">
+              <h2 class="title-text">식사 지킴이</h2>
+            </div>
+            <q-parallax class="meal-image" :src="randomImgUrl" />
           </div>
         </div>
       </q-card-section>
     </q-card>
-  </q-page>
-</template>
+    <q-card>
+      <q-card-section horizontal>
+        <q-img
+          class="col-5"
+          src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
+          style="height: 500px"
+        />
 
-<style scoped>
-.lb-wrap {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-.lb-wrap .meal-image {
-  width: 100%;
-  height: auto;
-  transition: opacity 1s ease-in-out;
-}
-.lb-text {
-  padding: 10px 20px;
-  text-align: center;
-}
-.title-text {
-  color: white; /* 텍스트 색상 */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
-}
-</style>
+        <q-card-section> dd </q-card-section>
+      </q-card-section>
+
+      <q-separator />
+    </q-card>
+
+    <q-card class="bg-pink-2 section">
+      <q-card-section>
+        <q-parallax
+          class="img-center"
+          src="src/assets/images/desserts.png"
+          :height="500"
+        />
+      </q-card-section>
+    </q-card>
+    <q-card>
+      <q-card-section horizontal>
+        <q-img
+          class="col-5"
+          src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
+        />
+
+        <q-card-section> dd </q-card-section>
+      </q-card-section>
+
+      <q-separator />
+    </q-card>
+    <q-card class="my-card section" flat bordered>
+      <q-card-section horizontal>
+        <q-card-section class="q-pt-xs">
+          <div class="text-overline text-black">Meal Guard</div>
+          <div class="text-h5 q-mt-sm q-mb-xs text-black">추천 레시피</div>
+          <div class="text-caption text-grey">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </div>
+        </q-card-section>
+
+        <q-card-section class="col-5 flex flex-center">
+          <q-img
+            class="rounded-borders"
+            src="https://cdn.quasar.dev/img/parallax2.jpg"
+          />
+        </q-card-section>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-actions>
+        <q-btn
+          @click="openViewModal(2)"
+          flat
+          color="primary"
+          label="레시피 보기"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-page-container>
+</template>
