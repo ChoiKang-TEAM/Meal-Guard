@@ -31,11 +31,11 @@ module.exports = configure(function (/* ctx */) {
     boot: ['i18n', 'axios', 'common'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
-    css: ['app.scss'],
+    css: ['app.scss', 'common.scss'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
-      // 'ionicons-v4',
+      'ionicons-v4',
       // 'mdi-v5',
       // 'fontawesome-v6',
       // 'eva-icons',
