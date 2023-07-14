@@ -28,4 +28,9 @@ public class RecipeService {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
         return optionalRecipe.orElseThrow(() -> new BusinessLogicException(ExceptionCode.RECIPE_NOT_FOUND));
     }
+
+    public Page<Recipe> findRecipesBySearch(String name,int page,int size){
+        if(name == null) return recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
+        else return recipeRepository.findByNameContainingIgnoreCase(name,PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
+    }
 }
