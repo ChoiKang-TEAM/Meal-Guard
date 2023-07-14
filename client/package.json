@@ -19,10 +19,12 @@
     "graphql-tag": "^2.12.6",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
+    "vee-validate": "^4.10.6",
     "villus": "^3.1.0",
     "vue": "^3.3.4",
     "vue-i18n": "^9.2.2",
-    "vue-router": "^4.0.0"
+    "vue-router": "^4.0.0",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",

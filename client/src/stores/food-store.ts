@@ -1,11 +1,16 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { ref } from 'vue'
+import { useGoogleImgSotre } from './google-img-store'
 
 export const useFoodStore = defineStore('food', () => {
   const temp = ref()
   const rotateData = ref()
   const randomFoodData = ref()
+  const recipeData = ref()
+  const recipeTotalPage = ref<number>(0)
+  const store = useGoogleImgSotre()
+  const { searchUrl } = store
 
   const getCurrentWeather = async (
     currentLongitude = 126.9312417,
@@ -39,8 +44,34 @@ export const useFoodStore = defineStore('food', () => {
     randomFoodData.value = result
   }
 
-  const state = { rotateData, randomFoodData }
-  const action = { getCurrentWeather, getRandomFoodByWeather }
+  const getRecipeData = async (dto: {
+    page: number
+    size: number
+    name: string | null
+  }) => {
+    const result = await api.get('/recipes/search', {
+      headers: {
+        'Content-Type': 'application / json',
+        'ngrok-skip-browser-warning': '69420',
+      },
+      params: {
+        size: dto.size,
+        page: dto.page,
+        name: dto.name,
+      },
+    })
+    recipeData.value = await Promise.all(
+      result?.data?.data.map(async (v: any) => {
+        const foodUrlImage = await searchUrl(v.name)
+        return { ...v, foodUrlImage }
+      })
+    )
+
+    recipeTotalPage.value = result?.data?.pageInfo?.totalPages
+  }
+
+  const state = { rotateData, randomFoodData, recipeData, recipeTotalPage }
+  const action = { getCurrentWeather, getRandomFoodByWeather, getRecipeData }
 
   return { ...state, ...action }
 })

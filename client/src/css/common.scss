@@ -70,3 +70,19 @@
   width: 100%;
   max-width: 350px;
 }
+
+.admin-pagination {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0 auto;
+  .q-pagination {
+    .q-btn {
+      &:disabled {
+        color: #aaa;
+      }
+    }
+  }
+}

@@ -12,8 +12,12 @@ import { IMAGE_GROUP } from 'src/common/images'
 import { useFoodStore } from 'src/stores/food-store'
 import { storeToRefs } from 'pinia'
 import { HOME_TABS, WHEATER_ICONS } from 'src/common/constants'
+import RecipeTableDialog from 'src/components/RecipeTableDialog.vue'
 
 export default defineComponent({
+  components: {
+    RecipeTableDialog,
+  },
   setup() {
     const url = ref()
     const store = useFoodStore()
@@ -243,6 +247,9 @@ export default defineComponent({
           label="레시피 보기"
         />
       </q-card-actions>
+      <q-dialog v-model="viewModalState[2].state"
+        ><recipe-table-dialog style="max-width: 1080px"></recipe-table-dialog
+      ></q-dialog>
     </q-card>
   </q-page-container>
 </template>
