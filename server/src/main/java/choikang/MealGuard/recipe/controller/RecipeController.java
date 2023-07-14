@@ -34,4 +34,13 @@ public class RecipeController {
 
         return new ResponseEntity<>(mapper.recipeToResponse(recipe),HttpStatus.OK);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity getRecipe(@RequestParam(required = false) String name,@RequestParam int page,@RequestParam int size){
+        Page<Recipe> recipePage = recipeService.findRecipesBySearch(name,page,size);
+
+        List<Recipe> recipes = recipePage.getContent();
+
+        return new ResponseEntity<>(new MultiResponseDto<>(mapper.recipeToListResponse(recipes),recipePage), HttpStatus.OK);
+    }
 }
