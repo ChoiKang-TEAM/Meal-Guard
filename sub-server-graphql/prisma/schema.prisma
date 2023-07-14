@@ -11,7 +11,44 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id             Int               @id @unique @default(autoincrement())
+  userId         String            @unique @map("user_id")
+  password       String
+  name           String?
+  preferredFoods UserFoodMapping[]
+  createdAt      DateTime          @default(now()) @map("reg_dtime")
+  updatedAt      DateTime          @updatedAt @map("upd_dtime")
+
+  @@map("MG_MB_USER")
+}
+
+model Food {
+  id         Int               @id @unique @default(autoincrement())
+  name       String            @unique
+  category   Category          @relation(fields: [categoryId], references: [id])
+  categoryId Int               @map("category_id")
+  users      UserFoodMapping[]
+  createdAt  DateTime          @default(now()) @map("reg_dtime")
+  updatedAt  DateTime          @updatedAt @map("upd_dtime")
+
+  @@map("MG_MB_FOOD")
+}
+
+model UserFoodMapping {
+  id     Int @id @unique @default(autoincrement())
+  userId Int @map("user_id")
+  foodId Int @map("food_id")
+
+  user User @relation(fields: [userId], references: [id])
+  food Food @relation(fields: [foodId], references: [id])
+
+  @@map("MG_MB_USER_FOOD_MAPPING")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  foods Food[]
+
+  @@map("MG_MB_CATEGORY")
 }
