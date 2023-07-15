@@ -3,7 +3,7 @@ import { useQuasar } from 'quasar'
 import { LoginMemberUserInput } from 'src/common/models'
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SignUp from 'src/components/member-account/SignUp.vue'
+import SignUp from 'src/components/SignUp.vue'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useMemberUserStore } from 'src/stores/member-user-store'
 
