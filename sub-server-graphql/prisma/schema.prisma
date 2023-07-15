@@ -15,6 +15,7 @@ model User {
   userId         String            @unique @map("user_id")
   password       String
   name           String?
+  userSeq        String            @unique @map("user_seq")
   preferredFoods UserFoodMapping[]
   createdAt      DateTime          @default(now()) @map("reg_dtime")
   updatedAt      DateTime          @updatedAt @map("upd_dtime")

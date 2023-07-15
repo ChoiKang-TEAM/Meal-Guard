@@ -6,6 +6,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { Logger } from 'winston'
 import * as bcrypt from 'bcrypt'
 import { FindMemberUserByUserId, SignUpMemberUserInput } from './dto/user.input'
+import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class UserService implements CrudService<User> {
@@ -20,7 +21,8 @@ export class UserService implements CrudService<User> {
         data: {
           userId: dto.userId,
           password: hasshedPassword,
-          name: dto.name
+          name: dto.name,
+          userSeq: uuidv4()
         }
       })
       return true
