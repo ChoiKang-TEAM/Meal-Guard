@@ -5,6 +5,7 @@ import { PrismaService } from 'src/shared/prisma/prisma.service'
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { Logger } from 'winston'
 import * as bcrypt from 'bcrypt'
+import { FindMemberUserByUserId } from './dto/user.input'
 
 @Injectable()
 export class UserService implements CrudService<User> {
@@ -33,7 +34,7 @@ export class UserService implements CrudService<User> {
   update(dto: User): Promise<boolean> {
     throw new Error('Method not implemented.')
   }
-  findUnique(dto: User): Promise<User> {
+  findUnique(dto: FindMemberUserByUserId): Promise<User> {
     throw new Error('Method not implemented.')
   }
   findAll(): Promise<User[]> {
