@@ -31,6 +31,11 @@ export const useFoodStore = defineStore('food', () => {
     await getRandomFoodByWeather(temp.value)
   }
 
+  const favoriteApi = async () => {
+    const result = await api.post(`/recipes/${3367}/favorite`)
+    console.log(result)
+  }
+
   const getRandomFoodByWeather = async (temp: number) => {
     const result = await api.get('/foods/temp', {
       headers: {
@@ -71,7 +76,12 @@ export const useFoodStore = defineStore('food', () => {
   }
 
   const state = { rotateData, randomFoodData, recipeData, recipeTotalPage }
-  const action = { getCurrentWeather, getRandomFoodByWeather, getRecipeData }
+  const action = {
+    getCurrentWeather,
+    getRandomFoodByWeather,
+    getRecipeData,
+    favoriteApi,
+  }
 
   return { ...state, ...action }
 })

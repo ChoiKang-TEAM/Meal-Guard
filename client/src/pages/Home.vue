@@ -23,7 +23,7 @@ export default defineComponent({
     const store = useFoodStore()
     const keyword = ref<string>('')
     const { rotateData, randomFoodData } = storeToRefs(store)
-    const { getCurrentWeather } = store
+    const { getCurrentWeather, favoriteApi } = store
     const parallax = ref<HTMLElement | null>(null)
 
     const isVisible = ref(false)
@@ -52,7 +52,7 @@ export default defineComponent({
 
     onMounted(async () => {
       observe()
-
+      favoriteApi()
       const randomValue: number = Math.floor(Math.random() * IMAGE_GROUP.length)
       imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
       window.addEventListener('scroll', parallaxScroll)
