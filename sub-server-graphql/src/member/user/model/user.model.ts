@@ -10,4 +10,7 @@ export class User {
 
   @Field(() => String)
   readonly password: string
+
+  @Field(() => String)
+  readonly userSeq: string
 }
