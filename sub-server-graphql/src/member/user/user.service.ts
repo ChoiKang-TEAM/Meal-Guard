@@ -6,6 +6,8 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { Logger } from 'winston'
 import * as bcrypt from 'bcrypt'
 import { FindMemberUserByUserId, SignUpMemberUserInput } from './dto/user.input'
+import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
 
 @Injectable()
 export class UserService implements CrudService<User> {
@@ -15,14 +17,20 @@ export class UserService implements CrudService<User> {
       const saltRound = 10
       const salt = await bcrypt.genSalt(saltRound)
       const hasshedPassword = await bcrypt.hash(dto.password, salt)
-
+      const userSeq = uuidv4()
       await this.prisma.user.create({
         data: {
           userId: dto.userId,
           password: hasshedPassword,
-          name: dto.name
+          name: dto.name,
+          userSeq: userSeq
         }
       })
+      const url = 'https://263c-124-111-225-247.ngrok-free.app/user/create'
+      const { data } = await axios.post(url, userSeq)
+
+      console.log(data)
+
       return true
     } catch (e) {
       this.logger.error(e)
