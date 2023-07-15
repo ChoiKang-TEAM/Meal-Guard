@@ -22,6 +22,9 @@ export class SignUpMemberUserInput {
 
   @Field(() => String, { nullable: false })
   readonly password: string
+
+  @Field(() => String, { nullable: true })
+  readonly name?: string
 }
 
 @InputType()

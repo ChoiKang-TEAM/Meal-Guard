@@ -5,12 +5,12 @@ import { PrismaService } from 'src/shared/prisma/prisma.service'
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { Logger } from 'winston'
 import * as bcrypt from 'bcrypt'
-import { FindMemberUserByUserId } from './dto/user.input'
+import { FindMemberUserByUserId, SignUpMemberUserInput } from './dto/user.input'
 
 @Injectable()
 export class UserService implements CrudService<User> {
   constructor(private readonly prisma: PrismaService, @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger) {}
-  async create(dto: User): Promise<boolean> {
+  async create(dto: SignUpMemberUserInput): Promise<boolean> {
     try {
       const saltRound = 10
       const salt = await bcrypt.genSalt(saltRound)
@@ -19,7 +19,8 @@ export class UserService implements CrudService<User> {
       await this.prisma.user.create({
         data: {
           userId: dto.userId,
-          password: hasshedPassword
+          password: hasshedPassword,
+          name: dto.name
         }
       })
       return true
@@ -34,8 +35,16 @@ export class UserService implements CrudService<User> {
   update(dto: User): Promise<boolean> {
     throw new Error('Method not implemented.')
   }
-  findUnique(dto: FindMemberUserByUserId): Promise<User> {
-    throw new Error('Method not implemented.')
+  async findUnique(dto: FindMemberUserByUserId): Promise<User> {
+    try {
+      return await this.prisma.user.findUnique({
+        where: {
+          userId: dto.userId
+        }
+      })
+    } catch (e) {
+      this.logger.error(e)
+    }
   }
   findAll(): Promise<User[]> {
     throw new Error('Method not implemented.')
