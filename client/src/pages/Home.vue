@@ -190,8 +190,6 @@ export default defineComponent({
           src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
           style="height: 500px"
         />
-
-        <q-card-section> dd </q-card-section>
       </q-card-section>
 
       <q-separator />
@@ -253,3 +251,9 @@ export default defineComponent({
     </q-card>
   </q-page-container>
 </template>
+
+<style lang="scss" scoped>
+.meal-image {
+  width: 500px;
+}
+</style>

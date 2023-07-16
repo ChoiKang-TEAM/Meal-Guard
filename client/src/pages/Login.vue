@@ -61,11 +61,10 @@ export default defineComponent({
     <q-header elevated class="bg-orange text-white">
       <q-toolbar>
         <q-toolbar-title>
-          <q-avatar>
-            <img
-              src="https://item.kakaocdn.net/do/6083fdfd2167d251eff093256f7ee68241d1a2caccd0c566eab28b91e2e5d306"
-            /> </q-avatar
-          >포트폴리오
+          <q-avatar size="24px">
+            <img src="src/assets/images/login-icon.png" />
+          </q-avatar>
+          MEAL-GUARD
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -73,7 +72,7 @@ export default defineComponent({
     <div class="q-pa-md q-gutter-md d-flex justify-center align-center vh-100">
       <q-card class="card-container">
         <q-card-section>
-          <h2 class="text-h6">Login</h2>
+          <h2 class="text-h6 text-black">로그인</h2>
         </q-card-section>
 
         <q-form @submit="memberLogin">
