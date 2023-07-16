@@ -43,4 +43,20 @@ public class RecipeController {
 
         return new ResponseEntity<>(new MultiResponseDto<>(mapper.recipeToListResponse(recipes),recipePage), HttpStatus.OK);
     }
+
+    // 좋아요 하기
+    @PostMapping("/{recipe-id}/favorite")
+    public ResponseEntity<String> postFavorite(@PathVariable("recipe-id") long recipeId , @RequestHeader("Authorization") String token) {
+        recipeService.createFavorite(recipeId,token);
+
+        return ResponseEntity.ok("좋아요");
+    }
+
+    //좋아요 취소
+    @DeleteMapping("/{recipe-id}/favorite")
+    public ResponseEntity<String> deleteFavorite(@PathVariable("recipe-id") long recipeId , @RequestHeader("Authorization") String token) {
+        recipeService.cancleFavorite(recipeId,token);
+
+        return ResponseEntity.ok("좋아요 취소");
+    }
 }
