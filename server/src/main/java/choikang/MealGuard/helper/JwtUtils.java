@@ -10,7 +10,7 @@ import javax.crypto.SecretKey;
 
 @Component
 public class JwtUtils {
-    @Value("${jwt.secret-key}")
+    @Value("${jwt.key}")
     private String SECRET_KEY;
 
     public Claims parseToken(String token) {
