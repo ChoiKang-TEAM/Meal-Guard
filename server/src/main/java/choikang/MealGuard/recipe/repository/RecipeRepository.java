@@ -17,9 +17,9 @@ public interface RecipeRepository extends JpaRepository<Recipe,Long> {
             "WHERE NOT EXISTS (SELECT recipe_id, user_seq " +
             "FROM favorite " +
             "WHERE recipe_id = :recipeId and user_seq = :userSeq)", nativeQuery = true)
-    int upFavorite(long recipeId, String userSeq);
+    void upFavorite(long recipeId, String userSeq);
 
     @Modifying
     @Query(value = "DELETE FROM favorite WHERE recipe_id = :recipeId and user_seq = :userSeq", nativeQuery = true)
-    int downFavorite(long recipeId, String userSeq);
+    void downFavorite(long recipeId, String userSeq);
 }
