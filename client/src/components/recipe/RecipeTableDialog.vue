@@ -5,6 +5,7 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { Form as ValidationForm, useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { RECIPE_COLUMNS } from 'src/common/columns'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: { ValidationForm },
@@ -13,6 +14,7 @@ export default defineComponent({
     const { recipeData, recipeTotalPage } = storeToRefs(store)
     const { getRecipeData } = store
     const pageIndex = ref<number>(1)
+    const router = useRouter()
 
     const validationSchema = yup.object({
       filter: yup.string().defined().required('필수 값을 입력해주세요.'),
@@ -56,6 +58,11 @@ export default defineComponent({
       pageIndex.value = 1
     }
 
+    const goDetailPage = (id: number) => {
+      console.log(id)
+      router.push({ name: 'RecipeDetail', params: { id: id } })
+    }
+
     const state = {
       RECIPE_COLUMNS,
       recipeData,
@@ -64,7 +71,7 @@ export default defineComponent({
       filter,
       errors,
     }
-    const action = { pageChange, getRecipeDataBySearch }
+    const action = { pageChange, getRecipeDataBySearch, goDetailPage }
     return {
       ...state,
       ...action,
@@ -108,7 +115,7 @@ export default defineComponent({
         </validation-form>
       </template>
       <template v-slot:body="props">
-        <q-tr :props="props">
+        <q-tr :props="props" @click="goDetailPage(props.row?.recipeId)">
           <q-td key="recipeId" :props="props">{{ props.row?.recipeId }}</q-td>
           <q-td key="part" :props="props">{{ props.row?.part }}</q-td>
           <q-td key="foodPicture" :props="props"
