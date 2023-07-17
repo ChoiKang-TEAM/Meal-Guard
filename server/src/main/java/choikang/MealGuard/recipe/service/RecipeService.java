@@ -3,8 +3,11 @@ package choikang.MealGuard.recipe.service;
 import choikang.MealGuard.global.exception.BusinessLogicException;
 import choikang.MealGuard.global.exception.ExceptionCode;
 import choikang.MealGuard.helper.JwtUtils;
+import choikang.MealGuard.recipe.dto.FavoriteRecipeResponse;
+import choikang.MealGuard.recipe.dto.RecipeDto;
 import choikang.MealGuard.recipe.entity.Favorite;
 import choikang.MealGuard.recipe.entity.Recipe;
+import choikang.MealGuard.recipe.repository.FavoriteRepository;
 import choikang.MealGuard.recipe.repository.RecipeRepository;
 import choikang.MealGuard.user.entity.User;
 import choikang.MealGuard.user.repository.UserRepository;
@@ -26,6 +29,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
 
+    private final FavoriteRepository favoriteRepository;
     private final JwtUtils jwtUtils;
 
     public Page<Recipe> findRecipes(int page,int size){
@@ -51,8 +55,8 @@ public class RecipeService {
         Optional<User> optionalUser = userRepository.findById(id);
         User user = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        for(Favorite favorite : user.getFavorites()){
-            if(favorite.getRecipe().getRecipeId() == recipe.getRecipeId()){
+        for (Favorite favorite : user.getFavorites()) {
+            if (favorite.getRecipe().getRecipeId() == recipe.getRecipeId()) {
                 throw new BusinessLogicException(ExceptionCode.LIKE_NOT_TWICE);
             }
         }
@@ -64,7 +68,6 @@ public class RecipeService {
     //좋아요 취소
     public void cancleFavorite(long recipeId,String token) {
         Recipe recipe = findRecipe(recipeId);
-
 
         Claims claims = jwtUtils.parseToken(token.substring(7));
         String id = (String) claims.get("userSeq");
@@ -79,5 +82,15 @@ public class RecipeService {
 
         recipeRepository.downFavorite(recipe.getRecipeId(),user.getUser_seq());
 
+    }
+
+    public Page<FavoriteRecipeResponse> findFavoritesRecipes(int page, int size, String token){
+        Claims claims = jwtUtils.parseToken(token.substring(7));
+        String id = (String) claims.get("userSeq");
+
+        Optional<User> optionalUser = userRepository.findById(id);
+        User user = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        return favoriteRepository.findFavoriteRecipesByUser_seq(id, PageRequest.of(page - 1, size, Sort.by("recipe.recipeId").descending()));
     }
 }
