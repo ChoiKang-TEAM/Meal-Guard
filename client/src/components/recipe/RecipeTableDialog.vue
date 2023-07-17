@@ -4,6 +4,8 @@ import { useFoodStore } from 'src/stores/food-store'
 import { defineComponent, onMounted, ref } from 'vue'
 import { Form as ValidationForm, useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
+import { RECIPE_COLUMNS } from 'src/common/columns'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: { ValidationForm },
@@ -12,9 +14,10 @@ export default defineComponent({
     const { recipeData, recipeTotalPage } = storeToRefs(store)
     const { getRecipeData } = store
     const pageIndex = ref<number>(1)
+    const router = useRouter()
 
     const validationSchema = yup.object({
-      filter: yup.string().defined().required('안찬양 쥬지를 분질러버려'),
+      filter: yup.string().defined().required('필수 값을 입력해주세요.'),
     })
 
     const { errors, meta } = useForm({
@@ -27,47 +30,6 @@ export default defineComponent({
       validateOnInput: true,
     })
 
-    const columns: any = [
-      {
-        name: 'recipeId',
-        align: 'left',
-        label: 'No',
-        field: 'recipeId',
-        sortable: true,
-      },
-      {
-        name: 'part',
-        align: 'center',
-        label: '종류',
-        field: 'part',
-      },
-      {
-        name: 'foodPicture',
-        align: 'center',
-        label: '음식 사진',
-        field: 'foodPicture',
-      },
-      {
-        name: 'name',
-        align: 'center',
-        label: '음식 이름',
-        field: 'name',
-        sortable: true,
-      },
-      {
-        name: 'way',
-        align: 'center',
-        label: '조리 방법',
-        field: 'way',
-      },
-
-      {
-        name: 'recipePicture',
-        align: 'center',
-        label: '재료 사진',
-        field: 'recipePicture',
-      },
-    ]
     onMounted(() => {
       const dto = {
         page: 1,
@@ -96,15 +58,20 @@ export default defineComponent({
       pageIndex.value = 1
     }
 
+    const goDetailPage = (id: number) => {
+      console.log(id)
+      router.push({ name: 'RecipeDetail', params: { id: id } })
+    }
+
     const state = {
-      columns,
+      RECIPE_COLUMNS,
       recipeData,
       pageIndex,
       recipeTotalPage,
       filter,
       errors,
     }
-    const action = { pageChange, getRecipeDataBySearch }
+    const action = { pageChange, getRecipeDataBySearch, goDetailPage }
     return {
       ...state,
       ...action,
@@ -118,7 +85,7 @@ export default defineComponent({
     <q-table
       title="음식 레시피"
       :rows="recipeData"
-      :columns="columns"
+      :columns="RECIPE_COLUMNS"
       row-key="recipeId"
       hide-pagination
       flat
@@ -147,17 +114,8 @@ export default defineComponent({
           </q-input>
         </validation-form>
       </template>
-      <!-- <template v-slot:header="props">
-        <q-tr :props="props">
-          <q-th key="recipeId" :props="props">{{ props.cols[0].label }}</q-th>
-          <q-th key="picture" :props="props">{{ props.cols?.[1].label }}</q-th>
-          <q-th key="way" :props="props">{{ props.cols?.[2].label }}</q-th>
-          <q-th key="name" :props="props">{{ props.cols?.[3].label }}</q-th>
-          <q-th key="part" :props="props">{{ props.cols?.[4].label }}</q-th>
-        </q-tr>
-      </template> -->
       <template v-slot:body="props">
-        <q-tr :props="props">
+        <q-tr :props="props" @click="goDetailPage(props.row?.recipeId)">
           <q-td key="recipeId" :props="props">{{ props.row?.recipeId }}</q-td>
           <q-td key="part" :props="props">{{ props.row?.part }}</q-td>
           <q-td key="foodPicture" :props="props"

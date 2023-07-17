@@ -3,7 +3,7 @@ import { useQuasar } from 'quasar'
 import { LoginMemberUserInput } from 'src/common/models'
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SignUp from 'src/components/SignUp.vue'
+import SignUp from 'src/components/login/SignUp.vue'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useMemberUserStore } from 'src/stores/member-user-store'
 
@@ -61,11 +61,10 @@ export default defineComponent({
     <q-header elevated class="bg-orange text-white">
       <q-toolbar>
         <q-toolbar-title>
-          <q-avatar>
-            <img
-              src="https://item.kakaocdn.net/do/6083fdfd2167d251eff093256f7ee68241d1a2caccd0c566eab28b91e2e5d306"
-            /> </q-avatar
-          >포트폴리오
+          <q-avatar size="24px">
+            <img src="src/assets/images/login-icon.png" />
+          </q-avatar>
+          MEAL-GUARD
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -73,7 +72,7 @@ export default defineComponent({
     <div class="q-pa-md q-gutter-md d-flex justify-center align-center vh-100">
       <q-card class="card-container">
         <q-card-section>
-          <h2 class="text-h6">Login</h2>
+          <h2 class="text-h6 text-black">로그인</h2>
         </q-card-section>
 
         <q-form @submit="memberLogin">
@@ -122,84 +121,11 @@ export default defineComponent({
               /></q-dialog>
             </div>
           </q-card-actions>
-
-          <!-- <q-card-section>
-              <q-btn rounded outline color="primary" label="회원가입" />
-            </q-card-section> -->
         </q-form>
       </q-card>
     </div>
   </q-layout>
 </template>
-
-<!-- <template>
-  <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-orange text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          <q-avatar>
-            <img
-              src="https://item.kakaocdn.net/do/6083fdfd2167d251eff093256f7ee68241d1a2caccd0c566eab28b91e2e5d306"
-            /> </q-avatar
-          >포트폴리오
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-header>
-    <q-page-container>
-      <q-page>
-        <from @submit="memberLogin">
-          <q-card>
-            <q-card-section> 로그인 </q-card-section>
-            <q-card-section>
-              <strong>아이디</strong>
-              <q-input
-                square
-                outlined
-                placeholder="아이디를 입력해주세요"
-                v-model="userId"
-              />
-
-              <strong>비밀번호</strong>
-              <q-input
-                square
-                outlined
-                type="password"
-                placeholder="비밀번호를 입력해주세요."
-                v-model="password"
-              />
-
-              <q-btn
-                square
-                unelevated
-                class="admin-btn pink w-100"
-                label="로그인"
-                type="submit"
-              />
-
-              <q-separator />
-              <q-btn
-                square
-                unelevated
-                class="admin-btn text-pink w-50"
-                label="계정 신청"
-                style="border: solid 1px gainsboro"
-              /><q-btn
-                square
-                unelevated
-                class="admin-btn w-50 text-pink"
-                label="비밀번호 찾기"
-                style="border: solid 1px gainsboro"
-              />
-            </q-card-section>
-          </q-card>
-        </from>
-        <span class="copyright-text"
-          >ⓒBU-LU-MAX N CO., LTD. ALL Right Reserved</span
-        >
-      </q-page>
-    </q-page-container>
-  </q-layout>
-</template> -->
 
 <style scoped>
 .d-flex {

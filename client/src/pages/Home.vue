@@ -12,7 +12,7 @@ import { IMAGE_GROUP } from 'src/common/images'
 import { useFoodStore } from 'src/stores/food-store'
 import { storeToRefs } from 'pinia'
 import { HOME_TABS, WHEATER_ICONS } from 'src/common/constants'
-import RecipeTableDialog from 'src/components/RecipeTableDialog.vue'
+import RecipeTableDialog from 'src/components/recipe/RecipeTableDialog.vue'
 
 export default defineComponent({
   components: {
@@ -91,7 +91,6 @@ export default defineComponent({
 
     fadeImage() // 초기 이미지 애니메이션 적용
 
-    const sections = ref<string[]>(['Section 1', 'Section 2', 'Section 3'])
     const activeTabIndex = ref(0)
     const scrollToSection = (index: number) => {
       const sectionElement = document.querySelectorAll('.section')[
@@ -127,7 +126,7 @@ export default defineComponent({
       randomImgUrl,
       imgStyle,
       HOME_TABS,
-      sections,
+
       activeTabIndex,
       rotateData,
       randomFoodData,
@@ -190,30 +189,28 @@ export default defineComponent({
           src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
           style="height: 500px"
         />
-
-        <q-card-section> dd </q-card-section>
       </q-card-section>
 
       <q-separator />
     </q-card>
 
     <q-card class="bg-pink-2 section">
-      <q-card-section>
+      <div class="flex justify-center items-center">
         <q-parallax
-          class="img-center"
           src="src/assets/images/desserts.png"
           :height="500"
+          style="width: 800px"
         />
-      </q-card-section>
+      </div>
     </q-card>
-    <q-card>
+    <q-card flat>
       <q-card-section horizontal>
         <q-img
           class="col-5"
           src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
         />
 
-        <q-card-section> dd </q-card-section>
+        <q-card-section class="text-black"> dd </q-card-section>
       </q-card-section>
 
       <q-separator />
@@ -224,8 +221,7 @@ export default defineComponent({
           <div class="text-overline text-black">Meal Guard</div>
           <div class="text-h5 q-mt-sm q-mb-xs text-black">추천 레시피</div>
           <div class="text-caption text-grey">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            오늘의 한 끼, 건강한 한 끼, 모두의 한 끼
           </div>
         </q-card-section>
 
@@ -253,3 +249,9 @@ export default defineComponent({
     </q-card>
   </q-page-container>
 </template>
+
+<style lang="scss" scoped>
+.meal-image {
+  width: 500px;
+}
+</style>
