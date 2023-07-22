@@ -2,9 +2,7 @@
   <!-- S : header -->
   <q-header elevated class="bg-black">
     <q-toolbar>
-      <div>
-        <slot name="expand" />
-      </div>
+      <slot name="expand" />
       <slot name="tabs" />
     </q-toolbar>
     <div></div>

@@ -42,11 +42,14 @@ export default defineComponent({
 
 <template>
   <header-layout>
-    <template #append><q-tab>dd</q-tab></template>
-    <q-card class="text-black" style="opacity: 0.3">
-      {{ count }}
-      {{ filter }}
-      <q-card-section class="recipe-info">
+    <template #expand>
+      <q-toolbar-title class="toolbar-title">
+        <div class="text-center">{{ recipeDetailData.name }}</div>
+      </q-toolbar-title></template
+    >
+
+    <q-card class="text-black" style="opacity: 1">
+      <q-card-section class="recipe-info" style="opacity: 0">
         <q-btn @click="test()" :style="filter" />
         <!-- <q-img :src="recipeDetailData?.mainImage" /> -->
       </q-card-section>
