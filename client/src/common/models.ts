@@ -29,3 +29,9 @@ export interface ColumnsModel {
   classes?: string | ((row: any) => string)
   headerStyle?: string
 }
+
+export interface BackgroundStyleModel {
+  background?: string
+  'background-size'?: 'cover' | 'contain'
+  opacity?: number
+}
