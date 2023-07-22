@@ -89,7 +89,7 @@ module.exports = {
     'vue/multi-word-component-names': [
       'error',
       {
-        ignores: ['Home', 'Login'],
+        ignores: ['Home', 'Login', 'Recipe'],
       },
     ],
   },

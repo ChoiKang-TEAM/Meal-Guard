@@ -1,20 +1,23 @@
 <script lang="ts">
 import { useQuasar } from 'quasar'
-import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useFoodStore } from 'src/stores/food-store'
+import HeaderLayout from 'src/layouts/HeaderLayout.vue'
 import { storeToRefs } from 'pinia'
+import { useRecipeStore } from 'src/stores/recipe-store'
 
 export default defineComponent({
+  components: { HeaderLayout },
   setup() {
     const route = useRoute()
-    const store = useFoodStore()
+    const store = useRecipeStore()
     const { getRecipeDetailData } = store
-    const { recipeDetailData } = storeToRefs(store)
-    // onMounted(() => {
-    //   const recipeId = Number(route.params.id)
-    //   getRecipeDetailData(recipeId)
-    // })
+    const { recipeDetailData, recipeBackGroundImageUrl } = storeToRefs(store)
+    onMounted(() => {
+      const recipeId = Number(route.params.id)
+      getRecipeDetailData(recipeId)
+      console.log(recipeBackGroundImageUrl.value)
+    })
     const count = ref(0)
     const color = ref('red')
     const test = () => {
@@ -38,12 +41,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <q-layout
-    style="
-      background-image: url(http://www.foodsafetykorea.go.kr/uploadimg/20230309/20230309032057_1678342857757.jpg);
-    "
-  >
-    <q-card class="text-black">
+  <header-layout>
+    <template #append><q-tab>dd</q-tab></template>
+    <q-card class="text-black" style="opacity: 0.3">
       {{ count }}
       {{ filter }}
       <q-card-section class="recipe-info">
@@ -56,10 +56,13 @@ export default defineComponent({
         </div>
       </q-card-section>
     </q-card>
-  </q-layout>
+  </header-layout>
 </template>
 
-<style>
+<style scoped>
+.body {
+  background: url('http://www.foodsafetykorea.go.kr/uploadimg/20230309/20230309032057_1678342857757.jpg');
+}
 .ra {
   transform: matrix3d();
 }

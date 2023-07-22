@@ -9,6 +9,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Home',
         path: '',
         component: () => import('pages/Home.vue'),
+        meta: { isBgImage: false },
       },
       {
         path: 'member-user',
@@ -21,13 +22,21 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+    ],
+  },
+  {
+    name: 'Recipe',
+    path: '/recipe',
+    component: () => import('pages/recipe/Recipe.vue'),
+    children: [
       {
         name: 'RecipeDetail',
-        path: 'recipe/detail/:id',
+        path: 'detail/:id',
         component: () => import('pages/recipe/RecipeDetail.vue'),
       },
     ],
   },
+
   {
     name: 'Login',
     path: '/login',

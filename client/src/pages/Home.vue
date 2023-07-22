@@ -52,11 +52,10 @@ export default defineComponent({
 
     onMounted(async () => {
       observe()
-      favoriteApi()
+      //await favoriteApi()
       const randomValue: number = Math.floor(Math.random() * IMAGE_GROUP.length)
       imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
       window.addEventListener('scroll', parallaxScroll)
-
       await getCurrentWeather()
     })
 
