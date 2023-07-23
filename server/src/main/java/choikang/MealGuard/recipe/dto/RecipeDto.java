@@ -36,15 +36,15 @@ public class RecipeDto {
         private String part; // 종류
 
         private String weight;
-        private String kcal;
+        private Double kcal;
 
-        private String carbohydrate; // 탄수화물
+        private Double carbohydrate; // 탄수화물
 
-        private String protein; // 단백질
+        private Double protein; // 단백질
 
-        private String fat; // 지방
+        private Double fat; // 지방
 
-        private String sodium; // 나트륨
+        private Double sodium; // 나트륨
 
         private String hashtag;
 
