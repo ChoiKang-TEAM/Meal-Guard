@@ -6,6 +6,7 @@ import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStatusStore } from 'src/stores/status-store'
 import { useMemberUserStore } from 'src/stores/member-user-store'
+import { useFoodStore } from 'src/stores/food-store'
 
 export default defineComponent({
   setup() {
@@ -14,22 +15,26 @@ export default defineComponent({
     const recipeStore = useRecipeStore()
     const memberUserStore = useMemberUserStore()
     const statusStore = useStatusStore()
+    const foodStore = useFoodStore()
+
     const { getRecipeDetailData, setNutritionData } = recipeStore
+    const { getNaverBlogByFoodName } = foodStore
+    const { getAgeGroup } = statusStore
 
     const { userData } = storeToRefs(memberUserStore)
-    const { getAgeGroup } = statusStore
     const { recipeBackGroundImageUrl, recipeDetailData } =
       storeToRefs(recipeStore)
     const backgroundStyle = ref<string>('')
 
     const handleScroll = () => {
-      isBlur.value = window.scrollY > 600
+      isBlur.value = window.scrollY > 100
     }
 
     onMounted(async () => {
       const recipeId = Number(route.params.id)
       await getRecipeDetailData(recipeId)
-      backgroundStyle.value = `height: 2000px; background: url(${recipeBackGroundImageUrl.value}); background-size: cover;  background-attachment: fixed;`
+      await getNaverBlogByFoodName(recipeDetailData?.value?.name)
+      backgroundStyle.value = ` background: url(${recipeBackGroundImageUrl.value}); background-size: cover; background-attachment: fixed; background-position: center;`
       window.addEventListener('scroll', handleScroll)
       handleScroll()
 

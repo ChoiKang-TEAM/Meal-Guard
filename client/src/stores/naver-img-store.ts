@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { SAMPLE_QUERY } from 'src/graphql/google-img-search'
 import { useQuery } from 'villus'
 
-export const useGoogleImgSotre = defineStore('google-img', () => {
+export const useNaverImgStore = defineStore('naver-img', () => {
   const searchUrl = async (keyword: string) => {
     const { data } = await useQuery({
       query: SAMPLE_QUERY,
