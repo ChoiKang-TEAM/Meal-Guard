@@ -25,15 +25,15 @@ public class Recipe {
     private String part; // 종류
 
     private String weight;
-    private String kcal;
+    private Double kcal;
 
-    private String carbohydrate; // 탄수화물
+    private Double carbohydrate; // 탄수화물
 
-    private String protein; // 단백질
+    private Double protein; // 단백질
 
-    private String fat; // 지방
+    private Double fat; // 지방
 
-    private String sodium; // 나트륨
+    private Double sodium; // 나트륨
 
     private String hashtag;
 
@@ -85,7 +85,7 @@ public class Recipe {
     private String manualImg20;
     private String manual20;
 
-    public Recipe(Long recipeId, String name, String way, String part, String weight, String kcal, String carbohydrate, String protein, String fat, String sodium, String hashtag, String mainImage, String information, String sodiumTip, String manualImg01, String manual01, String manualImg02, String manual02, String manualImg03, String manual03, String manualImg04, String manual04, String manualImg05, String manual05, String manualImg06, String manual06, String manualImg07, String manual07, String manualImg08, String manual08, String manualImg09, String manual09, String manualImg10, String manual10, String manualImg11, String manual11, String manualImg12, String manual12, String manualImg13, String manual13, String manualImg14, String manual14, String manualImg15, String manual15, String manualImg16, String manual16, String manualImg17, String manual17, String manualImg18, String manual18, String manualImg19, String manual19, String manualImg20, String manual20) {
+    public Recipe(Long recipeId, String name, String way, String part, String weight, Double kcal, Double carbohydrate, Double protein, Double fat, Double sodium, String hashtag, String mainImage, String information, String sodiumTip, String manualImg01, String manual01, String manualImg02, String manual02, String manualImg03, String manual03, String manualImg04, String manual04, String manualImg05, String manual05, String manualImg06, String manual06, String manualImg07, String manual07, String manualImg08, String manual08, String manualImg09, String manual09, String manualImg10, String manual10, String manualImg11, String manual11, String manualImg12, String manual12, String manualImg13, String manual13, String manualImg14, String manual14, String manualImg15, String manual15, String manualImg16, String manual16, String manualImg17, String manual17, String manualImg18, String manual18, String manualImg19, String manual19, String manualImg20, String manual20) {
         this.recipeId = recipeId;
         this.name = name;
         this.way = way;

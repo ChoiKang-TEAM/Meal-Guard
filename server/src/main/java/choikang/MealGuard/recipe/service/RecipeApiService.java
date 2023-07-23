@@ -62,11 +62,11 @@ public class RecipeApiService {
             String RCP_WAY2 = obj.get("RCP_WAY2").toString();
             String RCP_PAT2 = obj.get("RCP_PAT2").toString();
             String INFO_WGT = obj.get("INFO_WGT").toString();
-            String INFO_ENG = obj.get("INFO_ENG").toString();
-            String INFO_CAR = obj.get("INFO_CAR").toString();
-            String INFO_PRO = obj.get("INFO_PRO").toString();
-            String INFO_FAT = obj.get("INFO_FAT").toString();
-            String INFO_NA = obj.get("INFO_NA").toString();
+            Double INFO_ENG = Double.valueOf(obj.get("INFO_ENG").toString());
+            Double INFO_CAR = Double.valueOf(obj.get("INFO_CAR").toString());
+            Double INFO_PRO = Double.valueOf(obj.get("INFO_PRO").toString());
+            Double INFO_FAT = Double.valueOf(obj.get("INFO_FAT").toString());
+            Double INFO_NA = Double.valueOf(obj.get("INFO_NA").toString());
             String HASH_TAG = obj.get("HASH_TAG").toString();
             String ATT_FILE_NO_MK = obj.get("ATT_FILE_NO_MK").toString();
             String RCP_PARTS_DTLS = obj.get("RCP_PARTS_DTLS").toString();
