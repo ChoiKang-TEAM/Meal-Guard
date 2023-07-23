@@ -4,6 +4,7 @@ import choikang.MealGuard.global.exception.BusinessLogicException;
 import choikang.MealGuard.global.exception.ExceptionCode;
 import choikang.MealGuard.helper.JwtUtils;
 import choikang.MealGuard.recipe.dto.FavoriteRecipeResponse;
+import choikang.MealGuard.recipe.dto.RecipeDto;
 import choikang.MealGuard.recipe.entity.Favorite;
 import choikang.MealGuard.recipe.entity.Recipe;
 import choikang.MealGuard.recipe.entity.SearchKeyword;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,8 @@ public class RecipeService {
     private final SearchKeywordRepository searchKeywordRepository;
     private final JwtUtils jwtUtils;
 
+
+    // 전체 조회
     public Page<Recipe> findRecipes(int page,int size){
         return recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
     }
@@ -118,5 +122,9 @@ public class RecipeService {
 
     public List<SearchKeyword> findTop10PopularKeywords() {
         return searchKeywordRepository.findTop10ByOrderBySearchCountDesc();
+    }
+
+    public List<Recipe> findNames(){
+        return recipeRepository.findAll();
     }
 }
