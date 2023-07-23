@@ -4,7 +4,6 @@ import choikang.MealGuard.global.exception.BusinessLogicException;
 import choikang.MealGuard.global.exception.ExceptionCode;
 import choikang.MealGuard.helper.JwtUtils;
 import choikang.MealGuard.recipe.dto.FavoriteRecipeResponse;
-import choikang.MealGuard.recipe.dto.RecipeDto;
 import choikang.MealGuard.recipe.entity.Favorite;
 import choikang.MealGuard.recipe.entity.Recipe;
 import choikang.MealGuard.recipe.entity.SearchKeyword;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,23 +38,14 @@ public class RecipeService {
 
 
     // 전체 조회
-    public Page<Recipe> findRecipes(int page,int size){
-        return recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
-    }
+    public Page<Recipe> findRecipes(String name, String sortBy, int page, int size) {
+        Page<Recipe> recipes;
 
-    public Recipe findRecipe(long recipeId){
-        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
-        return optionalRecipe.orElseThrow(() -> new BusinessLogicException(ExceptionCode.RECIPE_NOT_FOUND));
-    }
-
-    public Page<Recipe> findRecipesBySearch(String name,int page,int size){
-        if(name == null) return recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
-        else {
+        if (name != null) {
             name = name.toLowerCase().trim();
-
             if (BLOCKED_WORDS.contains(name)) {
                 // 욕설이 포함된 검색어는 저장하지 않고 무시
-                return recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
+                return recipeRepository.findAll(PageRequest.of(page - 1, size, Sort.by("recipeId").descending()));
             }
 
             SearchKeyword searchKeyword = searchKeywordRepository.findByKeyword(name);
@@ -68,8 +57,43 @@ public class RecipeService {
                 searchKeyword.setSearchCount(searchKeyword.getSearchCount() + 1);
             }
             searchKeywordRepository.save(searchKeyword);
-            return recipeRepository.findByNameContainingIgnoreCase(name,PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
+            return recipeRepository.findByNameContainingIgnoreCase(name, PageRequest.of(page - 1, size, Sort.by("recipeId").descending()));
+        } else {
+            Sort sort;
+            if (sortBy == null) {
+                sort = Sort.by("recipeId").descending();
+            } else if (sortBy.equals("highCalorie")) {
+                sort = Sort.by("kcal").descending();
+            } else if (sortBy.equals("lowCalorie")) {
+                sort = Sort.by("kcal").ascending();
+            } else if (sortBy.equals("highCarbohydrate")) {
+                sort = Sort.by("carbohydrate").descending();
+            } else if (sortBy.equals("lowCarbohydrate")) {
+                sort = Sort.by("carbohydrate").ascending();
+            } else if (sortBy.equals("highProtein")) {
+                sort = Sort.by("protein").descending();
+            } else if (sortBy.equals("lowProtein")) {
+                sort = Sort.by("protein").ascending();
+            } else if (sortBy.equals("highFat")) {
+                sort = Sort.by("fat").descending();
+            } else if (sortBy.equals("lowFat")) {
+                sort = Sort.by("fat").ascending();
+            } else if (sortBy.equals("highSodium")) {
+                sort = Sort.by("sodium").descending();
+            } else if (sortBy.equals("lowSodium")) {
+                sort = Sort.by("sodium").ascending();
+            } else {
+                sort = Sort.by("recipeId").descending();
+            }
+
+            recipes = recipeRepository.findAll(PageRequest.of(page - 1, size, sort));
+            return recipes;
         }
+    }
+
+    public Recipe findRecipe(long recipeId){
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
+        return optionalRecipe.orElseThrow(() -> new BusinessLogicException(ExceptionCode.RECIPE_NOT_FOUND));
     }
 
     public void createFavorite(long recipeId,String token) {

@@ -11,5 +11,5 @@ public class FavoriteRecipeResponse {
     private Long recipeId;
     private String mainImage;
     private String name;
-    private String kcal;
+    private Double kcal;
 }
