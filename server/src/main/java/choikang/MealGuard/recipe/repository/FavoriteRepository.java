@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface FavoriteRepository extends JpaRepository<Favorite,Long> {
 
-    @Query("SELECT new choikang.MealGuard.recipe.dto.FavoriteRecipeResponse(r.recipeId, r.mainImage, r.name, r.kcal) " +
+    @Query("SELECT new choikang.MealGuard.recipe.dto.FavoriteRecipeResponse(r.recipeId, r.thumbnail, r.name, r.kcal) " +
             "FROM Favorite f JOIN Recipe r ON f.recipe.recipeId = r.recipeId " +
             "WHERE f.user.user_seq = :userSeq")
     Page<FavoriteRecipeResponse> findFavoriteRecipesByUser_seq(String userSeq, Pageable pageable);

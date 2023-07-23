@@ -91,13 +91,27 @@ public class RecipeService {
         }
     }
 
-    public Recipe findRecipe(long recipeId){
+    public Recipe findRecipe(String token,long recipeId){
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
-        return optionalRecipe.orElseThrow(() -> new BusinessLogicException(ExceptionCode.RECIPE_NOT_FOUND));
+        Recipe recipe = optionalRecipe.orElseThrow(() -> new BusinessLogicException(ExceptionCode.RECIPE_NOT_FOUND));
+
+        try {
+            Claims claims = jwtUtils.parseToken(token.substring(7));
+            String id = (String) claims.get("userSeq");
+
+            Optional<User> optionalUser = userRepository.findById(id);
+            User user = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+            user.addRecentRecipe(recipe);
+            userRepository.save(user);
+            return recipe;
+        }catch (Exception e){
+            return recipe;
+        }
     }
 
     public void createFavorite(long recipeId,String token) {
-        Recipe recipe = findRecipe(recipeId);
+        Recipe recipe = findRecipe(token,recipeId);
 
         Claims claims = jwtUtils.parseToken(token.substring(7));
         String id = (String) claims.get("userSeq");
@@ -117,7 +131,7 @@ public class RecipeService {
 
     //좋아요 취소
     public void cancleFavorite(long recipeId,String token) {
-        Recipe recipe = findRecipe(recipeId);
+        Recipe recipe = findRecipe(token,recipeId);
 
         Claims claims = jwtUtils.parseToken(token.substring(7));
         String id = (String) claims.get("userSeq");

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class FavoriteRecipeResponse {
     private Long recipeId;
-    private String mainImage;
+    private String thumbnail;
     private String name;
     private Double kcal;
 }
