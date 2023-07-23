@@ -57,7 +57,7 @@ public class RecipeService {
                 searchKeyword.setSearchCount(searchKeyword.getSearchCount() + 1);
             }
             searchKeywordRepository.save(searchKeyword);
-            return recipeRepository.findByNameContainingIgnoreCase(name, PageRequest.of(page - 1, size, Sort.by("recipeId").descending()));
+            return recipeRepository.findByNameOrHashtagContainingIgnoreCase(name, PageRequest.of(page - 1, size, Sort.by("recipeId").descending()));
         } else {
             Sort sort;
             if (sortBy == null) {
