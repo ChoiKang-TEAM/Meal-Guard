@@ -30,13 +30,14 @@ export default defineComponent({
       validateOnInput: true,
     })
 
-    onMounted(() => {
+    onMounted(async () => {
       const dto = {
         page: 1,
         size: 10,
         name: '',
       }
-      getRecipeData(dto)
+      await getRecipeData(dto)
+      console.log(recipeData.value)
     })
 
     const pageChange = async () => {
@@ -119,8 +120,16 @@ export default defineComponent({
           <q-td key="recipeId" :props="props">{{ props.row?.recipeId }}</q-td>
           <q-td key="part" :props="props">{{ props.row?.part }}</q-td>
           <q-td key="foodPicture" :props="props"
-            ><q-img :src="props.row?.foodUrlImage"
-          /></q-td>
+            ><q-img :src="props.row?.thumbnail">
+              <template v-slot:error>
+                <div
+                  class="absolute-full flex flex-center bg-negative text-white"
+                >
+                  Cannot load image
+                </div>
+              </template></q-img
+            ></q-td
+          >
           <q-td key="name" :props="props">{{ props.row?.name }}</q-td>
           <q-td key="way" :props="props">{{ props.row?.way }}</q-td>
 
