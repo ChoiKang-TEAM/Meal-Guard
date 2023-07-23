@@ -1,11 +1,12 @@
 package choikang.MealGuard.user.entity;
 
 import choikang.MealGuard.recipe.entity.Favorite;
-import lombok.AllArgsConstructor;
+import choikang.MealGuard.recipe.entity.Recipe;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -24,6 +25,18 @@ public class User {
         this.user_seq = user_seq;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Favorite> favorites;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<RecentRecipe> recentRecipes;
+
+    // 양방향 관계
+    public void addRecentRecipe(Recipe recipe) {
+        RecentRecipe recentRecipe = new RecentRecipe(this, recipe);
+        recentRecipes.add(0, recentRecipe);
+        if (recentRecipes.size() > 10) {
+            recentRecipes.remove(10);
+        }
+    }
 }
