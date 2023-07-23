@@ -78,4 +78,11 @@ public class RecipeController {
         return new ResponseEntity<>(top10PopularKeywords,HttpStatus.OK);
     }
 
+    @GetMapping("/name")
+    public ResponseEntity getNames(){
+        List<Recipe> names = recipeService.findNames();
+
+        return new ResponseEntity<>(mapper.recipeToNames(names),HttpStatus.OK);
+    }
+
 }

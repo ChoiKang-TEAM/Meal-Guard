@@ -94,7 +94,11 @@ public class RecipeDto {
         private String manual19;
         private String manualImg20;
         private String manual20;
-
     }
 
+    @Getter
+    @Setter
+    public static class Names{
+        private String name;
+    }
 }

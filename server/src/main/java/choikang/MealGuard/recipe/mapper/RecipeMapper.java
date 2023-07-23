@@ -14,4 +14,5 @@ public interface RecipeMapper {
 
     RecipeDto.Response recipeToResponse(Recipe recipe);
 
+    List<RecipeDto.Names> recipeToNames(List<Recipe> recipes);
 }
