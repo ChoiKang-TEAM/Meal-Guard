@@ -5,15 +5,17 @@ import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 
 export default defineComponent({
   setup() {
-    const isTransparent = ref(false)
+    const isBlur = ref<boolean>(false)
     const store = useRecipeStore()
     const { recipeBackGroundImageUrl } = storeToRefs(store)
+    const backgroundStyle = ref<string>('')
 
     const handleScroll = () => {
-      isTransparent.value = window.scrollY > 600
+      isBlur.value = window.scrollY > 600
     }
 
     onMounted(() => {
+      backgroundStyle.value = `height: 2000px; background: url(${recipeBackGroundImageUrl.value}); background-size: cover;  background-attachment: fixed;`
       window.addEventListener('scroll', handleScroll)
       handleScroll()
     })
@@ -22,21 +24,27 @@ export default defineComponent({
       window.removeEventListener('scroll', handleScroll)
     })
 
-    const state = { isTransparent, recipeBackGroundImageUrl }
+    const state = { isBlur, backgroundStyle }
     return state
-  },
-
-  computed: {
-    backgroundStyle() {
-      const opacity = this.isTransparent ? 0.5 : 1
-      return `height: 2000px; background: url(${this.recipeBackGroundImageUrl}); background-size: cover; opacity: ${opacity}; background-attachment: fixed;`
-    },
   },
 })
 </script>
 
 <template>
   <q-layout :style="backgroundStyle" view="hHh lpr fff">
+    <div :class="{ 'bg-blur': isBlur }"></div>
     <router-view />
   </q-layout>
 </template>
+
+<style scoped lang="scss">
+.bg-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px); /* 블러 효과 적용 */
+  -webkit-backdrop-filter: blur(8px); /* Safari 용 */
+}
+</style>

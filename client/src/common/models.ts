@@ -4,6 +4,19 @@ export interface HomeTabs {
   icon: string
 }
 
+type SexType = 'MALE' | 'FEMALE' | 'OTHER'
+type AgeType = 'TEENAGER' | 'YOUTH' | 'MIDDLEAGE' | 'SENIOR'
+
+export interface NutrientInfo {
+  KCAL: number
+  SODIUM: number
+  PROTEIN: number
+  CARBOHYDRATE: number
+  FAT: number
+}
+
+export type NutritionConstants = Record<AgeType, Record<SexType, NutrientInfo>>
+
 export interface LoginMemberUserInput {
   userId: string
   password: string

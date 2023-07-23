@@ -7,6 +7,7 @@ export const useMemberUserStore = defineStore(
   'member-user',
   () => {
     const token = ref<string | null>(null)
+
     // const findAllMemberUser = async () => {
     //   const { data } = await useQuery({
     //     query: FIND_ALL_MEMBER_USER,

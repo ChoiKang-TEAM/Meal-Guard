@@ -1,9 +1,17 @@
 import { defineStore } from 'pinia'
+import { NutrientInfo } from 'src/common/models'
 import { ref } from 'vue'
 
 export const useRecipeStore = defineStore('recipe', () => {
   const recipeBackGroundImageUrl = ref<string>('')
 
+  const nutritionData = new Map<keyof NutrientInfo, number>([
+    ['KCAL', 0],
+    ['SODIUM', 0],
+    ['PROTEIN', 0],
+    ['CARBOHYDRATE', 0],
+    ['FAT', 0],
+  ])
   const recipeDetailData = ref()
 
   const getRecipeDetailData = async (recipeId: number) => {
@@ -84,7 +92,7 @@ export const useRecipeStore = defineStore('recipe', () => {
     recipeBackGroundImageUrl.value = recipeDetailData.value.mainImage
   }
 
-  const state = { recipeBackGroundImageUrl, recipeDetailData }
+  const state = { recipeBackGroundImageUrl, recipeDetailData, nutritionData }
   const action = { getRecipeDetailData }
 
   return { ...state, ...action }
