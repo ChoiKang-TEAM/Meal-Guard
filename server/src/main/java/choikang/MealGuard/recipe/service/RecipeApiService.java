@@ -68,6 +68,7 @@ public class RecipeApiService {
             Double INFO_FAT = Double.valueOf(obj.get("INFO_FAT").toString());
             Double INFO_NA = Double.valueOf(obj.get("INFO_NA").toString());
             String HASH_TAG = obj.get("HASH_TAG").toString();
+            String ATT_FILE_NO_MAIN = obj.get("ATT_FILE_NO_MAIN").toString();
             String ATT_FILE_NO_MK = obj.get("ATT_FILE_NO_MK").toString();
             String RCP_PARTS_DTLS = obj.get("RCP_PARTS_DTLS").toString();
             String RCP_NA_TIP = obj.get("RCP_NA_TIP").toString();
@@ -112,7 +113,7 @@ public class RecipeApiService {
             String MANUAL_IMG20 = obj.get("MANUAL_IMG20").toString();
             String MANUAL20 = obj.get("MANUAL20").toString();
 
-            Recipe recipe = new Recipe(Long.parseLong(RCP_SEQ), RCP_NM, RCP_WAY2, RCP_PAT2, INFO_WGT, INFO_ENG, INFO_CAR, INFO_PRO, INFO_FAT, INFO_NA, HASH_TAG, ATT_FILE_NO_MK, RCP_PARTS_DTLS, RCP_NA_TIP,
+            Recipe recipe = new Recipe(Long.parseLong(RCP_SEQ), RCP_NM, RCP_WAY2, RCP_PAT2, INFO_WGT, INFO_ENG, INFO_CAR, INFO_PRO, INFO_FAT, INFO_NA, HASH_TAG, ATT_FILE_NO_MAIN,ATT_FILE_NO_MK, RCP_PARTS_DTLS, RCP_NA_TIP,
                     MANUAL_IMG01, MANUAL01, MANUAL_IMG02, MANUAL02, MANUAL_IMG03, MANUAL03, MANUAL_IMG04, MANUAL04, MANUAL_IMG05, MANUAL05, MANUAL_IMG06, MANUAL06, MANUAL_IMG07,
                     MANUAL07, MANUAL_IMG08, MANUAL08, MANUAL_IMG09, MANUAL09, MANUAL_IMG10, MANUAL10, MANUAL_IMG11, MANUAL11, MANUAL_IMG12, MANUAL12, MANUAL_IMG13, MANUAL13, MANUAL_IMG14, MANUAL14,
                     MANUAL_IMG15, MANUAL15, MANUAL_IMG16, MANUAL16, MANUAL_IMG17, MANUAL17, MANUAL_IMG18, MANUAL18, MANUAL_IMG19, MANUAL19, MANUAL_IMG20, MANUAL20);

@@ -15,6 +15,7 @@ public class RecipeDto {
 
         private String name;
 
+        private String thumbnail;
         private String way; // 만드는 방법
 
         private String part; // 종류
@@ -47,13 +48,12 @@ public class RecipeDto {
         private Double sodium; // 나트륨
 
         private String hashtag;
-
+        private String thumbnail;
         private String mainImage;
 
         private String information; // 재료 정보
 
         private String sodiumTip; // 저나트륨 조리법 팀
-
         private String manualImg01;
         private String manual01;
         private String manualImg02;
