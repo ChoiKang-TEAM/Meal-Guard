@@ -21,10 +21,10 @@ public class RecipeController {
 
     private final RecipeService recipeService;
     private final RecipeMapper mapper;
-
+    // 레시피 보기
     @GetMapping
-    public ResponseEntity getRecipes(@RequestParam(required = false) String sortBy,@RequestParam int page,@RequestParam int size){
-        Page<Recipe> recipePage = recipeService.findRecipes(sortBy,page, size);
+    public ResponseEntity getRecipes(@RequestParam(required = false) String name,@RequestParam(required = false) String sortBy,@RequestParam int page,@RequestParam int size){
+        Page<Recipe> recipePage = recipeService.findRecipes(name,sortBy,page, size);
         List<Recipe> recipes = recipePage.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(mapper.recipeToListResponse(recipes),recipePage), HttpStatus.OK);
@@ -36,16 +36,6 @@ public class RecipeController {
 
         return new ResponseEntity<>(mapper.recipeToResponse(recipe),HttpStatus.OK);
     }
-
-    @GetMapping("/search")
-    public ResponseEntity getRecipe(@RequestParam(required = false) String name,@RequestParam int page,@RequestParam int size){
-        Page<Recipe> recipePage = recipeService.findRecipesBySearch(name,page,size);
-
-        List<Recipe> recipes = recipePage.getContent();
-
-        return new ResponseEntity<>(new MultiResponseDto<>(mapper.recipeToListResponse(recipes),recipePage), HttpStatus.OK);
-    }
-
     // 좋아요 하기
     @PostMapping("/{recipe-id}/favorite")
     public ResponseEntity<String> postFavorite(@PathVariable("recipe-id") long recipeId , @RequestHeader("Authorization") String token) {
