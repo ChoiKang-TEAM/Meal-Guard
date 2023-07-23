@@ -23,7 +23,9 @@ export class UserService implements CrudService<User> {
           userId: dto.userId,
           password: hasshedPassword,
           name: dto.name,
-          userSeq: userSeq
+          userSeq: userSeq,
+          age: dto.age,
+          gender: dto.gender
         }
       })
       const url = 'https://263c-124-111-225-247.ngrok-free.app/user/create'
