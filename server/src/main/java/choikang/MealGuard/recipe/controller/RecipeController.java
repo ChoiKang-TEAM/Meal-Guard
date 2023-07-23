@@ -31,8 +31,8 @@ public class RecipeController {
     }
 
     @GetMapping("/{recipe-id}")
-    public ResponseEntity getRecipe(@PathVariable("recipe-id") long recipeId){
-        Recipe recipe = recipeService.findRecipe(recipeId);
+    public ResponseEntity getRecipe(@PathVariable("recipe-id") long recipeId, @RequestHeader("Authorization") String token){
+        Recipe recipe = recipeService.findRecipe(token,recipeId);
 
         return new ResponseEntity<>(mapper.recipeToResponse(recipe),HttpStatus.OK);
     }
@@ -52,6 +52,7 @@ public class RecipeController {
         return ResponseEntity.ok("좋아요 취소");
     }
 
+    // 좋아요 내역 불러오기
     @GetMapping("/favorites")
     public ResponseEntity getFavoriteRecipes(@RequestParam int page, @RequestParam int size, @RequestHeader("Authorization") String token){
         Page<FavoriteRecipeResponse> pageRecipes = recipeService.findFavoritesRecipes(page, size, token);
@@ -60,6 +61,7 @@ public class RecipeController {
         return new ResponseEntity<>(new MultiResponseDto<>(favoriteRecipes,pageRecipes),HttpStatus.OK);
     }
 
+    // 인기검색어 순위
     @GetMapping("/top10")
     public ResponseEntity getTop10PopularKeywords() {
         List<SearchKeyword> top10PopularKeywords = recipeService.findTop10PopularKeywords();
@@ -67,6 +69,7 @@ public class RecipeController {
         return new ResponseEntity<>(top10PopularKeywords,HttpStatus.OK);
     }
 
+    // 프론트엔드 캐싱용
     @GetMapping("/name")
     public ResponseEntity getNames(){
         List<Recipe> names = recipeService.findNames();
