@@ -111,3 +111,21 @@
 .text-small {
   font-size: 1px;
 }
+
+.recipe-info-card {
+  position: relative;
+  margin-top: 5%;
+  width: 50%;
+}
+
+.recipe-menual-card {
+  position: relative;
+  margin-top: 10%;
+  width: 1080px;
+}
+
+.recipe-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
