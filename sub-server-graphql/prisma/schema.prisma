@@ -10,6 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum GenderType {
+  MALE
+  FEMALE
+  OTHER
+}
+
 model User {
   id             Int               @id @unique @default(autoincrement())
   userId         String            @unique @map("user_id")
@@ -19,6 +25,8 @@ model User {
   preferredFoods UserFoodMapping[]
   createdAt      DateTime          @default(now()) @map("reg_dtime")
   updatedAt      DateTime          @updatedAt @map("upd_dtime")
+  gender         GenderType
+  age            Int
 
   @@map("MG_MB_USER")
 }

@@ -1,7 +1,10 @@
 package choikang.MealGuard.recipe.controller;
 
 import choikang.MealGuard.dto.MultiResponseDto;
+import choikang.MealGuard.recipe.dto.FavoriteRecipeResponse;
+import choikang.MealGuard.recipe.dto.RecipeDto;
 import choikang.MealGuard.recipe.entity.Recipe;
+import choikang.MealGuard.recipe.entity.SearchKeyword;
 import choikang.MealGuard.recipe.mapper.RecipeMapper;
 import choikang.MealGuard.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
@@ -59,4 +62,20 @@ public class RecipeController {
 
         return ResponseEntity.ok("좋아요 취소");
     }
+
+    @GetMapping("/favorites")
+    public ResponseEntity getFavoriteRecipes(@RequestParam int page, @RequestParam int size, @RequestHeader("Authorization") String token){
+        Page<FavoriteRecipeResponse> pageRecipes = recipeService.findFavoritesRecipes(page, size, token);
+        List<FavoriteRecipeResponse> favoriteRecipes = pageRecipes.getContent();
+
+        return new ResponseEntity<>(new MultiResponseDto<>(favoriteRecipes,pageRecipes),HttpStatus.OK);
+    }
+
+    @GetMapping("/top10")
+    public ResponseEntity getTop10PopularKeywords() {
+        List<SearchKeyword> top10PopularKeywords = recipeService.findTop10PopularKeywords();
+
+        return new ResponseEntity<>(top10PopularKeywords,HttpStatus.OK);
+    }
+
 }

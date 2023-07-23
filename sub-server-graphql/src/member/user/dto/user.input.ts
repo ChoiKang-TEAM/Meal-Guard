@@ -1,4 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql'
+import { GenderType } from '@prisma/client'
 
 @InputType()
 export class LoginMemberUserInput {
@@ -25,6 +26,12 @@ export class SignUpMemberUserInput {
 
   @Field(() => String, { nullable: true })
   readonly name?: string
+
+  @Field(() => GenderType, { nullable: false })
+  readonly gender: GenderType
+
+  @Field(() => Number, { nullable: false })
+  readonly age: number
 }
 
 @InputType()
