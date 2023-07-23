@@ -52,7 +52,7 @@ export const WHEATER_ICONS: { [key: string]: { name: string; color: string } } =
     },
   }
 
-export const nutritionConstants: NutritionConstants = {
+export const NUTRITION_CONSTATS: NutritionConstants = {
   TEENAGER: {
     MALE: {
       KCAL: 2700,
@@ -147,3 +147,15 @@ export const nutritionConstants: NutritionConstants = {
     },
   },
 }
+
+export const NUTRITION_TO_KOREAN: { [key: string]: string } = {
+  KCAL: '칼로리',
+  SODIUM: '나트륨',
+  PROTEIN: '단백질',
+  CARBOHYDRATE: '탄수화물',
+  FAT: '지방',
+}
+
+export const INDEX_LIST: string[] = Array.from({ length: 20 }, (_, index) =>
+  (index + 1).toString().padStart(2, '0')
+)

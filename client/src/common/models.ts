@@ -4,10 +4,10 @@ export interface HomeTabs {
   icon: string
 }
 
-type SexType = 'MALE' | 'FEMALE' | 'OTHER'
-type AgeType = 'TEENAGER' | 'YOUTH' | 'MIDDLEAGE' | 'SENIOR'
+export type GenderType = 'MALE' | 'FEMALE' | 'OTHER'
+export type AgeType = 'TEENAGER' | 'YOUTH' | 'MIDDLEAGE' | 'SENIOR'
 
-export interface NutrientInfo {
+export interface NutritionInfo {
   KCAL: number
   SODIUM: number
   PROTEIN: number
@@ -15,7 +15,10 @@ export interface NutrientInfo {
   FAT: number
 }
 
-export type NutritionConstants = Record<AgeType, Record<SexType, NutrientInfo>>
+export type NutritionConstants = Record<
+  AgeType,
+  Record<GenderType, NutritionInfo>
+>
 
 export interface LoginMemberUserInput {
   userId: string
@@ -47,4 +50,10 @@ export interface BackgroundStyleModel {
   background?: string
   'background-size'?: 'cover' | 'contain'
   opacity?: number
+}
+
+export interface SetNutritionInputDto {
+  nutrient: NutritionInfo
+  ageGroup: AgeType
+  gender: GenderType
 }

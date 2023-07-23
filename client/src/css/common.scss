@@ -90,6 +90,10 @@
   background-color: rgba(255, 255, 255, 0.4);
 }
 
+.bg-opacity-100 {
+  background-color: rgba(255, 255, 255, 0);
+}
+
 .recipe-card {
   width: 100%;
   max-width: 350px;
@@ -102,4 +106,8 @@
 .age-info::before {
   content: '•'; /* * 문자를 추가 */
   color: red; /* * 문자의 색상을 빨간색으로 설정 */
+}
+
+.text-small {
+  font-size: 1px;
 }
