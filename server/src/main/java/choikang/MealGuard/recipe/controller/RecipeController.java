@@ -2,7 +2,6 @@ package choikang.MealGuard.recipe.controller;
 
 import choikang.MealGuard.dto.MultiResponseDto;
 import choikang.MealGuard.recipe.dto.FavoriteRecipeResponse;
-import choikang.MealGuard.recipe.dto.RecipeDto;
 import choikang.MealGuard.recipe.entity.Recipe;
 import choikang.MealGuard.recipe.entity.SearchKeyword;
 import choikang.MealGuard.recipe.mapper.RecipeMapper;
@@ -24,8 +23,8 @@ public class RecipeController {
     private final RecipeMapper mapper;
 
     @GetMapping
-    public ResponseEntity getRecipes(@RequestParam int page,@RequestParam int size){
-        Page<Recipe> recipePage = recipeService.findRecipes(page, size);
+    public ResponseEntity getRecipes(@RequestParam(required = false) String sortBy,@RequestParam int page,@RequestParam int size){
+        Page<Recipe> recipePage = recipeService.findRecipes(sortBy,page, size);
         List<Recipe> recipes = recipePage.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(mapper.recipeToListResponse(recipes),recipePage), HttpStatus.OK);
