@@ -40,8 +40,21 @@ public class RecipeService {
 
 
     // 전체 조회
-    public Page<Recipe> findRecipes(int page,int size){
-        return recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
+    public Page<Recipe> findRecipes(String sortBy,int page,int size){
+        Page<Recipe> recipes;
+        if(sortBy == null) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
+        else if(sortBy.equals("highCalorie")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("kcal").descending()));
+        else if(sortBy.equals("lowCalorie")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("kcal").ascending()));
+        else if(sortBy.equals("highCarbohydrate")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("carbohydrate").descending()));
+        else if(sortBy.equals("lowCarbohydrate")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("carbohydrate").ascending()));
+        else if(sortBy.equals("highProtein")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("protein").descending()));
+        else if(sortBy.equals("lowProtein")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("protein").ascending()));
+        else if(sortBy.equals("highFat")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("fat").descending()));
+        else if(sortBy.equals("lowFat")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("fat").ascending()));
+        else if(sortBy.equals("highSodium")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("sodium").descending()));
+        else if(sortBy.equals("lowSodium")) recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("sodium").ascending()));
+        else recipes = recipeRepository.findAll(PageRequest.of(page-1,size, Sort.by("recipeId").descending()));
+        return recipes;
     }
 
     public Recipe findRecipe(long recipeId){
