@@ -34,9 +34,14 @@ public class User {
     // 양방향 관계
     public void addRecentRecipe(Recipe recipe) {
         RecentRecipe recentRecipe = new RecentRecipe(this, recipe);
-        recentRecipes.add(0, recentRecipe);
-        if (recentRecipes.size() > 10) {
-            recentRecipes.remove(10);
+        recentRecipes.add(recentRecipe);
+    }
+
+    // 최근 조회 레시피 목록의 사이즈를 제한하는 메서드
+    public void limitRecentRecipesSize() {
+        int maxSize = 10;
+        if (recentRecipes.size() > maxSize) {
+            recentRecipes.subList(0, recentRecipes.size() - maxSize).clear();
         }
     }
 }
