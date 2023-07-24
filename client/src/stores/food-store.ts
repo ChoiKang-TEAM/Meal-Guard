@@ -9,8 +9,9 @@ export const useFoodStore = defineStore('food', () => {
   const randomFoodData = ref()
   const recipeData = ref()
   const recipeTotalPage = ref<number>(0)
+  const recipeBlogData = ref()
   const naverImgStore = useNaverImgStore()
-  const { searchUrl } = naverImgStore
+  const { searchKewordByDaumBlog } = naverImgStore
 
   const getCurrentWeather = async (
     currentLongitude = 126.9312417,
@@ -80,22 +81,24 @@ export const useFoodStore = defineStore('food', () => {
 
   const getNaverBlogByFoodName = async (food: string) => {
     try {
-      const result = await api.get('/naverblog', {
-        headers: {
-          'Content-Type': 'application / json',
-          'ngrok-skip-browser-warning': '69420',
-        },
-        params: {
-          food: food,
-        },
-      })
-      const test = await Promise.all(
-        result?.data.map(async (v: any) => {
-          const foodUrlImage = await searchUrl(v.title)
-          return { ...v, foodUrlImage }
-        })
-      )
-      console.log(test)
+      const result = await searchKewordByDaumBlog(food)
+      // const result = await api.get('/naverblog', {
+      //   headers: {
+      //     'Content-Type': 'application / json',
+      //     'ngrok-skip-browser-warning': '69420',
+      //   },
+      //   params: {
+      //     food: food,
+      //   },
+      // })
+      // const test = await Promise.all(
+      //   result?.data.map(async (v: any) => {
+      //     const foodUrlImage = await searchUrl(v.title)
+      //     return { ...v, foodUrlImage }
+      //   })
+      // )
+
+      recipeBlogData.value = result
     } catch (e) {
       console.error(e)
     }
@@ -106,6 +109,7 @@ export const useFoodStore = defineStore('food', () => {
     randomFoodData,
     recipeData,
     recipeTotalPage,
+    recipeBlogData,
   }
 
   const action = {
