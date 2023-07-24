@@ -4,18 +4,22 @@ import HeaderLayout from 'src/layouts/HeaderLayout.vue'
 import { storeToRefs } from 'pinia'
 import { useRecipeStore } from 'src/stores/recipe-store'
 import { NUTRITION_TO_KOREAN } from 'src/common/constants'
+import { useFoodStore } from 'src/stores/food-store'
 
 export default defineComponent({
   components: { HeaderLayout },
   setup() {
     const recipeStore = useRecipeStore()
+    const foodStore = useFoodStore()
     const tab = ref<string>('manual01')
+    const slide = ref<number>(1)
     const {
       recipeDetailData,
       recipeRecipeImageUrl,
       nutritionData,
       manualData,
     } = storeToRefs(recipeStore)
+    const { recipeBlogData } = storeToRefs(foodStore)
 
     const state = {
       recipeDetailData,
@@ -25,6 +29,8 @@ export default defineComponent({
       manualData,
       splitterModel: 20,
       tab,
+      recipeBlogData,
+      slide,
     }
     const action = {}
     return {
@@ -140,52 +146,37 @@ export default defineComponent({
         </q-card-section>
       </q-card>
     </div>
-    <div class="recipe-card-container">
-      <q-card class="text-black bg-opacity q-pa-ma recipe-menual-card">
-        <q-card-section>
-          <q-splitter v-model="splitterModel">
-            <template v-slot:before>
-              <q-tabs
-                v-model="tab"
-                vertical
-                active-color="red-7"
-                class="text-grey-9 shadow-2"
-              >
-                <q-tab
-                  v-for="([key], index) in manualData"
-                  :key="index"
-                  :name="key"
-                  :label="`STEP${index + 1}`"
-                />
-              </q-tabs>
-            </template>
 
-            <template v-slot:after>
-              <q-tab-panels
-                v-model="tab"
-                animated
-                swipeable
-                vertical
-                class="bg-opacity-100"
-                transition-prev="jump-up"
-                transition-next="jump-up"
+    <div class="recipe-card-container">
+      <q-card class="text-black bg-opacity-100 q-pa-ma recipe-menual-card">
+        <q-card-section> <div class="text-h2">추천 블로그</div></q-card-section>
+        <q-card-section>
+          <q-carousel
+            v-model="slide"
+            transition-prev="slide-right"
+            transition-next="slide-left"
+            swipeable
+            animated
+            control-color="light-blue"
+            navigation
+            padding
+            arrows
+            height="600px"
+            class="bg-grey-2 shadow-2 rounded-borders"
+          >
+            <q-carousel-slide
+              v-for="(data, index) in recipeBlogData"
+              :key="index"
+              :name="index + 1"
+              class="column no-wrap"
+            >
+              <div
+                class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap"
               >
-                <q-tab-panel
-                  v-for="([key, data], index) in manualData"
-                  :key="index"
-                  :name="key"
-                >
-                  <div class="text-h4 q-mb-md">조리 방법</div>
-                  <div>{{ data?.manual }}</div>
-                  <q-img
-                    :src="data?.manualImg"
-                    class="q-mb-md"
-                    style="height: 250px; max-width: 250px"
-                  />
-                </q-tab-panel>
-              </q-tab-panels>
-            </template>
-          </q-splitter>
+                <q-img :src="data.thumbnail" />
+              </div>
+            </q-carousel-slide>
+          </q-carousel>
         </q-card-section>
       </q-card>
     </div>

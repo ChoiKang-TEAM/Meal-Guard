@@ -19,7 +19,7 @@ const setAuthToken = (token: string) => {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: 'https://d26f-124-111-225-247.ngrok-free.app/',
+  baseURL: 'https://c5b9-124-111-225-247.ngrok-free.app/',
 })
 
 export default boot(({ app }) => {

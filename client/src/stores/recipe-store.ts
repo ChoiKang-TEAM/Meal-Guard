@@ -40,6 +40,10 @@ export const useRecipeStore = defineStore('recipe', () => {
     recipeBackGroundImageUrl.value = result?.data?.thumbnail
     recipeRecipeImageUrl.value = result?.data?.mainImage
     recipeDetailData.value = result?.data
+    // recipeBackGroundImageUrl.value =
+    //   'http://www.foodsafetykorea.go.kr/uploadimg/20230309/20230309032057_1678342857757.jpg'
+    // recipeRecipeImageUrl.value =
+    //   'http://www.foodsafetykorea.go.kr/uploadimg/20230309/20230309032057_1678342857757.jpg'
     // recipeDetailData.value = {
     //   recipeId: 3367,
     //   name: '오징어 가라아게&칠리소스',
