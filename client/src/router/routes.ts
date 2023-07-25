@@ -43,6 +43,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/Login.vue'),
   },
 
+  {
+    name: 'Publish',
+    path: '/publish',
+    component: () => import('src/publish/PublishPage.vue'),
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {
