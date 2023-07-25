@@ -5,9 +5,10 @@ import { storeToRefs } from 'pinia'
 import { useRecipeStore } from 'src/stores/recipe-store'
 import { NUTRITION_TO_KOREAN } from 'src/common/constants'
 import { useFoodStore } from 'src/stores/food-store'
+import RecipeBlogCard from 'src/components/recipe/RecipeBlogCard.vue'
 
 export default defineComponent({
-  components: { HeaderLayout },
+  components: { HeaderLayout, RecipeBlogCard },
   setup() {
     const recipeStore = useRecipeStore()
     const foodStore = useFoodStore()
@@ -159,7 +160,6 @@ export default defineComponent({
             animated
             control-color="light-blue"
             navigation
-            padding
             arrows
             height="600px"
             class="bg-grey-2 shadow-2 rounded-borders"
@@ -170,11 +170,8 @@ export default defineComponent({
               :name="index + 1"
               class="column no-wrap"
             >
-              <div
-                class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap"
-              >
-                <q-img :src="data.thumbnail" />
-              </div>
+              <recipe-blog-card />
+              <q-img :src="data.thumbnail" width="320px" height="320px" />
             </q-carousel-slide>
           </q-carousel>
         </q-card-section>

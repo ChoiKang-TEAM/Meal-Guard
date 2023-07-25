@@ -65,11 +65,6 @@
   justify-content: center;
 }
 
-.my-card {
-  width: 100%;
-  max-width: 350px;
-}
-
 .member-pagination {
   margin-top: 15px;
   display: flex;
@@ -128,4 +123,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.best-blog {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.recipe-blog-card {
+  width: 100%;
+  max-width: 350px;
+  border-radius: 15px;
 }
