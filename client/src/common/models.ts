@@ -57,3 +57,11 @@ export interface SetNutritionInputDto {
   ageGroup: AgeType
   gender: GenderType
 }
+
+export interface RecipeBlogCardModel {
+  blogname: string
+  contents: string
+  thumbnail: string
+  title: string
+  url: string
+}

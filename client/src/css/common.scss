@@ -125,13 +125,20 @@
   align-items: center;
 }
 
-.best-blog {
-  display: flex;
-  flex-wrap: wrap;
+/* q-carousel 내부의 q-carousel-slide가 Flex 컨테이너가 됨 */
+/* q-carousel-slide 컴포넌트 내부의 .row.best-blog가 Flex 컨테이너가 됨 */
+.q-carousel-slide .row.best-blog {
+  display: flex; /* Flexbox 레이아웃 설정 */
+  gap: 20px; /* 각 자식 요소 사이의 간격 (마진)을 20px로 설정 */
 }
 
+/* recipe-blog-card 컴포넌트를 가로로 배치하도록 설정 */
 .recipe-blog-card {
-  width: 100%;
-  max-width: 350px;
-  border-radius: 15px;
+  flex: 1; /* 각 카드가 동일한 너비를 가지도록 설정 */
+  margin-right: 20px; /* 카드 사이에 오른쪽 마진 20px 추가 */
+}
+
+/* 마지막 카드의 오른쪽 마진을 제거하여 줄바꿈이 일어나도록 함 */
+.recipe-blog-card:last-child {
+  margin-right: 0;
 }

@@ -161,7 +161,7 @@ export default defineComponent({
             control-color="light-blue"
             navigation
             arrows
-            height="600px"
+            height="800px"
             class="bg-grey-2 shadow-2 rounded-borders"
           >
             <q-carousel-slide
@@ -170,8 +170,11 @@ export default defineComponent({
               :name="index + 1"
               class="column no-wrap"
             >
-              <recipe-blog-card />
-              <q-img :src="data.thumbnail" width="320px" height="320px" />
+              <div class="row best-blog">
+                <recipe-blog-card :blog-data="data" />
+                <recipe-blog-card :blog-data="data" />
+                <recipe-blog-card :blog-data="data" />
+              </div>
             </q-carousel-slide>
           </q-carousel>
         </q-card-section>
