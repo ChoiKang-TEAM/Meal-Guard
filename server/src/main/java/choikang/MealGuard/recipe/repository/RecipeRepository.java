@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface RecipeRepository extends JpaRepository<Recipe,Long> {
 
     @Query("SELECT r FROM Recipe r WHERE lower(r.name) LIKE %:keyword% OR lower(r.hashtag) LIKE %:keyword%")
     Page<Recipe> findByNameOrHashtagContainingIgnoreCase(String keyword, Pageable pageable);
+
+    List<Recipe> findByWayAndPart(String way,String part);
 
     @Modifying
     @Query(value = "INSERT INTO favorite (recipe_id, user_seq, ischecked) " +
