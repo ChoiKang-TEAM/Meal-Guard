@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt'
 import { FindMemberUserByUserId, SignUpMemberUserInput } from './dto/user.input'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
+import { PrismaClient } from '@prisma/client'
 
 @Injectable()
 export class UserService implements CrudService<User> {
@@ -18,20 +19,21 @@ export class UserService implements CrudService<User> {
       const salt = await bcrypt.genSalt(saltRound)
       const hasshedPassword = await bcrypt.hash(dto.password, salt)
       const userSeq = uuidv4()
-      await this.prisma.user.create({
-        data: {
-          userId: dto.userId,
-          password: hasshedPassword,
-          name: dto.name,
-          userSeq: userSeq,
-          age: dto.age,
-          gender: dto.gender
-        }
-      })
-      const url = 'https://263c-124-111-225-247.ngrok-free.app/user/create'
-      const { data } = await axios.post(url, userSeq)
 
-      console.log(data)
+      await this.prisma.$transaction(async (tx: PrismaClient) => {
+        tx.user.create({
+          data: {
+            userId: dto.userId,
+            password: hasshedPassword,
+            name: dto.name,
+            userSeq: userSeq,
+            age: dto.age,
+            gender: dto.gender
+          }
+        })
+        const url = 'https://263c-124-111-225-247.ngrok-free.app/user/create'
+        await axios.post(url, userSeq)
+      })
 
       return true
     } catch (e) {
@@ -50,6 +52,9 @@ export class UserService implements CrudService<User> {
       return await this.prisma.user.findUnique({
         where: {
           userId: dto.userId
+        },
+        include: {
+          preferredFoods: true
         }
       })
     } catch (e) {
