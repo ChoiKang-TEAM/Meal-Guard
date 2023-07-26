@@ -12,8 +12,18 @@ export const useStatusStore = defineStore('status', () => {
     else return 'SENIOR'
   }
 
+  const groupArrayIntoObjects = <T>(arr: T[]): { data: T[] }[] => {
+    const groupedObjects = Array.from(
+      { length: Math.ceil(arr.length / 3) },
+      (_, index) => ({
+        data: arr.slice(index * 3, index * 3 + 3),
+      })
+    )
+    return groupedObjects
+  }
+
   const state = { backGroundImageUrl }
-  const action = { getAgeGroup }
+  const action = { getAgeGroup, groupArrayIntoObjects }
 
   return { ...state, ...action }
 })

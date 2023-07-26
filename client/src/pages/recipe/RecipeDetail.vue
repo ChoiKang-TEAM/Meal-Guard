@@ -158,27 +158,33 @@ export default defineComponent({
             transition-next="slide-left"
             swipeable
             animated
-            control-color="light-blue"
+            control-color="black"
             navigation
             arrows
-            height="800px"
+            height="750px"
             class="bg-grey-2 shadow-2 rounded-borders"
           >
             <q-carousel-slide
-              v-for="(data, index) in recipeBlogData"
+              v-for="(groupData, index) in recipeBlogData"
               :key="index"
               :name="index + 1"
               class="column no-wrap"
             >
               <div class="row best-blog">
-                <recipe-blog-card :blog-data="data" />
-                <recipe-blog-card :blog-data="data" />
-                <recipe-blog-card :blog-data="data" />
+                <recipe-blog-card
+                  v-for="data in groupData.data"
+                  :key="data.title"
+                  :blog-data="data"
+                  >{{ data }}</recipe-blog-card
+                >
               </div>
             </q-carousel-slide>
           </q-carousel>
         </q-card-section>
       </q-card>
     </div>
+    <template #footer>
+      <div class="text-h6">(주) 싸홈 강대현(우리은행 1002-050-904892)</div>
+    </template>
   </header-layout>
 </template>
