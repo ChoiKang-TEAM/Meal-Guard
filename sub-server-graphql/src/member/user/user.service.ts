@@ -21,7 +21,7 @@ export class UserService implements CrudService<User> {
       const userSeq = uuidv4()
 
       await this.prisma.$transaction(async (tx: PrismaClient) => {
-        tx.user.create({
+        await tx.user.create({
           data: {
             userId: dto.userId,
             password: hasshedPassword,
@@ -31,7 +31,7 @@ export class UserService implements CrudService<User> {
             gender: dto.gender
           }
         })
-        const url = 'https://263c-124-111-225-247.ngrok-free.app/user/create'
+        const url = 'https://20c1-124-111-225-247.ngrok-free.app/user/create'
         await axios.post(url, userSeq)
       })
 
@@ -49,14 +49,24 @@ export class UserService implements CrudService<User> {
   }
   async findUnique(dto: FindMemberUserByUserId): Promise<User> {
     try {
-      return await this.prisma.user.findUnique({
+      const result = await this.prisma.user.findUnique({
         where: {
           userId: dto.userId
         },
         include: {
-          preferredFoods: true
+          preferredFoods: {
+            include: {
+              food: {
+                include: {
+                  category: true
+                }
+              }
+            }
+          }
         }
       })
+      console.log(result)
+      return result
     } catch (e) {
       this.logger.error(e)
     }

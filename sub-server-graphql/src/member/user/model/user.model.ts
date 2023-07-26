@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { GenderType } from '@prisma/client'
+import { UserFoodMapping } from 'src/shared/models/user-food-mapping.model'
 
 @ObjectType()
 export class User {
@@ -20,4 +21,7 @@ export class User {
 
   @Field(() => Number)
   readonly age: number
+
+  @Field(() => [UserFoodMapping])
+  readonly preferredFoods: UserFoodMapping[]
 }
