@@ -12,24 +12,22 @@ export default defineComponent({
   setup(props) {
     const blodCardData = computed(() => props.blogData)
     const isHovered = ref(false)
+    const urltest =
+      'https://hanamsport.or.kr/www/images/contents/thum_detail.jpg'
     const showButtons = () => {
       isHovered.value = true
     }
+    console.log(props.blogData)
 
     const hideButtons = () => {
       isHovered.value = false
     }
 
-    const handleButton1Click = () => {
-      // Logic for Button 1 click
+    const goBlogUrl = (url: string) => {
+      window.open(url, '_blank', 'noopener,noreferrer')
     }
-
-    const handleButton2Click = () => {
-      // Logic for Button 2 click
-    }
-    console.log(props.blogData)
-    const state = { isHovered, blodCardData }
-    const action = { showButtons, hideButtons }
+    const state = { isHovered, blodCardData, urltest }
+    const action = { showButtons, hideButtons, goBlogUrl }
     return {
       ...state,
       ...action,
@@ -40,7 +38,7 @@ export default defineComponent({
 
 <template>
   <q-card
-    class="recipe-blog-card text-black"
+    class="recipe-blog-card text-black border-rounded"
     @mouseenter="showButtons"
     @mouseleave="hideButtons"
     :style="{
@@ -49,44 +47,47 @@ export default defineComponent({
         : 'rgba(255, 255, 255, 1)',
     }"
   >
-    <q-img :src="blodCardData.thumbnail" spinner-color="white">
+    <q-img
+      :src="
+        blodCardData.thumbnail.length === 0 ? urltest : blodCardData.thumbnail
+      "
+      spinner-color="white"
+      height="325.33px"
+    >
       <div
         v-if="isHovered"
         class="absolute-full text-subtitle2 flex flex-center"
-      />
+      >
+        <q-btn
+          size="xl"
+          rounded
+          flat
+          outline
+          icon="bookmark_border"
+          color="gray"
+        />
+        <q-btn
+          size="xl"
+          rounded
+          flat
+          outline
+          icon="login"
+          color="gray"
+          @click="goBlogUrl(blodCardData.url)"
+        >
+          <q-tooltip class="bg-white text-black"
+            >블로그로 이동</q-tooltip
+          ></q-btn
+        >
+      </div>
     </q-img>
 
     <q-card-section>
-      <div class="text-h6" style="height: 100px">
+      <div class="text-subtitle2" style="height: 100px">
         <p v-html="blodCardData.title"></p>
       </div>
     </q-card-section>
     <q-separator inset />
     <q-card-section><p v-html="blodCardData.contents"></p></q-card-section>
-    <q-card-actions align="center" v-if="isHovered"
-      ><q-btn outline label="최진영" icon="star" />
-      <q-btn outline label="안찬양"
-    /></q-card-actions>
   </q-card>
 </template>
-
-<style>
-.wrapper {
-  position: relative;
-  /* Add other styles as needed */
-}
-
-.buttons {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  /* Add other styles for the buttons container */
-}
-
-.buttons button {
-  margin: 5px;
-  /* Add other styles for the buttons as needed */
-}
-</style>

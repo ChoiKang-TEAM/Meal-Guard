@@ -35,7 +35,6 @@ export const useFoodStore = defineStore('food', () => {
   // TODO: 좋아요 기능
   const favoriteApi = async () => {
     const result = await api.post(`/recipes/${3367}/favorite`)
-    console.log(result)
   }
 
   const getRandomFoodByWeather = async (temp: number) => {
@@ -82,6 +81,7 @@ export const useFoodStore = defineStore('food', () => {
   const getNaverBlogByFoodName = async (food: string) => {
     try {
       const result = await searchKewordByDaumBlog(food)
+
       // const result = await api.get('/naverblog', {
       //   headers: {
       //     'Content-Type': 'application / json',
