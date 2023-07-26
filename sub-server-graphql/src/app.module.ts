@@ -9,6 +9,8 @@ import { UserModule } from './member/user/user.module'
 import { WinstonModule } from 'nest-winston'
 import { transports, format } from 'winston'
 import { AuthModule } from './shared/auth/auth.module'
+import { FoodModule } from './member/food/food.module';
+import { CategoryModule } from './member/category/category.module';
 
 @Module({
   imports: [
@@ -27,7 +29,9 @@ import { AuthModule } from './shared/auth/auth.module'
     SearchImgModule,
     PrismaModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    FoodModule,
+    CategoryModule
   ],
   controllers: [],
   providers: [AppService]
