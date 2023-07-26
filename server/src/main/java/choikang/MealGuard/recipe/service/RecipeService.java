@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -164,5 +165,16 @@ public class RecipeService {
 
     public List<Recipe> findNames(){
         return recipeRepository.findAll();
+    }
+
+    public List<Recipe> findRecommendRecipes(String way,String part){
+        List<Recipe> recommendRecipes = recipeRepository.findByWayAndPart(way, part);
+
+        if(recommendRecipes.size() >= 6){
+            Collections.shuffle(recommendRecipes);
+            recommendRecipes = recommendRecipes.subList(0,6);
+        }
+
+        return recommendRecipes;
     }
 }
