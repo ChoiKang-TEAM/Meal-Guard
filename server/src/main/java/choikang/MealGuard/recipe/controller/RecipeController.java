@@ -77,4 +77,11 @@ public class RecipeController {
         return new ResponseEntity<>(mapper.recipeToNames(names),HttpStatus.OK);
     }
 
+    @GetMapping("/recommend")
+    public ResponseEntity getRecommendRecipes(@RequestParam String way,
+                                              @RequestParam String part){
+        List<Recipe> recommendRecipes = recipeService.findRecommendRecipes(way, part);
+
+        return new ResponseEntity<>(mapper.recipeToListResponse(recommendRecipes),HttpStatus.OK);
+    }
 }
