@@ -41,14 +41,10 @@ export class SearchImgService {
           Authorization: `KakaoAK ${process.env.DAUM_REST_KEY}`
         },
         params: {
-          query: keyword
+          query: keyword,
+          size: 9
         }
       })
-      // const data = await (await fetch(url, {
-      //   headers:}
-
-      // })).json()
-      console.log(data)
 
       return data?.documents
     } catch (e) {
