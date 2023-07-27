@@ -28,11 +28,16 @@ export class UserService implements CrudService<User> {
             name: dto.name,
             userSeq: userSeq,
             age: dto.age,
-            gender: dto.gender
+            gender: dto.gender,
+            preferredFoods: {
+              create: {
+                foodId: 1
+              }
+            }
           }
         })
-        const url = 'https://20c1-124-111-225-247.ngrok-free.app/user/create'
-        await axios.post(url, userSeq)
+        // const url = 'https://20c1-124-111-225-247.ngrok-free.app/user/create'
+        // await axios.post(url, userSeq)
       })
 
       return true
@@ -65,7 +70,7 @@ export class UserService implements CrudService<User> {
           }
         }
       })
-      console.log(result)
+
       return result
     } catch (e) {
       this.logger.error(e)
