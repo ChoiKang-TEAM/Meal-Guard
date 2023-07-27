@@ -9,9 +9,6 @@ export class Category {
   @Field(() => String)
   readonly type: string
 
-  @Field(() => String)
-  readonly name: string
-
   @Field(() => [Food], { nullable: true })
   readonly foods?: Food[]
 }
