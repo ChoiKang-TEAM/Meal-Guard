@@ -30,12 +30,20 @@ export class UserService implements CrudService<User> {
             age: dto.age,
             gender: dto.gender,
             preferredFoods: {
-              create: {
-                foodId: 1
+              createMany: {
+                data: dto.preferredFoodIds.map((foodId: number) => ({
+                  foodId: foodId
+                }))
               }
             }
           }
         })
+        // await tx.userFoodMapping.create({
+        //   data: {
+        //     userId: newUser.id,
+        //     foodId: dto.preferredFoodIds[0]
+        //   }
+        // })
         // const url = 'https://20c1-124-111-225-247.ngrok-free.app/user/create'
         // await axios.post(url, userSeq)
       })
