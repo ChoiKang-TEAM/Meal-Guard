@@ -144,5 +144,8 @@ public class Recipe {
     }
 
     @OneToMany(mappedBy = "recipe")
+    private List<Ingredient> ingredients;
+
+    @OneToMany(mappedBy = "recipe")
     private List<Favorite> favorites;
 }
