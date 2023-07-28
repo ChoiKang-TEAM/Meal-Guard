@@ -4,6 +4,7 @@ import { Food } from './model/food.model'
 import { PrismaService } from 'src/shared/prisma/prisma.service'
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { Logger } from 'winston'
+import { FindFilterFoodInput } from './dto/food.input'
 
 @Injectable()
 export class FoodService implements CrudService<Food> {
@@ -23,7 +24,16 @@ export class FoodService implements CrudService<Food> {
   findAll(): Promise<Food[]> {
     throw new Error('Method not implemented.')
   }
-  findByFilter(dto: Partial<Food>): Promise<Food[]> {
-    throw new Error('Method not implemented.')
+  async findByFilter(dto: FindFilterFoodInput): Promise<Food[]> {
+    try {
+      return await this.prisma.food.findMany({
+        where: {
+          categoryId: dto.categoryId
+        },
+        include: {
+          category: true
+        }
+      })
+    } catch (e) {}
   }
 }
