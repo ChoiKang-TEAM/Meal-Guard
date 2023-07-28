@@ -4,13 +4,23 @@ import { Food } from './model/food.model'
 import { PrismaService } from 'src/shared/prisma/prisma.service'
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { Logger } from 'winston'
-import { FindFilterFoodInput } from './dto/food.input'
+import { CreateFoodInput, FindFilterFoodInput } from './dto/food.input'
 
 @Injectable()
 export class FoodService implements CrudService<Food> {
   constructor(private readonly prisma: PrismaService, @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger) {}
-  create(dto: Partial<Food>): Promise<boolean> {
-    throw new Error('Method not implemented.')
+  async create(dto: CreateFoodInput): Promise<boolean> {
+    try {
+      await this.prisma.food.create({
+        data: {
+          name: dto.name,
+          categoryId: dto.categoryId
+        }
+      })
+    } catch (e) {
+      this.logger.error(e)
+      return false
+    }
   }
   delete(dto: Partial<Food>): Promise<boolean> {
     throw new Error('Method not implemented.')
@@ -34,6 +44,8 @@ export class FoodService implements CrudService<Food> {
           category: true
         }
       })
-    } catch (e) {}
+    } catch (e) {
+      this.logger.error(e)
+    }
   }
 }
