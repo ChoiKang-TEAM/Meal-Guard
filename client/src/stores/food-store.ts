@@ -2,6 +2,9 @@ import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { ref } from 'vue'
 import { useNaverImgStore } from './naver-img-store'
+import { useQuery } from 'villus'
+import { FindFilterFoodInput } from 'src/graphql/dto/food-input'
+import { FIND_FOOD_BY_FILTER } from 'src/graphql/food'
 
 export const useFoodStore = defineStore('food', () => {
   const temp = ref()
@@ -104,6 +107,16 @@ export const useFoodStore = defineStore('food', () => {
     }
   }
 
+  const findFoodByFilter = async (findFilterFoodInput: FindFilterFoodInput) => {
+    try {
+      const { data } = await useQuery({
+        query: FIND_FOOD_BY_FILTER,
+        variables: findFilterFoodInput,
+      })
+      console.log(data)
+    } catch (e) {}
+  }
+
   const state = {
     rotateData,
     randomFoodData,
@@ -118,6 +131,7 @@ export const useFoodStore = defineStore('food', () => {
     getRecipeData,
     favoriteApi,
     getNaverBlogByFoodName,
+    findFoodByFilter,
   }
 
   return { ...state, ...action }
