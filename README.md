@@ -1,8 +1,14 @@
+<div align="center"> 
+
 ![image](https://github.com/ChoiKang-TEAM/Meal-Guard/assets/89833446/5dcb54fd-5cd9-4184-b7e4-21489d48a181)
 
 
-# Meal-Guard
-음식 추천 웹사이트
+</br>
+
+**`프로젝트 명` :** Meal-Guard </br>
+**`프로젝트 기간` :** 23.06.17 ~ </br>
+`배포링크` :  [ 식사지킴이 ](http://localhost:3000/) </br>
+</br>
 
 ## 개발팀 소개
 
@@ -35,4 +41,5 @@ feat/기능명 : 기능 개발 브랜치 </br>
 |remove|파일을 삭제하는 작업만 수행한 경우
 |!BREAKING CHANGE|커다란 API 변경
 |!HOTFIX|급하게 치명적인 버그를 고쳐야하는 경우
+</div>
 </div>
