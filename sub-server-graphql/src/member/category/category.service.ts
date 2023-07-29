@@ -23,7 +23,7 @@ export class CategoryService implements CrudService<Category> {
   }
   findAll(): Promise<Category[]> {
     try {
-      return this.prisma.category.findMany()
+      return this.prisma.category.findMany({})
     } catch (e) {
       this.logger.error(e)
     }
