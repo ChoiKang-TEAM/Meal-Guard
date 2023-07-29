@@ -18,6 +18,7 @@ export default defineComponent({
     const { setToken } = memberUserStore
     const userId = ref<string>('')
     const password = ref<string>('')
+    const isPwd = ref<boolean>(true)
 
     const viewSignUpDialog = ref<boolean>(false)
 
@@ -47,7 +48,7 @@ export default defineComponent({
       viewSignUpDialog.value = true
     }
 
-    const state = { userId, password, viewSignUpDialog }
+    const state = { userId, password, viewSignUpDialog, isPwd }
     const action = { memberLogin, openSignUpDialog }
     return {
       ...state,
@@ -83,6 +84,7 @@ export default defineComponent({
               v-model="userId"
               label="아이디"
               type="text"
+              placeholder="아이디를 입력해주세요."
             />
           </q-card-section>
           <q-card-section>
@@ -91,8 +93,18 @@ export default defineComponent({
               outlined
               v-model="password"
               label="비밀번호"
-              type="password"
-            />
+              :type="isPwd ? 'password' : 'text'"
+              placeholder="비밀번호를 입력해주세요."
+              autocomplete="off"
+            >
+              <template v-slot:append
+                ><q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                />
+              </template>
+            </q-input>
           </q-card-section>
 
           <q-card-section>
