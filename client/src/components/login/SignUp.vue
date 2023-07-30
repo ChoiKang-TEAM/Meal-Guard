@@ -2,16 +2,24 @@
 import { useQuasar } from 'quasar'
 import { SignUpMemberUserInput } from 'src/common/models'
 import { useAuthStore } from 'src/stores/auth-store'
-import { defineComponent, ref } from 'vue'
+import { useCategoryStore } from 'src/stores/category-store'
+import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
-    const store = useAuthStore()
-    const { signUpMemberUser } = store
+    const authStore = useAuthStore()
+    const categoryStore = useCategoryStore()
+    const { signUpMemberUser } = authStore
+    const { findAllCategory } = categoryStore
     const userId = ref<string>('')
     const password = ref<string>('')
     const userList = ref<any>()
+    const isPwd = ref<boolean>(true)
+
+    onMounted(() => {
+      findAllCategory()
+    })
 
     const memberSingUp = async () => {
       try {
@@ -29,7 +37,7 @@ export default defineComponent({
       }
     }
 
-    const state = { userList, userId, password }
+    const state = { userList, userId, password, isPwd }
     const action = { memberSingUp }
     return {
       ...state,
@@ -41,7 +49,7 @@ export default defineComponent({
 <template>
   <q-card class="card-container">
     <q-card-section>
-      <h2 class="text-h6">
+      <h2 class="text-h6 text-black">
         회원가입
         <q-btn rounded flat icon="close" v-close-popup style="float: right" />
       </h2>
@@ -57,8 +65,18 @@ export default defineComponent({
           outlined
           v-model="password"
           label="비밀번호"
-          type="password"
-        />
+          :type="isPwd ? 'password' : 'text'"
+          placeholder="비밀번호를 입력해주세요."
+          autocomplete="off"
+        >
+          <template v-slot:append
+            ><q-icon
+              :name="isPwd ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="isPwd = !isPwd"
+            />
+          </template>
+        </q-input>
       </q-card-section>
 
       <q-card-section>

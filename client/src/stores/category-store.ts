@@ -8,7 +8,7 @@ export const useCategoryStore = defineStore('category', () => {
       const { data } = await useQuery({
         query: FIND_ALL_CATEGORY,
       })
-      console.log(data)
+      console.log(data?.value)
     } catch (e) {}
   }
   const state = {}
