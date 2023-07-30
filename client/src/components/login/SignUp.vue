@@ -48,7 +48,7 @@ export default defineComponent({
 <template>
   <q-card class="card-container">
     <q-card-section>
-      <h2 class="text-h6">
+      <h2 class="text-h6 text-black">
         회원가입
         <q-btn rounded flat icon="close" v-close-popup style="float: right" />
       </h2>
