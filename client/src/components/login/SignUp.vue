@@ -2,16 +2,23 @@
 import { useQuasar } from 'quasar'
 import { SignUpMemberUserInput } from 'src/common/models'
 import { useAuthStore } from 'src/stores/auth-store'
-import { defineComponent, ref } from 'vue'
+import { useCategoryStore } from 'src/stores/category-store'
+import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
-    const store = useAuthStore()
-    const { signUpMemberUser } = store
+    const authStore = useAuthStore()
+    const categoryStore = useCategoryStore()
+    const { signUpMemberUser } = authStore
+    const { findAllCategory } = categoryStore
     const userId = ref<string>('')
     const password = ref<string>('')
     const userList = ref<any>()
+
+    onMounted(() => {
+      findAllCategory()
+    })
 
     const memberSingUp = async () => {
       try {
@@ -58,6 +65,7 @@ export default defineComponent({
           v-model="password"
           label="비밀번호"
           type="password"
+          autocomplete="off"
         />
       </q-card-section>
 
