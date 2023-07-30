@@ -15,6 +15,7 @@ export default defineComponent({
     const userId = ref<string>('')
     const password = ref<string>('')
     const userList = ref<any>()
+    const isPwd = ref<boolean>(true)
 
     onMounted(() => {
       findAllCategory()
@@ -36,7 +37,7 @@ export default defineComponent({
       }
     }
 
-    const state = { userList, userId, password }
+    const state = { userList, userId, password, isPwd }
     const action = { memberSingUp }
     return {
       ...state,
@@ -64,9 +65,18 @@ export default defineComponent({
           outlined
           v-model="password"
           label="비밀번호"
-          type="password"
+          :type="isPwd ? 'password' : 'text'"
+          placeholder="비밀번호를 입력해주세요."
           autocomplete="off"
-        />
+        >
+          <template v-slot:append
+            ><q-icon
+              :name="isPwd ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="isPwd = !isPwd"
+            />
+          </template>
+        </q-input>
       </q-card-section>
 
       <q-card-section>
