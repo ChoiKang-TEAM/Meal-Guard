@@ -17,6 +17,8 @@ export class FoodService implements CrudService<Food> {
           categoryId: dto.categoryId
         }
       })
+
+      return true
     } catch (e) {
       this.logger.error(e)
       return false

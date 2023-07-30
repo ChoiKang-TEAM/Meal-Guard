@@ -4,13 +4,14 @@ import { FindMemberUserByUserId, SignUpMemberUserInput } from './dto/user.input'
 import { User } from './model/user.model'
 import { UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard'
+import { BadWordsPipe } from 'src/shared/pipes/language-filter.pipe'
 
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation(() => Boolean)
-  async signUpMemberUser(@Args('signUpMemberUserInput') signUpMemberUserInput: SignUpMemberUserInput, @Context() context: { req: Request }): Promise<boolean> {
+  async signUpMemberUser(@Args('signUpMemberUserInput', BadWordsPipe) signUpMemberUserInput: SignUpMemberUserInput, @Context() context: { req: Request }): Promise<boolean> {
     return await this.userService.create(signUpMemberUserInput)
   }
 

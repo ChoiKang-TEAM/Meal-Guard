@@ -33,7 +33,7 @@ export class SignUpMemberUserInput {
   @Field(() => Number, { nullable: false })
   readonly age: number
 
-  @Field(() => [Number], { nullable: true })
+  @Field(() => [Number], { defaultValue: [], nullable: true })
   readonly preferredFoodIds?: number[]
 }
 
