@@ -3,8 +3,11 @@ import { useQuasar } from 'quasar'
 import { SignUpMemberUserInput } from 'src/common/models'
 import { useAuthStore } from 'src/stores/auth-store'
 import { defineComponent, ref } from 'vue'
+import { Form as ValidationForm, useForm, useField } from 'vee-validate'
+import * as yup from 'yup'
 
 export default defineComponent({
+  components: { ValidationForm },
   setup() {
     const $q = useQuasar()
     const authStore = useAuthStore()
@@ -16,6 +19,7 @@ export default defineComponent({
 
     const memberSingUp = async () => {
       try {
+        console.log(1)
         const signUpMemberUserInput: SignUpMemberUserInput = {
           userId: userId.value,
           password: password.value,
@@ -46,7 +50,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <q-form @submit="memberSingUp">
+  <validation-form @submit="memberSingUp">
     <q-card-section>
       <q-input rounded outlined v-model="userId" label="아이디" type="text" />
     </q-card-section>
@@ -80,5 +84,5 @@ export default defineComponent({
         label="가입하기"
       />
     </q-card-section>
-  </q-form>
+  </validation-form>
 </template>

@@ -165,24 +165,20 @@ export const SIGN_UP_QSTEP_LIST: SignUpSteps[] = [
     title: '개인 정보 동의',
     icon: '',
     caption: '(필수 항목)',
-    require: true,
   },
   {
     title: '본인 확인',
     icon: '',
     caption: '(필수 항목)',
-    require: true,
   },
   {
     title: '개인 정보 입력',
     icon: '',
     caption: '(필수 항목)',
-    require: false,
   },
   {
     title: '선호 음식 선택',
     icon: '',
     caption: '(선택 항목)',
-    require: false,
   },
 ]
