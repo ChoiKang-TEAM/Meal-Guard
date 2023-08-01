@@ -38,10 +38,10 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     const memberUserStore = useMemberUserStore()
+    const exceptionPathList: string[] = ['/login', '/sign-up']
     const { resetToken } = memberUserStore
     const { token } = storeToRefs(memberUserStore)
-    if (to.path === '/login') {
-      console.log('tt')
+    if (exceptionPathList.includes(to.path)) {
       resetToken()
       return next()
     }

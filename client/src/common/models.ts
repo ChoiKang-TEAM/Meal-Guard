@@ -4,6 +4,13 @@ export interface HomeTabs {
   icon: string
 }
 
+export interface SignUpSteps {
+  title: string
+  caption?: string | null
+  icon: string
+  require: boolean
+}
+
 export type GenderType = 'MALE' | 'FEMALE' | 'OTHER'
 export type AgeType = 'TEENAGER' | 'YOUTH' | 'MIDDLEAGE' | 'SENIOR'
 

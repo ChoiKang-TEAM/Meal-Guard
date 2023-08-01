@@ -1,4 +1,4 @@
-import { HomeTabs, NutritionConstants } from './models'
+import { HomeTabs, NutritionConstants, SignUpSteps } from './models'
 
 export const HOME_TABS: HomeTabs[] = [
   {
@@ -159,3 +159,30 @@ export const NUTRITION_TO_KOREAN: { [key: string]: string } = {
 export const INDEX_LIST: string[] = Array.from({ length: 20 }, (_, index) =>
   (index + 1).toString().padStart(2, '0')
 )
+
+export const SIGN_UP_QSTEP_LIST: SignUpSteps[] = [
+  {
+    title: '개인 정보 동의',
+    icon: '',
+    caption: '(필수 항목)',
+    require: true,
+  },
+  {
+    title: '본인 확인',
+    icon: '',
+    caption: '(필수 항목)',
+    require: true,
+  },
+  {
+    title: '개인 정보 입력',
+    icon: '',
+    caption: '(필수 항목)',
+    require: false,
+  },
+  {
+    title: '선호 음식 선택',
+    icon: '',
+    caption: '(선택 항목)',
+    require: false,
+  },
+]
