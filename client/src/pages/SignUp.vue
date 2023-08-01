@@ -71,10 +71,9 @@ export default defineComponent({
 
               <q-stepper-navigation>
                 <q-btn
-                  :disable="data.require"
-                  :color="data.require ? 'grey' : 'amber'"
+                  color="amber"
                   @click="step = index + 2"
-                  label="Continue"
+                  label="계속하기"
                 />
                 <q-btn
                   v-if="index > 0"
