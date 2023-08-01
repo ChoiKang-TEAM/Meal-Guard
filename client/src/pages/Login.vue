@@ -3,12 +3,10 @@ import { useQuasar } from 'quasar'
 import { LoginMemberUserInput } from 'src/common/models'
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SignUp from 'src/components/login/SignUp.vue'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useMemberUserStore } from 'src/stores/member-user-store'
 
 export default defineComponent({
-  components: { SignUp },
   setup() {
     const $q = useQuasar()
     const router = useRouter()
@@ -19,8 +17,6 @@ export default defineComponent({
     const userId = ref<string>('')
     const password = ref<string>('')
     const isPwd = ref<boolean>(true)
-
-    const viewSignUpDialog = ref<boolean>(false)
 
     const memberLogin = async () => {
       try {
@@ -44,12 +40,12 @@ export default defineComponent({
       }
     }
 
-    const openSignUpDialog = () => {
-      viewSignUpDialog.value = true
+    const goSignUpPage = () => {
+      router.replace({ name: 'SignUp' })
     }
 
-    const state = { userId, password, viewSignUpDialog, isPwd }
-    const action = { memberLogin, openSignUpDialog }
+    const state = { userId, password, isPwd }
+    const action = { memberLogin, goSignUpPage }
     return {
       ...state,
       ...action,
@@ -125,12 +121,9 @@ export default defineComponent({
                 flat
                 class="w-50"
                 color="orange"
-                @click="openSignUpDialog"
+                @click="goSignUpPage"
                 label="회원 가입"
               />
-              <q-dialog persistent v-model="viewSignUpDialog">
-                <sign-up
-              /></q-dialog>
             </div>
           </q-card-actions>
         </q-form>

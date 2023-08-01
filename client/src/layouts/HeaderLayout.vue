@@ -1,5 +1,4 @@
 <template>
-  <!-- S : header -->
   <q-header elevated class="bg-black">
     <q-toolbar>
       <q-btn rounded flat @click="$router.go(-1)" icon="arrow_back" />
@@ -8,7 +7,6 @@
     </q-toolbar>
     <div></div>
   </q-header>
-  <!-- E : header -->
   <q-page-container>
     <q-page>
       <slot />

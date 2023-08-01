@@ -44,6 +44,12 @@ const routes: RouteRecordRaw[] = [
   },
 
   {
+    name: 'SignUp',
+    path: '/sign-up',
+    component: () => import('pages/SignUp.vue'),
+  },
+
+  {
     name: 'Publish',
     path: '/publish',
     component: () => import('src/publish/PublishPage.vue'),
