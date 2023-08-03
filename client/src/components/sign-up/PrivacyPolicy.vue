@@ -7,7 +7,6 @@ import { Form as ValidationForm, useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 
 export default defineComponent({
-  components: { ValidationForm },
   setup() {
     const $q = useQuasar()
     const authStore = useAuthStore()
@@ -49,39 +48,5 @@ export default defineComponent({
 </script>
 
 <template>
-  <validation-form @submit="memberSingUp">
-    <q-card-section>
-      <q-input rounded outlined v-model="userId" label="아이디" type="text" />
-    </q-card-section>
-    <q-card-section>
-      <q-input
-        rounded
-        outlined
-        v-model="password"
-        label="비밀번호"
-        :type="isPwd ? 'password' : 'text'"
-        placeholder="비밀번호를 입력해주세요."
-        autocomplete="off"
-      >
-        <template v-slot:append
-          ><q-icon
-            :name="isPwd ? 'visibility_off' : 'visibility'"
-            class="cursor-pointer"
-            @click="isPwd = !isPwd"
-          />
-        </template>
-      </q-input>
-    </q-card-section>
-
-    <q-card-section>
-      <q-btn
-        rounded
-        outline
-        class="w-100"
-        color="primary"
-        type="submit"
-        label="가입하기"
-      />
-    </q-card-section>
-  </validation-form>
+  <q-card-section> 개인 정보 방침 </q-card-section>
 </template>
