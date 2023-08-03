@@ -1,7 +1,7 @@
 <template>
   <q-header elevated class="bg-black">
     <q-toolbar>
-      <q-btn rounded flat @click="$router.go(-1)" icon="arrow_back" />
+      <q-btn round flat @click="$router.go(-1)" icon="arrow_back" />
       <slot name="expand" />
       <slot name="tabs" />
     </q-toolbar>

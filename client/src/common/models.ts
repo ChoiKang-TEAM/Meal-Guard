@@ -8,7 +8,6 @@ export interface SignUpSteps {
   title: string
   caption?: string | null
   icon: string
-  require: boolean
 }
 
 export type GenderType = 'MALE' | 'FEMALE' | 'OTHER'

@@ -1,7 +1,5 @@
 <script lang="ts">
-import { useQuasar } from 'quasar'
-import { SignUpMemberUserInput, SignUpSteps } from 'src/common/models'
-import { useAuthStore } from 'src/stores/auth-store'
+import { SignUpSteps } from 'src/common/models'
 import { useCategoryStore } from 'src/stores/category-store'
 import { defineComponent, onMounted, ref } from 'vue'
 import { SIGN_UP_QSTEP_LIST } from 'src/common/constants'
@@ -11,10 +9,8 @@ import InformationEnter from 'src/components/sign-up/InformationEnter.vue'
 export default defineComponent({
   components: { HeaderLayout, InformationEnter },
   setup() {
-    const $q = useQuasar()
-    const authStore = useAuthStore()
     const categoryStore = useCategoryStore()
-    const { signUpMemberUser } = authStore
+
     const { findAllCategory } = categoryStore
     const userId = ref<string>('')
     const password = ref<string>('')
@@ -28,26 +24,6 @@ export default defineComponent({
       qStepList.value = JSON.parse(JSON.stringify(SIGN_UP_QSTEP_LIST))
     })
 
-    const memberSingUp = async () => {
-      try {
-        const signUpMemberUserInput: SignUpMemberUserInput = {
-          userId: userId.value,
-          password: password.value,
-        }
-        const { data, error } = await signUpMemberUser({
-          signUpMemberUserInput: signUpMemberUserInput,
-        })
-        if (error) {
-        } else return $q
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    const test = (data: any) => {
-      data.require = false
-    }
-
     const state = {
       userList,
       userId,
@@ -56,7 +32,7 @@ export default defineComponent({
       qStepList,
       step: ref(1),
     }
-    const action = { memberSingUp, test }
+    const action = {}
     return {
       ...state,
       ...action,
@@ -95,10 +71,9 @@ export default defineComponent({
 
               <q-stepper-navigation>
                 <q-btn
-                  :disable="data.require"
-                  :color="data.require ? 'grey' : 'amber'"
+                  color="amber"
                   @click="step = index + 2"
-                  label="Continue"
+                  label="계속하기"
                 />
                 <q-btn
                   v-if="index > 0"

@@ -41,7 +41,7 @@ export default defineComponent({
     }
 
     const goSignUpPage = () => {
-      router.replace({ name: 'SignUp' })
+      router.push({ name: 'SignUp' })
     }
 
     const state = { userId, password, isPwd }
