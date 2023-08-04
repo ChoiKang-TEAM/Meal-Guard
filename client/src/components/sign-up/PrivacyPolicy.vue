@@ -1,44 +1,26 @@
 <script lang="ts">
 import { useQuasar } from 'quasar'
-import { SignUpMemberUserInput } from 'src/common/models'
 import { useAuthStore } from 'src/stores/auth-store'
-import { defineComponent, ref } from 'vue'
-import { Form as ValidationForm, useForm, useField } from 'vee-validate'
-import * as yup from 'yup'
+import { computed, defineComponent, ref } from 'vue'
+import { PRIVACY_POLICY_LIST } from 'src/common/constants'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
     const authStore = useAuthStore()
-    const { signUpMemberUser } = authStore
-    const userId = ref<string>('')
-    const password = ref<string>('')
-    const userList = ref<any>()
-    const isPwd = ref<boolean>(true)
+    const isAllChecked = ref<boolean>(false)
+    const selected: any = computed({
+      get: (value) => {
+        console.log(value)
+        return ['policy-1']
+      },
+      set: (value) => {
+        console.log(value)
+      },
+    })
 
-    const memberSingUp = async () => {
-      try {
-        const signUpMemberUserInput: SignUpMemberUserInput = {
-          userId: userId.value,
-          password: password.value,
-        }
-        const { error } = await signUpMemberUser({
-          signUpMemberUserInput: signUpMemberUserInput,
-        })
-        if (error) {
-        } else return $q
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    const state = {
-      userList,
-      userId,
-      password,
-      isPwd,
-    }
-    const action = { memberSingUp }
+    const state = { selected, isAllChecked, PRIVACY_POLICY_LIST }
+    const action = {}
     return {
       ...state,
       ...action,
@@ -48,5 +30,42 @@ export default defineComponent({
 </script>
 
 <template>
-  <q-card-section> 개인 정보 방침 </q-card-section>
+  <q-card-section class="text-black"> 개인 정보 방침 </q-card-section>
+  <q-card-section class="text-black">
+    <q-list>
+      <q-item tag="label" v-ripple>
+        <q-item-section avatar>
+          <q-checkbox
+            v-model="isAllChecked"
+            color="positive"
+            checked-icon="task_alt"
+            unchecked-icon="highlight_off"
+          />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>전체 동의</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        v-for="(data, index) in PRIVACY_POLICY_LIST"
+        :key="index"
+        tag="label"
+        v-ripple
+      >
+        <q-item-section avatar>
+          <q-checkbox
+            v-model="selected"
+            :val="data.val"
+            color="positive"
+            checked-icon="task_alt"
+            unchecked-icon="highlight_off"
+          />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ data.title }}</q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </q-card-section>
 </template>

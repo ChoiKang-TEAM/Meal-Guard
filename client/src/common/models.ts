@@ -10,6 +10,12 @@ export interface SignUpSteps {
   icon: string
 }
 
+export interface PrivacyPolicies {
+  title: string
+  val: string
+  required: boolean
+}
+
 export type GenderType = 'MALE' | 'FEMALE' | 'OTHER'
 export type AgeType = 'TEENAGER' | 'YOUTH' | 'MIDDLEAGE' | 'SENIOR'
 
