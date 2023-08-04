@@ -5,9 +5,10 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { SIGN_UP_QSTEP_LIST } from 'src/common/constants'
 import HeaderLayout from 'src/layouts/HeaderLayout.vue'
 import InformationEnter from 'src/components/sign-up/InformationEnter.vue'
+import PrivacyPolicy from 'src/components/sign-up/PrivacyPolicy.vue'
 
 export default defineComponent({
-  components: { HeaderLayout, InformationEnter },
+  components: { HeaderLayout, InformationEnter, PrivacyPolicy },
   setup() {
     const categoryStore = useCategoryStore()
 
@@ -67,11 +68,13 @@ export default defineComponent({
               :caption="data.caption ?? ''"
               :done="step > index + 1"
             >
-              <information-enter></information-enter>
+              <privacy-policy v-if="index === 0" />
+              <information-enter v-if="index === 1" />
 
               <q-stepper-navigation>
                 <q-btn
-                  color="amber"
+                  flat
+                  class="bg-teal"
                   @click="step = index + 2"
                   label="계속하기"
                 />

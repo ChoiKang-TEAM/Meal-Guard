@@ -1,4 +1,9 @@
-import { HomeTabs, NutritionConstants, SignUpSteps } from './models'
+import {
+  HomeTabs,
+  NutritionConstants,
+  PrivacyPolicies,
+  SignUpSteps,
+} from './models'
 
 export const HOME_TABS: HomeTabs[] = [
   {
@@ -180,5 +185,23 @@ export const SIGN_UP_QSTEP_LIST: SignUpSteps[] = [
     title: '선호 음식 선택',
     icon: '',
     caption: '(선택 항목)',
+  },
+]
+
+export const PRIVACY_POLICY_LIST: PrivacyPolicies[] = [
+  {
+    title: '[필수] MEAL-GUARD 이용 동의',
+    required: true,
+    val: 'policy-1',
+  },
+  {
+    title: '[필수] 개인 정보 이용 동의',
+    required: true,
+    val: 'policy-2',
+  },
+  {
+    title: '[선택] 이벤트 이용 동의',
+    required: false,
+    val: 'policy-3',
   },
 ]
