@@ -8,15 +8,16 @@ export default defineComponent({
   setup() {
     const $q = useQuasar()
     const authStore = useAuthStore()
-    const isAllChecked = computed<boolean>({
-      get: () => {
-        return true
+    const isAllChecked = ref<boolean>(false)
+    const selected: any = computed({
+      get: (value) => {
+        console.log(value)
+        return ['policy-1']
       },
       set: (value) => {
         console.log(value)
       },
     })
-    const selected = ref<string[]>([])
 
     const state = { selected, isAllChecked, PRIVACY_POLICY_LIST }
     const action = {}
