@@ -8,19 +8,23 @@ export default defineComponent({
   setup() {
     const $q = useQuasar()
     const authStore = useAuthStore()
+
     const isAllChecked = ref<boolean>(false)
-    const selected: any = computed({
-      get: (value) => {
-        console.log(value)
-        return ['policy-1']
-      },
-      set: (value) => {
-        console.log(value)
-      },
-    })
+    const selected = ref<string[]>([])
+
+    const updateIsAllChecked = () => {
+      isAllChecked.value = selected.value.length === PRIVACY_POLICY_LIST.length
+    }
+
+    // selected 배열의 값이 변경되면 isAllChecked도 자동으로 업데이트됩니다.
+    const selectAllItems = () => {
+      selected.value = isAllChecked.value
+        ? PRIVACY_POLICY_LIST.map((item) => item.val)
+        : []
+    }
 
     const state = { selected, isAllChecked, PRIVACY_POLICY_LIST }
-    const action = {}
+    const action = { selectAllItems, updateIsAllChecked }
     return {
       ...state,
       ...action,
@@ -40,6 +44,7 @@ export default defineComponent({
             color="positive"
             checked-icon="task_alt"
             unchecked-icon="highlight_off"
+            @click="selectAllItems()"
           />
         </q-item-section>
         <q-item-section>
@@ -60,6 +65,7 @@ export default defineComponent({
             color="positive"
             checked-icon="task_alt"
             unchecked-icon="highlight_off"
+            @click="updateIsAllChecked()"
           />
         </q-item-section>
         <q-item-section>
