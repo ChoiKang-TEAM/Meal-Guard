@@ -66,7 +66,6 @@ export default defineComponent({
             checked-icon="task_alt"
             unchecked-icon="highlight_off"
             @click="updateIsAllChecked()"
-            :error="true"
           />
         </q-item-section>
         <q-item-section>
