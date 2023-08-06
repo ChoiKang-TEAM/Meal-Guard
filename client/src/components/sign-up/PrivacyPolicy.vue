@@ -1,23 +1,24 @@
 <script lang="ts">
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth-store'
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { PRIVACY_POLICY_LIST } from 'src/common/constants'
-import { useForm, useField } from 'vee-validate'
+import { useField } from 'vee-validate'
 import * as yup from 'yup'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
     const authStore = useAuthStore()
     const { signUpInputData } = authStore
+    const { formSteps } = storeToRefs(authStore)
     const isAllChecked = ref<boolean>(false)
 
     const validatePolicyList = PRIVACY_POLICY_LIST.filter(
       (val) => val.required
     ).map((val) => val.val)
 
-    console.log(validatePolicyList)
     const {
       value: selected,
       meta,
@@ -32,6 +33,13 @@ export default defineComponent({
         )
         .required(),
       { initialValue: [] }
+    )
+
+    watch(
+      () => meta.valid,
+      (isValid) => {
+        formSteps.value['step-1'] = isValid
+      }
     )
 
     const updateIsAllChecked = () => {

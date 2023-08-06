@@ -29,7 +29,7 @@ export default defineComponent({
     })
 
     const isStepValid = (stepNumber: number) => {
-      return formSteps.value[stepNumber]
+      return formSteps.value[`step-${stepNumber}`]
     }
 
     const state = {

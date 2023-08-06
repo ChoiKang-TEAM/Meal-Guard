@@ -6,11 +6,11 @@ import { ref } from 'vue'
 export const useAuthStore = defineStore('auth', () => {
   const signUpInputData = new Map()
   signUpInputData.set('privacy-policy', [])
-  const formSteps = ref<{ [key: number]: boolean }>({
-    1: false,
-    2: false,
-    3: false,
-    4: true,
+  const formSteps = ref<{ [key: string]: boolean }>({
+    'step-1': false,
+    'step-2': false,
+    'step-3': false,
+    'step-4': true,
   })
 
   const { execute: loginMemberUser } = useMutation(LOGIN_MEMBER_USER)
