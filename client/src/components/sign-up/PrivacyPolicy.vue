@@ -3,27 +3,54 @@ import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth-store'
 import { computed, defineComponent, ref } from 'vue'
 import { PRIVACY_POLICY_LIST } from 'src/common/constants'
+import { useForm, useField } from 'vee-validate'
+import * as yup from 'yup'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
     const authStore = useAuthStore()
-
+    const { signUpInputData } = authStore
     const isAllChecked = ref<boolean>(false)
-    const selected = ref<string[]>([])
+
+    const validatePolicyList = PRIVACY_POLICY_LIST.filter(
+      (val) => val.required
+    ).map((val) => val.val)
+
+    console.log(validatePolicyList)
+    const {
+      value: selected,
+      meta,
+      errorMessage,
+    } = useField<string[]>(
+      'selected',
+      yup
+        .array()
+        .of(yup.string())
+        .test('has-policies', '필수 항목을 체크해주세요.', (value: any) =>
+          validatePolicyList.every((policy: string) => value.includes(policy))
+        )
+        .required(),
+      { initialValue: [] }
+    )
 
     const updateIsAllChecked = () => {
       isAllChecked.value = selected.value.length === PRIVACY_POLICY_LIST.length
     }
 
-    // selected 배열의 값이 변경되면 isAllChecked도 자동으로 업데이트됩니다.
     const selectAllItems = () => {
       selected.value = isAllChecked.value
         ? PRIVACY_POLICY_LIST.map((item) => item.val)
         : []
     }
 
-    const state = { selected, isAllChecked, PRIVACY_POLICY_LIST }
+    const state = {
+      selected,
+      isAllChecked,
+      PRIVACY_POLICY_LIST,
+      meta,
+      errorMessage,
+    }
     const action = { selectAllItems, updateIsAllChecked }
     return {
       ...state,
@@ -34,7 +61,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <q-card-section class="text-black"> 개인 정보 방침 </q-card-section>
+  <q-card-section class="text-black">
+    개인 정보 방침 {{ meta }} {{ errorMessage }}
+  </q-card-section>
   <q-card-section class="text-black">
     <q-list>
       <q-item tag="label" v-ripple>
@@ -72,6 +101,7 @@ export default defineComponent({
           <q-item-label>{{ data.title }}</q-item-label>
         </q-item-section>
       </q-item>
+      <span class="text-red">{{ errorMessage }}</span>
     </q-list>
   </q-card-section>
 </template>
