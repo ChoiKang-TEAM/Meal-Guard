@@ -6,13 +6,16 @@ import { SIGN_UP_QSTEP_LIST } from 'src/common/constants'
 import HeaderLayout from 'src/layouts/HeaderLayout.vue'
 import InformationEnter from 'src/components/sign-up/InformationEnter.vue'
 import PrivacyPolicy from 'src/components/sign-up/PrivacyPolicy.vue'
+import { useAuthStore } from 'src/stores/auth-store'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: { HeaderLayout, InformationEnter, PrivacyPolicy },
   setup() {
     const categoryStore = useCategoryStore()
-
+    const authStore = useAuthStore()
     const { findAllCategory } = categoryStore
+    const { formSteps } = storeToRefs(authStore)
     const userId = ref<string>('')
     const password = ref<string>('')
     const userList = ref<any>()
@@ -25,6 +28,10 @@ export default defineComponent({
       qStepList.value = JSON.parse(JSON.stringify(SIGN_UP_QSTEP_LIST))
     })
 
+    const isStepValid = (stepNumber: number) => {
+      return formSteps.value[`step-${stepNumber}`]
+    }
+
     const state = {
       userList,
       userId,
@@ -33,7 +40,7 @@ export default defineComponent({
       qStepList,
       step: ref(1),
     }
-    const action = {}
+    const action = { isStepValid }
     return {
       ...state,
       ...action,
@@ -74,9 +81,10 @@ export default defineComponent({
               <q-stepper-navigation>
                 <q-btn
                   flat
-                  class="bg-teal"
+                  :class="isStepValid(index + 1) ? 'bg-teal' : 'bg-grey'"
                   @click="step = index + 2"
-                  label="계속하기"
+                  label="다음으로"
+                  :disable="!isStepValid(index + 1)"
                 />
                 <q-btn
                   v-if="index > 0"
