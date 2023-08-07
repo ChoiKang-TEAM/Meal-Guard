@@ -1,7 +1,7 @@
 <script lang="ts">
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth-store'
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { PRIVACY_POLICY_LIST } from 'src/common/constants'
 import { useField } from 'vee-validate'
 import * as yup from 'yup'
@@ -12,8 +12,12 @@ export default defineComponent({
     const $q = useQuasar()
     const authStore = useAuthStore()
     const { signUpInputData } = authStore
-    const { formSteps } = storeToRefs(authStore)
+    const { formSteps, formStepNumber } = storeToRefs(authStore)
     const isAllChecked = ref<boolean>(false)
+
+    onMounted(() => {
+      updateIsAllChecked()
+    })
 
     const validatePolicyList = PRIVACY_POLICY_LIST.filter(
       (val) => val.required
@@ -32,14 +36,7 @@ export default defineComponent({
           validatePolicyList.every((policy: string) => value.includes(policy))
         )
         .required(),
-      { initialValue: [] }
-    )
-
-    watch(
-      () => meta.valid,
-      (isValid) => {
-        formSteps.value['step-1'] = isValid
-      }
+      { initialValue: signUpInputData.get('privacy-policy') }
     )
 
     const updateIsAllChecked = () => {
@@ -52,6 +49,11 @@ export default defineComponent({
         : []
     }
 
+    const goNextStep = () => {
+      signUpInputData.set('privacy-policy', [...selected.value])
+      formStepNumber.value += 1
+    }
+
     const state = {
       selected,
       isAllChecked,
@@ -59,7 +61,7 @@ export default defineComponent({
       meta,
       errorMessage,
     }
-    const action = { selectAllItems, updateIsAllChecked }
+    const action = { selectAllItems, updateIsAllChecked, goNextStep }
     return {
       ...state,
       ...action,
@@ -69,9 +71,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <q-card-section class="text-black">
-    개인 정보 방침 {{ meta }} {{ errorMessage }}
-  </q-card-section>
+  <q-card-section class="text-black"> 개인 정보 방침 </q-card-section>
   <q-card-section class="text-black">
     <q-list>
       <q-item tag="label" v-ripple>
@@ -112,4 +112,13 @@ export default defineComponent({
       <span class="text-red">{{ errorMessage }}</span>
     </q-list>
   </q-card-section>
+  <q-card-actions>
+    <q-btn
+      flat
+      :disable="!meta.valid"
+      label="다음으로"
+      :class="meta.valid ? 'bg-teal' : 'bg-grey'"
+      @click="goNextStep"
+    ></q-btn>
+  </q-card-actions>
 </template>

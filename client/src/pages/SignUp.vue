@@ -15,7 +15,7 @@ export default defineComponent({
     const categoryStore = useCategoryStore()
     const authStore = useAuthStore()
     const { findAllCategory } = categoryStore
-    const { formSteps } = storeToRefs(authStore)
+    const { formSteps, formStepNumber } = storeToRefs(authStore)
     const userId = ref<string>('')
     const password = ref<string>('')
     const userList = ref<any>()
@@ -38,7 +38,7 @@ export default defineComponent({
       password,
       isPwd,
       qStepList,
-      step: ref(1),
+      formStepNumber,
     }
     const action = { isStepValid }
     return {
@@ -60,7 +60,7 @@ export default defineComponent({
         <q-card-section>
           <h2 class="text-h6 text-black">회원가입</h2>
           <q-stepper
-            v-model="step"
+            v-model="formStepNumber"
             done-color="amber-5"
             active-color="amber-5"
             inactive-color="grey"
@@ -73,12 +73,12 @@ export default defineComponent({
               :title="data.title"
               :icon="data.icon"
               :caption="data.caption ?? ''"
-              :done="step > index + 1"
+              :done="formStepNumber > index + 1"
             >
               <privacy-policy v-if="index === 0" />
               <information-enter v-if="index === 1" />
 
-              <q-stepper-navigation>
+              <!-- <q-stepper-navigation>
                 <q-btn
                   flat
                   :class="isStepValid(index + 1) ? 'bg-teal' : 'bg-grey'"
@@ -94,7 +94,7 @@ export default defineComponent({
                   label="Back"
                   class="q-ml-sm"
                 />
-              </q-stepper-navigation>
+              </q-stepper-navigation> -->
             </q-step>
           </q-stepper>
         </q-card-section>
