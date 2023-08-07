@@ -13,12 +13,19 @@ export const useAuthStore = defineStore('auth', () => {
     'step-4': true,
   })
 
+  const formStepNumber = ref<number>(1)
+
+  const goBackStep = () => {
+    formStepNumber.value -= 1
+  }
+
   const { execute: loginMemberUser } = useMutation(LOGIN_MEMBER_USER)
   const { execute: signUpMemberUser } = useMutation(SIGN_UP_MEMBER_USER)
-  const state = { signUpInputData, formSteps }
+  const state = { signUpInputData, formSteps, formStepNumber }
   const action = {
     loginMemberUser,
     signUpMemberUser,
+    goBackStep,
   }
 
   return { ...state, ...action }
