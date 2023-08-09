@@ -190,17 +190,17 @@ export const SIGN_UP_QSTEP_LIST: SignUpSteps[] = [
 
 export const PRIVACY_POLICY_LIST: PrivacyPolicies[] = [
   {
-    title: '[필수] MEAL-GUARD 이용 동의',
+    title: 'MEAL-GUARD 이용 동의',
     required: true,
     val: 'policy-1',
   },
   {
-    title: '[필수] 개인 정보 이용 동의',
+    title: '개인 정보 이용 동의',
     required: true,
     val: 'policy-2',
   },
   {
-    title: '[선택] 이벤트 이용 동의',
+    title: '이벤트 이용 동의',
     required: false,
     val: 'policy-3',
   },
