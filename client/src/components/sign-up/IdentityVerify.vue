@@ -17,6 +17,7 @@ export default defineComponent({
     const { formStepNumber } = storeToRefs(authStore)
     const { goBackStep } = authStore
     const phoneNumberAgreeValue = ref<boolean>(false)
+    const confirmRequest = ref<boolean>(false)
 
     const {
       value: phoneNumber,
@@ -42,6 +43,7 @@ export default defineComponent({
       phoneNumberMeta,
       errorMessage,
       phoneNumberAgreeValue,
+      confirmRequest,
     }
     const action = { goNextStep, goBackStep }
     return {
@@ -83,6 +85,7 @@ export default defineComponent({
 
   <q-card-section>
     <q-btn
+      v-if="!confirmRequest"
       flat
       dense
       :disable="!phoneNumberMeta.valid || !phoneNumberAgreeValue"
@@ -92,7 +95,9 @@ export default defineComponent({
           ? 'bg-positive'
           : 'bg-grey'
       "
-    ></q-btn>
+      @click="confirmRequest = true"
+    />
+    <q-btn v-else flat dense label="확인" class="bg-positive" />
   </q-card-section>
 
   <q-card-actions>
