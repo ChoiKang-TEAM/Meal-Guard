@@ -146,3 +146,21 @@
 .border-rounded {
   border-radius: 25px;
 }
+
+.essential-checkbox {
+  .q-checkbox__label {
+    &::before {
+      content: '[필수] ';
+      color: rgb(29, 219, 22);
+    }
+  }
+}
+
+.optional-checkbox {
+  .q-checkbox__label {
+    &::before {
+      content: '[선택] ';
+      color: gray;
+    }
+  }
+}

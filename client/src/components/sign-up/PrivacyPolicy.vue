@@ -82,10 +82,8 @@ export default defineComponent({
             checked-icon="task_alt"
             unchecked-icon="highlight_off"
             @click="selectAllItems()"
+            label="전체 동의"
           />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>전체 동의</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -103,10 +101,9 @@ export default defineComponent({
             checked-icon="task_alt"
             unchecked-icon="highlight_off"
             @click="updateIsAllChecked()"
+            :class="data.required ? 'essential-checkbox' : 'optional-checkbox'"
+            :label="data.title"
           />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>{{ data.title }}</q-item-label>
         </q-item-section>
       </q-item>
       <span class="text-red">{{ errorMessage }}</span>
@@ -119,6 +116,6 @@ export default defineComponent({
       label="다음으로"
       :class="meta.valid ? 'bg-teal' : 'bg-grey'"
       @click="goNextStep"
-    ></q-btn>
+    />
   </q-card-actions>
 </template>

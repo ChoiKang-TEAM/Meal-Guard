@@ -6,11 +6,12 @@ import { SIGN_UP_QSTEP_LIST } from 'src/common/constants'
 import HeaderLayout from 'src/layouts/HeaderLayout.vue'
 import InformationEnter from 'src/components/sign-up/InformationEnter.vue'
 import PrivacyPolicy from 'src/components/sign-up/PrivacyPolicy.vue'
+import IdentityVerify from 'src/components/sign-up/IdentityVerify.vue'
 import { useAuthStore } from 'src/stores/auth-store'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({
-  components: { HeaderLayout, InformationEnter, PrivacyPolicy },
+  components: { HeaderLayout, InformationEnter, PrivacyPolicy, IdentityVerify },
   setup() {
     const categoryStore = useCategoryStore()
     const authStore = useAuthStore()
@@ -76,7 +77,8 @@ export default defineComponent({
               :done="formStepNumber > index + 1"
             >
               <privacy-policy v-if="index === 0" />
-              <information-enter v-if="index === 1" />
+              <identity-verify v-if="index === 1" />
+              <information-enter v-if="index === 2" />
 
               <!-- <q-stepper-navigation>
                 <q-btn

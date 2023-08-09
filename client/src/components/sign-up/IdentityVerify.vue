@@ -2,32 +2,50 @@
 import { useQuasar } from 'quasar'
 import { SignUpMemberUserInput } from 'src/common/models'
 import { useAuthStore } from 'src/stores/auth-store'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
+import { api } from 'src/boot/axios'
+import { PHONENUMBER_REGEX } from 'src/common/regexs'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
     const authStore = useAuthStore()
+    const { signUpInputData } = authStore
+    const { formStepNumber } = storeToRefs(authStore)
     const { goBackStep } = authStore
-    const validationSchema = yup.object({
-      userId: yup.string().defined().required('아이디 값은 필수 값입니다.'),
-    })
+    const phoneNumberAgreeValue = ref<boolean>(false)
+    const confirmRequest = ref<boolean>(false)
 
-    const { value: userId } = useField<string>('userId', {
-      validateOnInput: true,
-    })
-    const { value: password } = useField<string>('password', {
-      validateOnInput: true,
-    })
+    const {
+      value: phoneNumber,
+      meta: phoneNumberMeta,
+      errorMessage,
+    } = useField<string>(
+      'phoneNumber',
+      yup
+        .string()
+        .defined()
+        .matches(PHONENUMBER_REGEX, '잘못된 형식입니다.')
+        .required('휴대폰 번호는 필수 정보입니다.')
+    )
 
-    const isPwd = ref<boolean>(true)
+    const goNextStep = () => {
+      console.log(phoneNumber.value)
+      signUpInputData.set('phone-number', phoneNumber.value)
+      formStepNumber.value += 1
+    }
 
     const state = {
-      isPwd,
+      phoneNumber,
+      phoneNumberMeta,
+      errorMessage,
+      phoneNumberAgreeValue,
+      confirmRequest,
     }
-    const action = { goBackStep }
+    const action = { goNextStep, goBackStep }
     return {
       ...state,
       ...action,
@@ -38,30 +56,58 @@ export default defineComponent({
 
 <template>
   <q-card-section>
-    <q-input rounded outlined v-model="userId" label="아이디" type="text" />
-  </q-card-section>
-  <q-card-section>
     <q-input
-      rounded
-      outlined
-      v-model="password"
-      label="비밀번호"
-      :type="isPwd ? 'password' : 'text'"
-      placeholder="비밀번호를 입력해주세요."
-      autocomplete="off"
+      stack-label
+      clear-icon="close"
+      clearable
+      color="positive"
+      v-model="phoneNumber"
+      placeholder="휴대폰 번호를 입력해주세요 (-제외)"
+      type="text"
+      no-error-icon
+      :error="!!errorMessage"
+      label="본인 인증"
     >
-      <template v-slot:append
-        ><q-icon
-          :name="isPwd ? 'visibility_off' : 'visibility'"
-          class="cursor-pointer"
-          @click="isPwd = !isPwd"
-        />
+      <template #error>
+        {{ errorMessage }}
       </template>
     </q-input>
   </q-card-section>
 
+  <q-checkbox
+    v-model="phoneNumberAgreeValue"
+    color="positive"
+    checked-icon="task_alt"
+    unchecked-icon="highlight_off"
+    label="인증 약관 동의"
+    class="text-black essential-checkbox"
+  />
+
+  <q-card-section>
+    <q-btn
+      v-if="!confirmRequest"
+      flat
+      dense
+      :disable="!phoneNumberMeta.valid || !phoneNumberAgreeValue"
+      label="인증번호"
+      :class="
+        phoneNumberMeta.valid && phoneNumberAgreeValue
+          ? 'bg-positive'
+          : 'bg-grey'
+      "
+      @click="confirmRequest = true"
+    />
+    <q-btn v-else flat dense label="확인" class="bg-positive" />
+  </q-card-section>
+
   <q-card-actions>
-    <q-btn flat label="다음으로"></q-btn>
+    <q-btn
+      flat
+      :disable="!phoneNumberMeta.valid"
+      label="다음으로"
+      :class="phoneNumberMeta.valid ? 'bg-teal' : 'bg-grey'"
+      @click="goNextStep"
+    />
     <q-btn
       flat
       @click="goBackStep"
