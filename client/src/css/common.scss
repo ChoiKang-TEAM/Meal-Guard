@@ -2,9 +2,25 @@
   margin-top: 50px;
 }
 
+.ml-05 {
+  margin-left: 5%;
+}
+
 .img-50 {
   width: 50%;
   height: auto;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.w-20 {
+  width: 20%;
+}
+
+.w-80 {
+  width: 80%;
 }
 
 .weather-widget {
@@ -161,6 +177,21 @@
     &::before {
       content: '[선택] ';
       color: gray;
+    }
+  }
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.essential-input {
+  .q-field__label {
+    &::after {
+      content: ' *';
+      color: red;
     }
   }
 }
