@@ -14,6 +14,7 @@ export default defineComponent({
     const foodStore = useFoodStore()
     const tab = ref<string>('manual01')
     const slide = ref<number>(1)
+
     const {
       recipeDetailData,
       recipeRecipeImageUrl,
