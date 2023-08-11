@@ -37,7 +37,6 @@ export default defineComponent({
         name: '',
       }
       await getRecipeData(dto)
-      console.log(recipeData.value)
     })
 
     const pageChange = async () => {
@@ -60,7 +59,6 @@ export default defineComponent({
     }
 
     const goDetailPage = (id: number) => {
-      console.log(id)
       router.push({ name: 'RecipeDetail', params: { id: id } })
     }
 

@@ -1,17 +1,16 @@
 <script lang="ts">
 import { useQuasar } from 'quasar'
-import { SignUpMemberUserInput } from 'src/common/models'
 import { useAuthStore } from 'src/stores/auth-store'
 import { defineComponent, ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { EMAIL_REGEX, PASSWORD_REGEX } from 'src/common/regexs'
+import { GenderType } from 'src/common/models'
 
 export default defineComponent({
   setup() {
-    const $q = useQuasar()
     const authStore = useAuthStore()
-    const { goBackStep } = authStore
+
     const { signUpInputData } = authStore
 
     const isPwd = ref<boolean>(true)
@@ -34,10 +33,15 @@ export default defineComponent({
       passwordConfirm: yup
         .string()
         .defined()
+        .oneOf([yup.ref<string>('password')], '비밀번호가 일치하지 않습니다.'),
+      gender: yup
+        .string()
+        .defined()
         .oneOf(
-          [yup.ref<string>('password'), ''],
-          '비밀번호가 일치하지 않습니다.'
-        ),
+          <GenderType[]>['FEMALE', 'MALE', 'OTHER'],
+          '성별은 남자, 여자, 기타만 가능합니다.'
+        )
+        .required('성별은 필수 정보입니다.'),
     })
 
     const { errors, meta } = useForm({
@@ -56,6 +60,9 @@ export default defineComponent({
     const { value: name } = useField<string>('name', {
       validateOnInput: true,
     })
+    const { value: gender } = useField<GenderType>('gender', {
+      validateOnInput: true,
+    })
 
     const goNextStep = (): void => {
       console.log(1)
@@ -70,6 +77,7 @@ export default defineComponent({
       password,
       passwordConfirm,
       phoneNumber,
+      gender,
     }
     const action = { goNextStep }
     return {
@@ -151,6 +159,40 @@ export default defineComponent({
       readonly
       disable
     />
+  </q-card-section>
+  <q-card-section class="text-black">
+    <div>성별</div>
+    <div class="q-gutter-sm">
+      <q-radio
+        v-model="gender"
+        checked-icon="task_alt"
+        unchecked-icon="panorama_fish_eye"
+        val="MALE"
+        label="남자"
+      />
+      <q-radio
+        v-model="gender"
+        checked-icon="task_alt"
+        unchecked-icon="panorama_fish_eye"
+        val="FEMALE"
+        label="여자"
+      />
+      <q-radio
+        v-model="gender"
+        checked-icon="task_alt"
+        unchecked-icon="panorama_fish_eye"
+        val="OTHER"
+        label="기타"
+      />
+      <q-radio
+        v-model="gender"
+        checked-icon="task_alt"
+        unchecked-icon="panorama_fish_eye"
+        val="polygon"
+        label="Polygon"
+      />
+      <div class="text-red">{{ errors.gender }}</div>
+    </div>
   </q-card-section>
 
   <q-card-actions>

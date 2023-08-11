@@ -17,7 +17,6 @@ export default defineComponent({
     const showButtons = () => {
       isHovered.value = true
     }
-    console.log(props.blogData)
 
     const hideButtons = () => {
       isHovered.value = false
