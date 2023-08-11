@@ -9,10 +9,9 @@ import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   setup() {
-    const $q = useQuasar()
     const authStore = useAuthStore()
     const { signUpInputData } = authStore
-    const { formSteps, formStepNumber } = storeToRefs(authStore)
+    const { formStepNumber } = storeToRefs(authStore)
     const isAllChecked = ref<boolean>(false)
 
     onMounted(() => {
@@ -36,7 +35,7 @@ export default defineComponent({
           validatePolicyList.every((policy: string) => value.includes(policy))
         )
         .required(),
-      { initialValue: signUpInputData.get('privacy-policy') }
+      { initialValue: signUpInputData.get('privacy-policy') ?? [] }
     )
 
     const updateIsAllChecked = () => {

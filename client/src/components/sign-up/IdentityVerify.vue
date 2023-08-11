@@ -77,7 +77,7 @@ export default defineComponent({
         return noticeDialog('인증번호를 확인해주세요.')
       if (verifyConfirm.value === verify) {
         verifyConfirmValid.value = true
-        confirmRequest.value = false
+
         stopTimer()
         return noticeDialog('인증이 완료되었습니다.')
       }
@@ -150,15 +150,20 @@ export default defineComponent({
     />
   </q-card-section>
 
-  <q-checkbox
-    v-model="phoneNumberAgreeValue"
-    color="positive"
-    checked-icon="task_alt"
-    unchecked-icon="highlight_off"
-    label="인증 약관 동의"
-    class="text-black essential-checkbox"
-    :disable="confirmRequest"
-  />
+  <div>
+    <q-checkbox
+      v-if="!verifyConfirmValid"
+      v-model="phoneNumberAgreeValue"
+      color="positive"
+      checked-icon="task_alt"
+      unchecked-icon="highlight_off"
+      label="인증 약관 동의"
+      class="text-black essential-checkbox"
+      :disable="confirmRequest"
+    />
+  </div>
+
+  <q-icon size="large" name="task_alt" color="black" label="dd" />
 
   <q-card-section v-if="confirmRequest" class="text-red">
     <q-input

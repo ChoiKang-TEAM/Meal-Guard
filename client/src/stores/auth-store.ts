@@ -5,7 +5,7 @@ import { ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const signUpInputData = new Map()
-  signUpInputData.set('privacy-policy', [])
+
   const formSteps = ref<{ [key: string]: boolean }>({
     'step-1': false,
     'step-2': false,
