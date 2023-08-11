@@ -12,8 +12,10 @@ export default defineComponent({
     const $q = useQuasar()
     const authStore = useAuthStore()
     const { goBackStep } = authStore
+    const { signUpInputData } = authStore
 
     const isPwd = ref<boolean>(true)
+    const phoneNumber = signUpInputData.get('phone-number')
 
     const validationSchema = yup.object({
       userId: yup
@@ -67,6 +69,7 @@ export default defineComponent({
       name,
       password,
       passwordConfirm,
+      phoneNumber,
     }
     const action = { goNextStep }
     return {
@@ -132,13 +135,22 @@ export default defineComponent({
       :error="!!errors.passwordConfirm"
       placeholder="비밀번호를 한번 더 입력해주세요."
       autocomplete="off"
-      label="비밀번호"
+      label="비밀번호 확인"
       class="essential-input"
     >
       <template #error>
-        {{ errors.password }}
+        {{ errors.passwordConfirm }}
       </template>
     </q-input>
+    <q-input
+      stack-label
+      color="positive"
+      v-model="phoneNumber"
+      type="text"
+      label="휴대폰 번호"
+      readonly
+      disable
+    />
   </q-card-section>
 
   <q-card-actions>
