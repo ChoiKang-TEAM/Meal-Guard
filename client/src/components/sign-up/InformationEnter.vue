@@ -160,8 +160,9 @@ export default defineComponent({
       disable
     />
   </q-card-section>
-  <q-card-section>
-    <div class="q-gutter-sm text-black">
+  <q-card-section class="text-black">
+    <div>성별</div>
+    <div class="q-gutter-sm">
       <q-radio
         v-model="gender"
         checked-icon="task_alt"
