@@ -9,7 +9,6 @@ export const useInterceptor = () => {
   const TIMEOUT = 60000
   const { fetch: originalFetch } = window
   const newfetch = async (...args: any) => {
-    console.log(args)
     const [resource, config] = args
     if (token.value) {
       config.headers = {
@@ -28,7 +27,7 @@ export const useInterceptor = () => {
       })
       return response
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw e
     } finally {
       clearTimeout(id)
