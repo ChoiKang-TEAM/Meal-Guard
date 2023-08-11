@@ -150,9 +150,8 @@ export default defineComponent({
     />
   </q-card-section>
 
-  <div>
+  <div v-if="!verifyConfirmValid">
     <q-checkbox
-      v-if="!verifyConfirmValid"
       v-model="phoneNumberAgreeValue"
       color="positive"
       checked-icon="task_alt"
@@ -162,10 +161,11 @@ export default defineComponent({
       :disable="confirmRequest"
     />
   </div>
-
-  <q-icon size="large" name="task_alt" color="black" label="dd" />
-
-  <q-card-section v-if="confirmRequest" class="text-red">
+  <div v-else>
+    <q-icon size="large" name="task_alt" color="black" class="ml-01" />
+    <span class="text-black"> 본인 인증이 완료되었습니다.</span>
+  </div>
+  <q-card-section v-if="confirmRequest && !verifyConfirmValid" class="text-red">
     <q-input
       stack-label
       clear-icon="close"
