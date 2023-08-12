@@ -167,6 +167,7 @@ export default defineComponent({
         v-model="gender"
         checked-icon="task_alt"
         unchecked-icon="panorama_fish_eye"
+        color="positive"
         val="MALE"
         label="남자"
       />
@@ -174,6 +175,7 @@ export default defineComponent({
         v-model="gender"
         checked-icon="task_alt"
         unchecked-icon="panorama_fish_eye"
+        color="positive"
         val="FEMALE"
         label="여자"
       />
@@ -181,16 +183,11 @@ export default defineComponent({
         v-model="gender"
         checked-icon="task_alt"
         unchecked-icon="panorama_fish_eye"
+        color="positive"
         val="OTHER"
         label="기타"
       />
-      <q-radio
-        v-model="gender"
-        checked-icon="task_alt"
-        unchecked-icon="panorama_fish_eye"
-        val="polygon"
-        label="Polygon"
-      />
+
       <div class="text-red">{{ errors.gender }}</div>
     </div>
   </q-card-section>
