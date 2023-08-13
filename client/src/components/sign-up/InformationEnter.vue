@@ -6,15 +6,13 @@ import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { EMAIL_REGEX, PASSWORD_REGEX } from 'src/common/regexs'
 import { GenderType } from 'src/common/models'
+import { FindMemberUserByUserId } from 'src/graphql/dto/member-user-input'
 
 export default defineComponent({
   setup() {
     const authStore = useAuthStore()
-
-    const { signUpInputData } = authStore
-
+    const { signUpInputData, checkedInUseCaseFromUserId } = authStore
     const isPwd = ref<boolean>(true)
-
     const phoneNumber = signUpInputData.get('phone-number')
 
     const validationSchema = yup.object({
@@ -45,7 +43,7 @@ export default defineComponent({
       name: yup.string(),
     })
 
-    const { errors, meta } = useForm({
+    const { errors, meta, setFieldError } = useForm({
       validationSchema,
     })
 
@@ -69,8 +67,12 @@ export default defineComponent({
       console.log(1)
     }
 
-    const checkedInUseCaseFromUserId = (): void => {
-      console.log(12)
+    const checkedUserId = async (): Promise<void> => {
+      const dto: FindMemberUserByUserId = {
+        userId: userId.value ?? '',
+      }
+      const valid: boolean = await checkedInUseCaseFromUserId(dto)
+      if (!valid) setFieldError('userId', '이미 사용 중인 아이디입니다.')
     }
 
     const state = {
@@ -84,7 +86,7 @@ export default defineComponent({
       phoneNumber,
       gender,
     }
-    const action = { goNextStep, checkedInUseCaseFromUserId }
+    const action = { goNextStep, checkedUserId }
     return {
       ...state,
       ...action,
@@ -107,7 +109,7 @@ export default defineComponent({
       :error="!!errors.userId"
       label="아이디"
       class="essential-input"
-      @blur="checkedInUseCaseFromUserId"
+      @blur="checkedUserId"
     >
       <template #error>
         {{ errors.userId }}
