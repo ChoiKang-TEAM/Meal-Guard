@@ -161,7 +161,7 @@ export default defineComponent({
     />
   </q-card-section>
   <q-card-section class="text-black">
-    <div>성별</div>
+    <div class="essential-div">성별</div>
     <div class="q-gutter-sm">
       <q-radio
         v-model="gender"
