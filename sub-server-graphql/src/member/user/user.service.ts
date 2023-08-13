@@ -90,4 +90,22 @@ export class UserService implements CrudService<User> {
   findByFilter(dto: User): Promise<User[]> {
     throw new Error('Method not implemented.')
   }
+
+  async validByInUseCaseFromUserId(dto: FindMemberUserByUserId): Promise<boolean> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          userId: dto.userId
+        },
+        select: {
+          userId: true
+        }
+      })
+
+      if (user) return true
+      else return false
+    } catch (e) {
+      this.logger.error(e)
+    }
+  }
 }

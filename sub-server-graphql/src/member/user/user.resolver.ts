@@ -20,4 +20,9 @@ export class UserResolver {
   async findUniqueMemberUser(@Args('findMemberUserByUserId') findMemberUserByUserId: FindMemberUserByUserId): Promise<User> {
     return await this.userService.findUnique(findMemberUserByUserId)
   }
+
+  @Query(() => Boolean)
+  async validByInUseCaseFromUserId(@Args('findMemberUserByUserId') findMemberUserByUserId: FindMemberUserByUserId): Promise<boolean> {
+    return await this.userService.validByInUseCaseFromUserId(findMemberUserByUserId)
+  }
 }
