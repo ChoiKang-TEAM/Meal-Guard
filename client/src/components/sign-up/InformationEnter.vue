@@ -14,6 +14,7 @@ export default defineComponent({
     const { signUpInputData } = authStore
 
     const isPwd = ref<boolean>(true)
+
     const phoneNumber = signUpInputData.get('phone-number')
 
     const validationSchema = yup.object({
@@ -22,7 +23,6 @@ export default defineComponent({
         .defined()
         .matches(EMAIL_REGEX, '이메일 형식이 아닙니다.')
         .required('아이디 값은 필수 값입니다.'),
-      name: yup.string(),
       password: yup
         .string()
         .defined()
@@ -42,6 +42,7 @@ export default defineComponent({
           '성별은 남자, 여자, 기타만 가능합니다.'
         )
         .required('성별은 필수 정보입니다.'),
+      name: yup.string(),
     })
 
     const { errors, meta } = useForm({
@@ -68,6 +69,10 @@ export default defineComponent({
       console.log(1)
     }
 
+    const checkedInUseCaseFromUserId = (): void => {
+      console.log(12)
+    }
+
     const state = {
       isPwd,
       errors,
@@ -79,7 +84,7 @@ export default defineComponent({
       phoneNumber,
       gender,
     }
-    const action = { goNextStep }
+    const action = { goNextStep, checkedInUseCaseFromUserId }
     return {
       ...state,
       ...action,
@@ -102,6 +107,7 @@ export default defineComponent({
       :error="!!errors.userId"
       label="아이디"
       class="essential-input"
+      @blur="checkedInUseCaseFromUserId"
     >
       <template #error>
         {{ errors.userId }}
