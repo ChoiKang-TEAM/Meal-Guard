@@ -1,21 +1,25 @@
 <script lang="ts">
 import { SignUpSteps } from 'src/common/models'
-import { useCategoryStore } from 'src/stores/category-store'
 import { defineComponent, onMounted, ref } from 'vue'
 import { SIGN_UP_QSTEP_LIST } from 'src/common/constants'
 import HeaderLayout from 'src/layouts/HeaderLayout.vue'
 import InformationEnter from 'src/components/sign-up/InformationEnter.vue'
 import PrivacyPolicy from 'src/components/sign-up/PrivacyPolicy.vue'
 import IdentityVerify from 'src/components/sign-up/IdentityVerify.vue'
+import PreferredFoodCheck from 'src/components/sign-up/PreferredFoodCheck.vue'
 import { useAuthStore } from 'src/stores/auth-store'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({
-  components: { HeaderLayout, InformationEnter, PrivacyPolicy, IdentityVerify },
+  components: {
+    HeaderLayout,
+    InformationEnter,
+    PrivacyPolicy,
+    IdentityVerify,
+    PreferredFoodCheck,
+  },
   setup() {
-    const categoryStore = useCategoryStore()
     const authStore = useAuthStore()
-    const { findAllCategory } = categoryStore
     const { formSteps, formStepNumber } = storeToRefs(authStore)
     const userId = ref<string>('')
     const password = ref<string>('')
@@ -24,8 +28,6 @@ export default defineComponent({
     const qStepList = ref<SignUpSteps[]>([])
 
     onMounted(() => {
-      findAllCategory()
-      console.log(SIGN_UP_QSTEP_LIST)
       qStepList.value = JSON.parse(JSON.stringify(SIGN_UP_QSTEP_LIST))
     })
 
@@ -76,27 +78,10 @@ export default defineComponent({
               :caption="data.caption ?? ''"
               :done="formStepNumber > index + 1"
             >
-              <privacy-policy v-if="index === 0" />
+              <privacy-policy v-if="index === 3" />
               <identity-verify v-if="index === 1" />
               <information-enter v-if="index === 2" />
-
-              <!-- <q-stepper-navigation>
-                <q-btn
-                  flat
-                  :class="isStepValid(index + 1) ? 'bg-teal' : 'bg-grey'"
-                  @click="step = index + 2"
-                  label="다음으로"
-                  :disable="!isStepValid(index + 1)"
-                />
-                <q-btn
-                  v-if="index > 0"
-                  flat
-                  @click="step = index"
-                  color="primary"
-                  label="Back"
-                  class="q-ml-sm"
-                />
-              </q-stepper-navigation> -->
+              <preferred-food-check v-if="index === 0" />
             </q-step>
           </q-stepper>
         </q-card-section>

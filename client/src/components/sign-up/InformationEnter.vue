@@ -1,5 +1,4 @@
 <script lang="ts">
-import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth-store'
 import { defineComponent, ref } from 'vue'
 import { Form as ValidationForm, useForm, useField } from 'vee-validate'
@@ -8,6 +7,7 @@ import { BIRTHDAT_REGEX, EMAIL_REGEX, PASSWORD_REGEX } from 'src/common/regexs'
 import { GenderType } from 'src/common/models'
 import { FindMemberUserByUserId } from 'src/graphql/dto/member-user-input'
 import dayjs from 'dayjs'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
@@ -16,6 +16,7 @@ export default defineComponent({
   setup() {
     const authStore = useAuthStore()
     const { signUpInputData, checkedInUseCaseFromUserId } = authStore
+    const { formStepNumber } = storeToRefs(authStore)
     const isPwd = ref<boolean>(true)
     const phoneNumber = signUpInputData.get('phone-number')
 
@@ -47,7 +48,8 @@ export default defineComponent({
       name: yup.string(),
       birthday: yup
         .string()
-        .matches(BIRTHDAT_REGEX, '생년월일을 확인해주세요.'),
+        .matches(BIRTHDAT_REGEX, '생년월일을 확인해주세요.')
+        .required('비밀번호는 필수 정보입니다.'),
     })
 
     const { errors, meta, setFieldError } = useForm({
@@ -68,7 +70,18 @@ export default defineComponent({
     const { value: birthday } = useField<string>('birthday')
 
     const goNextStep = (): void => {
-      checkedUserId()
+      checkedUserId().then(() => {
+        if (meta.value.valid) {
+          signUpInputData.set('information', {
+            userId: userId.value,
+            password: password.value,
+            gender: gender.value,
+            name: name.value ?? '',
+            birthday: birthday.value,
+          })
+          formStepNumber.value += 1
+        } else return
+      })
     }
 
     const checkedUserId = async (): Promise<void> => {
@@ -87,7 +100,7 @@ export default defineComponent({
       const year = parseInt(validBirthDay.substring(0, 4))
       const month = parseInt(validBirthDay.substring(4, 6))
       const day = parseInt(validBirthDay.substring(6))
-      console.log(year, month, day)
+
       const lastDayOfMonth = dayjs(`${year}-${month}`).endOf('month').date()
 
       if (day > lastDayOfMonth)
@@ -239,6 +252,7 @@ export default defineComponent({
         placeholder="8자리를 입력해주세요."
         @blur="checkedBirthDay"
         mask="########"
+        class="essential-input"
       >
         <template #error>
           {{ errors.birthday }}
@@ -252,6 +266,7 @@ export default defineComponent({
         label="다음으로"
         :class="meta.valid ? 'bg-teal' : 'bg-grey'"
         type="submit"
+        :disable="!meta.valid"
       />
     </q-card-actions>
   </validation-form>

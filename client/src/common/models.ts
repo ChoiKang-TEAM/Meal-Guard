@@ -77,3 +77,7 @@ export interface RecipeBlogCardModel {
   title: string
   url: string
 }
+
+export interface CategoryFindModel {
+  type: string
+}
