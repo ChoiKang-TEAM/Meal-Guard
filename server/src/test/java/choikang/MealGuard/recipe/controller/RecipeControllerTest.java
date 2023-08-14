@@ -20,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +40,9 @@ public class RecipeControllerTest {
     @MockBean
     private RecipeMapper mapper;
 
-    @DisplayName("레시피 목록 불러오기")
+    @DisplayName("레시피 목록 가져오기")
     @Test
-    public void testGetRecipes() throws Exception {
+    void testGetRecipes() throws Exception {
 
         List<Recipe> mockRecipes = new ArrayList<>();
 
@@ -64,5 +66,27 @@ public class RecipeControllerTest {
 
         verify(recipeService).findRecipes(eq("닭가슴살"), eq("highProtein"), eq(1), eq(10));
         verify(mapper).recipeToListResponse(eq(mockRecipes));
+    }
+
+    @DisplayName("레시피 상세 가져오기")
+    @Test
+    void testGetRecipe() throws Exception {
+        long recipeId = 1L;
+        RecipeDto.Response mockRecipe = new RecipeDto.Response();
+        mockRecipe.setRecipeId(recipeId);
+        String accessToken = "eyJhbGciOiJIUzUxMiJ9.NjA2NDUwOTc3LCJtZW1iZXJJZCI6Mjd9.1TvYDexLUkOkOsBksbS6dnyJ4Ig1m9LMdTJ2FzCdOW0GEEdM4S6MpLZTpMGZCa-BN9jnbC9htZljsi5e7Mc-OQ";
+
+        Recipe recipe = new Recipe();
+        when(recipeService.findRecipe(anyString(),anyLong())).thenReturn(recipe);
+        when(mapper.recipeToResponse(any())).thenReturn(mockRecipe);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipes/" + recipeId)
+                        .header("Authorization", accessToken)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(recipeService).findRecipe(eq(accessToken), eq(recipeId));
+        verify(mapper).recipeToResponse(eq(recipe));
+
     }
 }
