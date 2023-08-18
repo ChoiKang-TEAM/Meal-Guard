@@ -17,16 +17,17 @@ enum GenderType {
 }
 
 model User {
-  id             Int               @id @unique @default(autoincrement())
-  userId         String            @unique @map("user_id")
-  password       String
-  name           String?
-  userSeq        String            @unique @map("user_seq")
-  preferredFoods UserFoodMapping[]
-  createdAt      DateTime          @default(now()) @map("reg_dtime")
-  updatedAt      DateTime          @updatedAt @map("upd_dtime")
-  gender         GenderType
-  age            Int
+  id                  Int                   @id @unique @default(autoincrement())
+  userId              String                @unique @map("user_id")
+  password            String
+  name                String?
+  userSeq             String                @unique @map("user_seq")
+  preferredFoods      UserFoodMapping[]
+  preferredCategories UserCategoryMapping[]
+  createdAt           DateTime              @default(now()) @map("reg_dtime")
+  updatedAt           DateTime              @updatedAt @map("upd_dtime")
+  gender              GenderType
+  age                 Int
 
   @@map("MG_MB_USER")
 }
@@ -56,9 +57,24 @@ model UserFoodMapping {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  type  String
-  foods Food[]
+  id        Int                   @id @default(autoincrement())
+  type      String
+  foods     Food[]
+  users     UserCategoryMapping[]
+  createdAt DateTime              @default(now()) @map("reg_dtime")
+  updatedAt DateTime              @updatedAt @map("upd_dtime")
 
   @@map("MG_MB_CATEGORY")
+}
+
+model UserCategoryMapping {
+  id         Int @id @unique @default(autoincrement())
+  userId     Int @map("user_id")
+  categoryId Int @map("category_id")
+
+  user     User     @relation(fields: [userId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@unique(fields: [userId, categoryId], name: "userPreferredCategory")
+  @@map("MG_MB_USER_CATEGORY_MAPPING")
 }
