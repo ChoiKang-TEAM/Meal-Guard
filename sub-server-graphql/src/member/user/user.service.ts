@@ -29,10 +29,10 @@ export class UserService implements CrudService<User> {
             userSeq: userSeq,
             age: dto.age,
             gender: dto.gender,
-            preferredFoods: {
+            preferredCategories: {
               createMany: {
-                data: dto.preferredFoodIds.map((foodId: number) => ({
-                  foodId: foodId
+                data: dto.preferredCategoryIds.map((categoryId: number) => ({
+                  categoryId
                 }))
               }
             }
@@ -74,6 +74,11 @@ export class UserService implements CrudService<User> {
                   category: true
                 }
               }
+            }
+          },
+          preferredCategories: {
+            include: {
+              category: true
             }
           }
         }
