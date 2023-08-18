@@ -5,21 +5,19 @@ import { useQuery } from 'villus'
 import { ref } from 'vue'
 
 export const useCategoryStore = defineStore('category', () => {
-  const categoryTab = ref<string[]>([])
+  const categoryTabData = ref<CategoryFindModel[]>([])
   const findAllCategory = async () => {
     try {
       const { data } = await useQuery({
         query: FIND_ALL_CATEGORY,
+        cachePolicy: 'network-only',
       })
-      const items: CategoryFindModel[] = data?.value?.findAllCategory ?? []
-      for (const item of items) {
-        categoryTab.value.push(item.type)
-      }
+      categoryTabData.value = data?.value?.findAllCategory ?? []
     } catch (e) {
       console.error(e)
     }
   }
-  const state = { categoryTab }
+  const state = { categoryTabData }
   const action = { findAllCategory }
 
   return { ...state, ...action }
