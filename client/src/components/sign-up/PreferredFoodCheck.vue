@@ -1,27 +1,54 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
+import { CategoryFindModel } from 'src/common/models'
+import { FindFilterFoodInput } from 'src/graphql/dto/food-input'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useCategoryStore } from 'src/stores/category-store'
+import { useFoodStore } from 'src/stores/food-store'
 import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   setup() {
     const authStore = useAuthStore()
     const categoryStore = useCategoryStore()
+    const foodStore = useFoodStore()
     const { findAllCategory } = categoryStore
-    const { categoryTab } = storeToRefs(categoryStore)
+    const { findFoodByFilter } = foodStore
+    const { categoryTabData } = storeToRefs(categoryStore)
     const tab = ref<string>('')
+    const foodData = ref<{ id: number; name: string }[]>([])
+    const preferredFoodList = ref<number[]>([])
 
     onMounted(async () => {
       await findAllCategory()
-      tab.value = categoryTab.value[0] ?? ''
+      tab.value = categoryTabData.value[0].type
+      await changeFoodData()
     })
+
     const goNextStep = () => {
       console.log(1)
     }
 
-    const state = { categoryTab, tab }
-    const action = { goNextStep }
+    const changeFoodData = async (): Promise<void> => {
+      const categoryId: number = findCategoryIdByCategoryName()
+      foodData.value = await findFoodByFilter({ categoryId })
+    }
+
+    const findCategoryIdByCategoryName = (): number => {
+      const foundData: CategoryFindModel | undefined =
+        categoryTabData.value.find(
+          (val: CategoryFindModel) => val.type === tab.value
+        )
+
+      return foundData?.id ?? 0
+    }
+
+    const test = (event: any) => {
+      console.log(preferredFoodList.value)
+    }
+
+    const state = { categoryTabData, tab, foodData, preferredFoodList }
+    const action = { goNextStep, changeFoodData, test }
     return {
       ...state,
       ...action,
@@ -46,12 +73,13 @@ export default defineComponent({
       indicator-color="positive"
       align="justify"
       narrow-indicator
+      @update:model-value="changeFoodData"
     >
       <q-tab
-        v-for="(data, index) in categoryTab"
+        v-for="(data, index) in categoryTabData"
         :key="index"
-        :name="data"
-        :label="data"
+        :name="data.type"
+        :label="data.type"
         style="border-radius: 40px"
       />
     </q-tabs>
@@ -60,12 +88,24 @@ export default defineComponent({
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel
-        v-for="(data, index) in categoryTab"
+        v-for="(data, index) in categoryTabData"
         :key="index"
-        :name="data"
+        :name="data.type"
       >
-        <div class="text-h6">{{ data }}</div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <q-item-label header>{{ data.type }}</q-item-label>
+
+        <q-item v-for="item in foodData" :key="item.id" tag="label" v-ripple>
+          <q-item-section side top>
+            <q-checkbox
+              v-model="preferredFoodList"
+              @click="test"
+              :val="item.id"
+            />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ item.name }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-tab-panel>
     </q-tab-panels></q-card-section
   >

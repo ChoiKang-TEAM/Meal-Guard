@@ -111,10 +111,16 @@ export const useFoodStore = defineStore('food', () => {
     try {
       const { data } = await useQuery({
         query: FIND_FOOD_BY_FILTER,
-        variables: findFilterFoodInput,
+        variables: {
+          findFilterFoodInput: findFilterFoodInput,
+        },
+        cachePolicy: 'network-only',
       })
-      console.log(data)
-    } catch (e) {}
+      console.log(data?.value)
+      return data?.value?.findFoodByFilter ?? []
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const state = {

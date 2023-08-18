@@ -79,5 +79,6 @@ export interface RecipeBlogCardModel {
 }
 
 export interface CategoryFindModel {
+  id: number
   type: string
 }
