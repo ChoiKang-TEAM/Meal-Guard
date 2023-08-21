@@ -207,3 +207,10 @@
   color: gray;
   font-size: x-small;
 }
+
+.home-header-text {
+  height: 50px; /* 원하는 높이로 변경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

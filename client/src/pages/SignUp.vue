@@ -52,14 +52,14 @@ export default defineComponent({
 })
 </script>
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout class="common-layout" view="lHh Lpr lFf">
     <header-layout>
       <template #expand>
         <q-toolbar-title class="toolbar-title">
           <div class="text-center">MEAL-GUARD</div>
         </q-toolbar-title></template
       >
-      <q-card flat class="card-container">
+      <q-card flat class="common-content">
         <q-card-section>
           <h2 class="text-h6 text-black">회원가입</h2>
           <q-stepper
