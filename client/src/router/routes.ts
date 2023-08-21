@@ -1,28 +1,28 @@
 import { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
+  // {
+  //   path: '/',
+  //   component: () => import('layouts/MainLayout.vue'),
+  //   children: [
+  //     {
+  //       path: 'member-user',
+  //       component: () => import('pages/member-user/MemberUser.vue'),
+  //       children: [
+  //         {
+  //           name: 'ChatMessenger',
+  //           path: 'chat-messenger',
+  //           component: () => import('pages/member-user/ChatMessenger.vue'),
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
   {
+    name: 'Home',
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      {
-        name: 'Home',
-        path: '',
-        component: () => import('pages/Home.vue'),
-        meta: { isBgImage: false },
-      },
-      {
-        path: 'member-user',
-        component: () => import('pages/member-user/MemberUser.vue'),
-        children: [
-          {
-            name: 'ChatMessenger',
-            path: 'chat-messenger',
-            component: () => import('pages/member-user/ChatMessenger.vue'),
-          },
-        ],
-      },
-    ],
+    component: () => import('pages/Home.vue'),
+    meta: { isBgImage: false },
   },
   {
     name: 'Recipe',
