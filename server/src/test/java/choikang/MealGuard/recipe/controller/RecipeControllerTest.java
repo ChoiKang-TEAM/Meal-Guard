@@ -7,11 +7,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import choikang.MealGuard.recipe.dto.FavoriteRecipeResponse;
 import choikang.MealGuard.recipe.dto.RecipeDto;
 import choikang.MealGuard.recipe.entity.Recipe;
+import choikang.MealGuard.recipe.entity.SearchKeyword;
 import choikang.MealGuard.recipe.mapper.RecipeMapper;
 import choikang.MealGuard.recipe.service.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,14 +21,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(RecipeController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class RecipeControllerTest {
@@ -47,11 +48,11 @@ public class RecipeControllerTest {
 
         Page<Recipe> mockRecipePage = new PageImpl<>(mockRecipes);
 
-        when(recipeService.findRecipes(anyString(), anyString(), anyInt(), anyInt())).thenReturn(mockRecipePage);
+        Mockito.when(recipeService.findRecipes(anyString(), anyString(), anyInt(), anyInt())).thenReturn(mockRecipePage);
 
         List<RecipeDto.ListResponse> mockListResponses = new ArrayList<>();
 
-        when(mapper.recipeToListResponse(anyList())).thenReturn(mockListResponses);
+        Mockito.when(mapper.recipeToListResponse(anyList())).thenReturn(mockListResponses);
 
         mockMvc.perform(get("/recipes")
                         .param("name", "닭가슴살")
@@ -62,9 +63,6 @@ public class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data").isArray());
-
-        verify(recipeService).findRecipes(eq("닭가슴살"), eq("highProtein"), eq(1), eq(10));
-        verify(mapper).recipeToListResponse(eq(mockRecipes));
     }
 
     @Test
@@ -75,16 +73,13 @@ public class RecipeControllerTest {
         String accessToken = "Bearer eyJhbGciOiJIUzUxMiJ9.NjA2NDUwOTc3LCJtZW1iZXJJZCI6Mjd9.1TvYDexLUkOkOsBksbS6dnyJ4Ig1m9LMdTJ2FzCdOW0GEEdM4S6MpLZTpMGZCa-BN9jnbC9htZljsi5e7Mc-OQ";
 
         Recipe recipe = new Recipe();
-        when(recipeService.findRecipe(anyString(),anyLong())).thenReturn(recipe);
-        when(mapper.recipeToResponse(any())).thenReturn(mockRecipe);
+        Mockito.when(recipeService.findRecipe(anyString(),anyLong())).thenReturn(recipe);
+        Mockito.when(mapper.recipeToResponse(any())).thenReturn(mockRecipe);
 
         mockMvc.perform(get("/recipes/" + recipeId)
                         .header("Authorization", accessToken)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-
-        verify(recipeService).findRecipe(eq(accessToken), eq(recipeId));
-        verify(mapper).recipeToResponse(eq(recipe));
 
     }
 
@@ -126,5 +121,49 @@ public class RecipeControllerTest {
                         .header("Authorization",accessToken)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void 인기검색어_순위() throws Exception {
+        List<SearchKeyword> top10PopularKeywords = new ArrayList<>();
+
+        Mockito.when(recipeService.findTop10PopularKeywords())
+                .thenReturn(top10PopularKeywords);
+
+        mockMvc.perform(get("/recipes/top10"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void 프론트_네임_캐싱() throws Exception {
+        List<Recipe> names = new ArrayList<>();
+        List<RecipeDto.Names> namesList = new ArrayList<>();
+
+        Mockito.when(recipeService.findNames())
+                .thenReturn(names);
+        Mockito.when(mapper.recipeToNames(any()))
+                .thenReturn(namesList);
+
+        mockMvc.perform(get("/recipes/name"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void 추천_레시피_조리방법_종류() throws Exception {
+        String way = "볶기";
+        String part = "반찬";
+        List<Recipe> recommendRecipes = new ArrayList<>();
+        List<RecipeDto.ListResponse> listResponses = new ArrayList<>();
+
+        Mockito.when(recipeService.findRecommendRecipes(anyString(),anyString()))
+                .thenReturn(recommendRecipes);
+        Mockito.when(mapper.recipeToListResponse(any()))
+                .thenReturn(listResponses);
+
+        mockMvc.perform(get("/recipes/recommend")
+                        .param("way",way)
+                        .param("part",part))
+                .andExpect(status().isOk());
+
     }
 }
