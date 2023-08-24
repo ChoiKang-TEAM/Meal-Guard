@@ -214,3 +214,19 @@
   align-items: center;
   justify-content: center;
 }
+
+.text-border {
+  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+
+.text-position-middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.text-family-persive {
+  font-family: 'Caveat';
+}

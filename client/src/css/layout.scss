@@ -10,4 +10,12 @@
     padding: 20px;
     width: 700px;
   }
+
+  @media (max-width: 600px) {
+    .common-content {
+      background-color: white;
+      padding: 10px;
+      width: 100%;
+    }
+  }
 }

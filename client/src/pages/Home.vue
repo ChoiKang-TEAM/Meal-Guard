@@ -25,50 +25,27 @@ export default defineComponent({
     const store = useFoodStore()
     const keyword = ref<string>('')
     const { rotateData, randomFoodData } = storeToRefs(store)
-    const { getCurrentWeather, favoriteApi } = store
+    const { getCurrentWeather } = store
     const parallax = ref<HTMLElement | null>(null)
-
     const isVisible = ref(false)
 
-    const { observe } = useIntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            isVisible.value = true
-          } else {
-            isVisible.value = false
-          }
-        })
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5,
-      }
-    )
+    const yOffset = ref(0)
 
     const imageData = ref({
       randomImgUrl: '',
       imgStyle: { opacity: 0 },
     })
 
+    const handleScroll = () => {
+      yOffset.value = window.scrollY
+    }
+
     onMounted(async () => {
-      observe()
-      //await favoriteApi()
       const randomValue: number = Math.floor(Math.random() * IMAGE_GROUP.length)
       imageData.value.randomImgUrl = IMAGE_GROUP[randomValue]
-      window.addEventListener('scroll', parallaxScroll)
-      await getCurrentWeather()
+      window.addEventListener('scroll', handleScroll)
+      //await getCurrentWeather()
     })
-
-    const parallaxScroll = () => {
-      if (parallax.value) {
-        const scrollTop =
-          window.pageYOffset || document.documentElement.scrollTop
-        const parallaxOffset = scrollTop * 0.5
-        parallax.value.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`
-      }
-    }
 
     const fadeImage = () => {
       imgStyle.value.opacity = 0
@@ -100,6 +77,13 @@ export default defineComponent({
       sectionElement.scrollIntoView({ behavior: 'smooth' })
     }
 
+    const parallaxStyle = computed(() => {
+      const transform = `translateY(${yOffset.value * 0.5}px)` // 조절 가능한 값
+      return {
+        transform,
+      }
+    })
+
     const viewModalState = reactive<{ name: string; state: boolean }[]>([
       {
         name: 'food',
@@ -117,9 +101,6 @@ export default defineComponent({
     const openViewModal = (viewStateIndex: number): void => {
       viewModalState[viewStateIndex].state = true
     }
-    onBeforeUnmount(() => {
-      window.removeEventListener('scroll', parallaxScroll)
-    })
 
     const state = {
       url,
@@ -127,7 +108,7 @@ export default defineComponent({
       randomImgUrl,
       imgStyle,
       HOME_TABS,
-
+      parallaxStyle,
       activeTabIndex,
       rotateData,
       randomFoodData,
@@ -167,48 +148,58 @@ export default defineComponent({
         </q-toolbar-title>
       </template>
 
-      <q-card class="bg-yellow-3 section">
-        <q-card-section>
-          <div class="weather-widget">
-            <div class="location">{{ rotateData?.region }}</div>
-            <div class="temperature">{{ rotateData?.weather?.temp }}°C</div>
-            <div class="description">
-              <!-- <ion-icon v-if="rotateData?.weather?.sky" name="snow" /> -->
-              {{ rotateData?.weather?.sky }}
-            </div>
-          </div>
-          <div class="parallax" ref="parallax">
-            <div>
-              <div class="lb-text">
-                <h2 class="title-text">식사 지킴이</h2>
-              </div>
-              <q-parallax class="meal-image" :src="randomImgUrl" />
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
-      <q-card>
-        <q-card-section horizontal>
-          <q-img
-            class="col-5"
-            src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
-            style="height: 500px"
-          />
-        </q-card-section>
-
-        <q-separator />
-      </q-card>
-
-      <q-card class="bg-pink-2 section">
-        <div class="flex justify-center items-center">
-          <q-parallax
-            src="src/assets/images/desserts.png"
-            :height="500"
-            style="width: 800px"
-          />
+      <div class="weather-widget">
+        <div class="location">{{ rotateData?.region }}</div>
+        <div class="temperature">{{ rotateData?.weather?.temp }}°C</div>
+        <div class="description">
+          <!-- <ion-icon v-if="rotateData?.weather?.sky" name="snow" /> -->
+          {{ rotateData?.weather?.sky }}
         </div>
-      </q-card>
-      <q-card flat>
+      </div>
+
+      <q-card flat class="common-content">
+        <q-card-section>
+          <div>
+            <div class="text-subtitle1 text-overline">SMART-MEAL</div>
+          </div>
+        </q-card-section>
+
+        <q-card-section class="q-pa-none q-ma-none bg-amber-2">
+          <div class="parallax-container">
+            <div class="parallax-content" :style="parallaxStyle">
+              <q-img :src="randomImgUrl" />
+            </div>
+            <div class="text-overlay text-border">
+              <div class="text-subtitle1 text-overline">SMART-MEAL</div>
+              <div class="text-h2">맞춤 식사 추천</div>
+              <q-btn outline label="GO" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-intersection class="example-item" transition="flip-right" once>
+          <q-card-section horizontal>
+            <q-img
+              class="col-6"
+              src="https://cdn.pixabay.com/photo/2015/08/25/03/50/herbs-906140_1280.jpg"
+            />
+            <div class="text-black text-position-middle col-6">
+              <div class="text-h6">더 건강한 식사</div>
+              <div class="text-subtitle2 text-italic text-family-persive">
+                MEAL-GUARD
+              </div>
+              <br />
+              <div class="text-body2">한 끼를 소중하게</div>
+              <div class="text-body2">한 끼를 더 가치있게</div>
+              <div class="text-body2">한 끼를 보람차게</div>
+            </div>
+          </q-card-section>
+        </q-intersection>
+        <q-separator />
+
+        <div class="flex justify-center items-center">
+          <q-parallax src="src/assets/images/desserts.png" :height="500" />
+        </div>
+
         <q-card-section horizontal>
           <q-img
             class="col-5"
@@ -219,8 +210,7 @@ export default defineComponent({
         </q-card-section>
 
         <q-separator />
-      </q-card>
-      <q-card class="my-card section" flat bordered>
+
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
             <div class="text-overline text-black">Meal Guard</div>
@@ -255,3 +245,32 @@ export default defineComponent({
     </header-layout>
   </q-layout>
 </template>
+
+<style lang="scss" scoped>
+.parallax-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.parallax-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  margin: 0px 0px 0px 0px;
+  padding: 0%;
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+</style>
