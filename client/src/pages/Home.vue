@@ -77,12 +77,13 @@ export default defineComponent({
       sectionElement.scrollIntoView({ behavior: 'smooth' })
     }
 
-    const parallaxStyle = computed(() => {
-      const transform = `translateY(${yOffset.value * 0.5}px)` // 조절 가능한 값
-      return {
-        transform,
-      }
-    })
+    // const parallaxStyle = computed(() => {
+    //   console.log(yOffset.value)
+    //   const transform = `translateY(${yOffset.value * 0.5 - 500}px)` // 조절 가능한 값
+    //   return {
+    //     transform,
+    //   }
+    // })
 
     const viewModalState = reactive<{ name: string; state: boolean }[]>([
       {
@@ -108,7 +109,7 @@ export default defineComponent({
       randomImgUrl,
       imgStyle,
       HOME_TABS,
-      parallaxStyle,
+
       activeTabIndex,
       rotateData,
       randomFoodData,
@@ -158,25 +159,16 @@ export default defineComponent({
       </div>
 
       <q-card flat class="common-content">
-        <q-card-section>
-          <div>
-            <div class="text-subtitle1 text-overline">SMART-MEAL</div>
+        <q-card-section class="q-pa-none q-ma-none">
+          <q-img
+            src="https://img.freepik.com/premium-photo/asian-korean-food-and-chopsticks-on-wooden-background_94255-4973.jpg?w=1800"
+          />
+          <div class="text-overlay text-border">
+            <div class="text-h4">MEAL-GUARD</div>
           </div>
         </q-card-section>
 
-        <q-card-section class="q-pa-none q-ma-none bg-amber-2">
-          <div class="parallax-container">
-            <div class="parallax-content" :style="parallaxStyle">
-              <q-img :src="randomImgUrl" />
-            </div>
-            <div class="text-overlay text-border">
-              <div class="text-subtitle1 text-overline">SMART-MEAL</div>
-              <div class="text-h2">맞춤 식사 추천</div>
-              <q-btn outline label="GO" />
-            </div>
-          </div>
-        </q-card-section>
-        <q-intersection class="example-item" transition="flip-right" once>
+        <q-intersection class="example-item" transition="flip-right">
           <q-card-section horizontal>
             <q-img
               class="col-6"
@@ -194,6 +186,21 @@ export default defineComponent({
             </div>
           </q-card-section>
         </q-intersection>
+
+        <q-card-section class="q-pa-none q-ma-none bg-amber-2">
+          <div class="parallax-container">
+            <div class="parallax-content">
+              <q-parallax :src="randomImgUrl" :height="300" />
+            </div>
+            <div class="text-overlay text-border">
+              <div class="text-overline">SMART-MEAL</div>
+              <div class="text-h2">맞춤 식사 추천</div>
+              <br />
+              <q-btn outline label="GO" />
+            </div>
+          </div>
+        </q-card-section>
+
         <q-separator />
 
         <div class="flex justify-center items-center">
@@ -247,30 +254,20 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-.parallax-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
+// .parallax-container {
+//   position: relative;
+//   width: 100%;
+//   height: 100vh;
+//   overflow: hidden;
+// }
 
-.parallax-content {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center center;
-  margin: 0px 0px 0px 0px;
-  padding: 0%;
-}
-
-.text-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  text-align: center;
-  color: white;
-}
+// .parallax-content {
+//   position: relative;
+//   width: 100%;
+//   height: 100%;
+//   background-size: cover;
+//   background-position: center center;
+//   margin: 0px 0px 0px 0px;
+//   padding: 0%;
+// }
 </style>
