@@ -168,7 +168,7 @@ export default defineComponent({
           </div>
         </q-card-section>
 
-        <q-intersection class="example-item" transition="flip-right">
+        <q-intersection class="example-item" transition="flip-right" once>
           <q-card-section horizontal>
             <q-img
               class="col-6"
@@ -190,7 +190,7 @@ export default defineComponent({
         <q-card-section class="q-pa-none q-ma-none bg-amber-2">
           <div class="parallax-container">
             <div class="parallax-content">
-              <q-parallax :src="randomImgUrl" :height="300" />
+              <q-parallax :src="randomImgUrl" :speed="3" :height="400" />
             </div>
             <div class="text-overlay text-border">
               <div class="text-overline">SMART-MEAL</div>
