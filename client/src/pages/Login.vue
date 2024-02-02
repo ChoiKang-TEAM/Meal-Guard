@@ -5,8 +5,12 @@ import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useMemberUserStore } from 'src/stores/member-user-store'
+import HeaderLayout from 'src/layouts/HeaderLayout.vue'
 
 export default defineComponent({
+  components: {
+    HeaderLayout,
+  },
   setup() {
     const $q = useQuasar()
     const router = useRouter()
@@ -54,24 +58,16 @@ export default defineComponent({
 })
 </script>
 <template>
-  <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-orange text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          <q-avatar size="24px">
-            <img src="src/assets/images/login-icon.png" />
-          </q-avatar>
-          MEAL-GUARD
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-header>
+  <q-layout class="common-layout" view="hHh lpR fFf">
+    <header-layout>
+      <template #expand>
+        <q-toolbar-title class="toolbar-title">
+          <div class="text-center">MEAL-GUARD</div>
+        </q-toolbar-title></template
+      >
 
-    <div class="q-pa-md q-gutter-md d-flex justify-center align-center vh-100">
-      <q-card class="card-container">
-        <q-card-section>
-          <h2 class="text-h6 text-black">로그인</h2>
-        </q-card-section>
-
+      <q-card flat class="common-content">
+        <h2 class="text-h6 text-black">로그인</h2>
         <q-form @submit="memberLogin">
           <q-card-section>
             <q-input
@@ -128,29 +124,6 @@ export default defineComponent({
           </q-card-actions>
         </q-form>
       </q-card>
-    </div>
+    </header-layout>
   </q-layout>
 </template>
-
-<style scoped>
-.d-flex {
-  display: flex;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.align-center {
-  align-items: center;
-}
-
-.vh-100 {
-  height: 100vh;
-}
-
-.card-container {
-  min-width: 600px;
-  margin: auto;
-}
-</style>

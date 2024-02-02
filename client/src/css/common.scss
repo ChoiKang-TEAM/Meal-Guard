@@ -207,3 +207,36 @@
   color: gray;
   font-size: x-small;
 }
+
+.home-header-text {
+  height: 50px; /* 원하는 높이로 변경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-border {
+  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+
+.text-position-middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.text-family-persive {
+  font-family: 'Caveat';
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  color: white;
+}
